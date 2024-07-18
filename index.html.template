@@ -9,60 +9,280 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled">Disabled</a>
-                </li>
+
+<div class="px-8 py-5 my-5 text-center">
+    <img class="d-block mx-auto mb-4" src="/resources/img.png" alt="" width="200" height="200">
+    <h1 class="display-5 fw-bold text-body-emphasis">Екатерина Заикина</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Психолог, психотерапевт</p>
+        <p class="lead mb-4">для людей, которые эмигрировали</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10 text-center">
+            <h1>Обо мне</h1>
+        </div>
+
+        <div class="col-10">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Практикую более 3 лет.</li>
+                <li class="list-group-item">Провела более 1400 клиентских сессий.</li>
+                <li class="list-group-item">Помогла более 90 клиентам.</li>
             </ul>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+        </div>
+
+        <div class="col-10">
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne"
+                                aria-expanded="true" aria-controls="collapseOne">
+                            Подробнее
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse"
+                         data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <p>Я недирективный терапевт — это значит, что свою задачу я вижу в том, чтобы
+                                создать условия,
+                                создать <strong>безопасное и доверительное пространство</strong>, в котором вы
+                                смогли бы
+                                <strong>открыть себя</strong>.</p>
+                            <p>Психология — моё второе образование. А по первому я — инженер-программист, и до
+                                декрета
+                                <strong>работала
+                                    в IT</strong>. Затем какое-то время я на общественных началах была учителем
+                                в частной
+                                русской
+                                школе.</p>
+                            <p>У меня двое детей. И я хорошо понимаю, что <strong>быть мамой</strong> — это
+                                работа, которая
+                                требует умения и выносливости. Глядя на своих детей и на детей в школе, я стала
+                                интересоваться
+                                детской психологией. Читала Петрановскую, Млодик. Тогда я и решила стать
+                                психологом — мне
+                                захотелось сделать это своей миссией. Исцеляя себя, человек несёт в свою семью и
+                                в мир
+                                уверенность, спокойствие и благополучие — и делает вклад в будущие поколения.
+                            </p>
+                            <p>Кардинальная <strong>смена профессии</strong> требует <strong>большой
+                                устойчивости и веры в
+                                себя</strong>. Если перед вами тоже стоит такой вопрос — я готова помочь.</p>
+                            <p>С 2016 года я живу в Англии. И мне очень понятны переживания человека, который
+                                меняет страну,
+                                сталкивается со <strong>сменой окружения</strong>. Чувствует разочарование,
+                                тревогу:
+                                «Справлюсь
+                                я или нет?
+                                Правильным ли было это решение или стоило выбрать другую страну?» У человека
+                                происходит
+                                большая
+                                <strong>переоценка ценностей</strong>, по-новой приходится выстраивать свою
+                                личность — и я
+                                готова быть с вами в
+                                этом процессе.</p>
+                            <p>Я <strong>верю в ваши силы и способности</strong>. И предоставлю свои
+                                профессиональные
+                                знания,
+                                навыки и поддержку
+                                для вашего развития, чтобы вы сами управляли своей жизнью. Чтобы вы могли
+                                понять, что хотите
+                                и
+                                какое решение является для вас самым верным. Чтобы вы обрели <strong>внутреннюю
+                                    опору и
+                                    уверенный взгляд
+                                    в будущее</strong>. В результате ваша жизнь может измениться целиком и
+                                полностью, а
+                                может
+                                внешне остаться
+                                такой же, как была — но у вас появится ощущение не «мной живут», а <strong>«я
+                                    живу»</strong>.
+                            </p>
+                            <p>Мне интересно, как устроены люди, я интроверт — <strong>внимательно слушаю и
+                                пропускаю
+                                человека
+                                через
+                                себя</strong>. Мне важно, что он думает, чего боится, как у него складывается
+                                жизнь. И как
+                                терапевту мне
+                                ценно увидеть то значимое, что порой скрыто за словами, и понять вас.</p>
+                            <p>Буду рада знакомству!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</nav>
 
-<div class="container my-5">
-    <h1>Hello, world!</h1>
-    <div class="col-lg-8 px-0">
-        <p class="fs-5">You've successfully loaded up the Bootstrap starter example. It includes <a
-                href="https://getbootstrap.com/">Bootstrap 5</a> via the <a
-                href="https://www.jsdelivr.com/package/npm/bootstrap">jsDelivr CDN</a> and includes an additional CSS
-            and JS file for your own code.</p>
-        <p>Feel free to download or copy-and-paste any parts of this example.</p>
+</div>
 
-        <hr class="col-1 my-4">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10 text-center">
+            <h1>Помогу вам, если</h1>
+        </div>
+        <div class="col-10">
+            <p>Вы переехали или только планируете переезд в другую страну и испытываете сложности в адаптации.</p>
+            <p>Вы переживаете эмоциональные качели от перемен в вашей жизни, когда</p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Вы ощущаете неуверенность в завтрашнем дне, когда появляются сомнения, а
+                    правильный ли выбор вы совершили
+                </li>
+                <li class="list-group-item">Поднимаются и обостряются все «тараканы»</li>
+                <li class="list-group-item">Вас накрывает паника «уехал(а) навсегда»</li>
+                <li class="list-group-item">Вы испытываете внутреннее сопротивление в изучении языка</li>
+            </ul>
+        </div>
+    </div>
+</div>
 
-        <a href="https://getbootstrap.com" class="btn btn-primary">Read the Bootstrap docs</a>
-        <a href="https://github.com/twbs/examples" class="btn btn-secondary">View on GitHub</a>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10 text-center">
+            <h1>Мои клиенты получают:</h1>
+        </div>
+        <div class="col-10">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Внутреннюю опору</li>
+                <li class="list-group-item">Понимание себя и своих ценностей</li>
+                <li class="list-group-item">Умение слышать свои желания</li>
+                <li class="list-group-item">Навык справляться со своими эмоциями и выходить в устойчивое состояние</li>
+                <li class="list-group-item">Ответ на вопрос «Кто я»</li>
+                <li class="list-group-item">Построение собственного сценария персонального будущего</li>
+                <li class="list-group-item">Бережное и комфортное пространство</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10 text-center">
+            <h1>Записаться на консультацию:</h1>
+        </div>
+        <div class="col-10">
+            <ul class="list-group">
+                <li class="list-group-item">Telegram</li>
+                <li class="list-group-item">WhatsApp</li>
+                <li class="list-group-item">Email</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10 text-center">
+            <h1>Индивидуальная консультация</h1>
+        </div>
+        <div class="col-10">
+            <p>Сессия длится 60 минут, проводится онлайн (Skype, Google-Meet): 4000 р / 40 фунтов</p>
+            <p><strong>Первая сессия</strong> представляет собой интервью-знакомство, где вы знакомитесь со мной, а я с
+                вами, мы обсуждаем
+                возможные пути решения вашего запроса и принимаем решение о возможной совместной работе.</p>
+            <p>В нашей работе есть важное <strong>правило о 24 часах</strong>:
+                <i>Если вы отменяете или переносите нашу встречу менее, чем за 24 часа до назначенного времени, то
+                    сессия
+                    должна быть оплачена</i>.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10 text-center">
+            <h1>Записаться на консультацию:</h1>
+        </div>
+        <div class="col-10">
+            <ul class="list-group">
+                <li class="list-group-item">Telegram</li>
+                <li class="list-group-item">WhatsApp</li>
+                <li class="list-group-item">Email</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10 text-center">
+            <h1>Образование:</h1>
+        </div>
+        <div class="col-10">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">1400+ часов дополнительного профессионального образования</li>
+                <li class="list-group-item">270+ часов личной терапии</li>
+                <li class="list-group-item">130+ часов супервизий</li>
+                <li class="list-group-item">Действительный член ОППЛ</li>
+                <li class="list-group-item">Аккредитованный полимодальный психотерапевт (СРО «Союз психологов и
+                    психотерапевтов»)
+                </li>
+                <li class="list-group-item">Аккредитованный психотерапевт «Транзактный анализ Восточная версия «(СРО
+                    «Союз
+                    психологов и психотерапевтов»)
+                </li>
+                <li class="list-group-item">2021 - высшее психологическое образование, бакалавриат</li>
+                <li class="list-group-item">2020 - повышение квалификации «Логотерапия и экзистенциальный анализ»</li>
+                <li class="list-group-item">2023 - повышение квалификации «Транзактный анализ - Восточная версия»</li>
+                <li class="list-group-item">2024 - повышение квалификации «Эриксоновская терапия и эриксоновский гипноз»
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container" data-bs-theme="dark">
+    <div class="row justify-content-center">
+        <div class="col-10 text-center">
+            <h1>Отзывы</h1>
+        </div>
+        <div class="col-10">
+            <div id="carouselExampleIndicators" class="carousel slide">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
+                            class="active"
+                            aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                            aria-label="Slide 2"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item text-center col-md-2 col-sm-2 col-xs-12 active">
+                        <img src="/resources/review1.png" class="media-object img-rounded img-responsive" alt="Отзыв 1">
+                    </div>
+                    <div class="carousel-item text-center col-md-2 col-sm-2 col-xs-12">
+                        <img src="/resources/review2.png" class="media-object img-rounded img-responsive" alt="Отзыв 2">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10 text-center">
+            <h1>Записаться на консультацию:</h1>
+        </div>
+        <div class="col-10">
+            <ul class="list-group">
+                <li class="list-group-item">Telegram</li>
+                <li class="list-group-item">WhatsApp</li>
+                <li class="list-group-item">Email</li>
+            </ul>
+        </div>
     </div>
 </div>
 
