@@ -56,7 +56,7 @@
                 <i class="fa fa-twitter fa-3x" aria-hidden="true"></i>
 
                 <div class="title">
-                    <h4>{{ whatsapp() }} WhatsApp</h4>
+                    <h4> {{ whatsapp() }} <a href="https://wa.me/+447449131761"> WhatsApp </a></h4>
                 </div>
 
              </div>
@@ -79,7 +79,7 @@
         <span class="navbar-text mr-auto">
             <a href="https://t.me/katerina_zaikina"> {{ telegram() }} </a> </span>
         <span class="navbar-text mr-auto">
-            <a href=""> {{ whatsapp() }} </a> </span>
+            <a href="https://wa.me/+447449131761"> {{ whatsapp() }} </a> </span>
         <span class="navbar-text mr-auto">
             <a href="mailto:zaikina.katerina@gmail.com"> {{ email() }} </a> </span>
         {% endif %}
