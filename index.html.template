@@ -309,6 +309,20 @@
     </div>
 </div>
 
+<div class="container">
+    <div class="row justify-content-center mt-5 mb-5">
+        <div class="col-10 text-center">
+            <h1>Приветствие:</h1>
+        </div>
+        <div class="col-10 text-center">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/hh2o3HF7pgM?si=1DSE5O2MN9nM6ZUp"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
 <div class="container" data-bs-theme="dark">
     <div class="row justify-content-center mt-5 mb-5">
         <div class="col-10 text-center">
