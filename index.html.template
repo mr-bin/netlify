@@ -329,7 +329,7 @@
         </div>
         <div class="col-8 text-left">
             <div class="title">
-                <h4> {{ youtube() }} <a href="www.youtube.com/@psy_ekaterina_zaikina"> Youtube канал </a></h4>
+                <h4> {{ youtube() }} <a href="https://youtube.com/@psy_ekaterina_zaikina">Youtube канал </a></h4>
             </div>
         </div>
     </div>
