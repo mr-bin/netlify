@@ -1,3 +1,14 @@
-title: "Сайт психолога"
+title: "Екатерина Заикина — психолог"
+site_url: "https://ekaterina-zaikina.netlify.app"
 price:
   gbp: 50
+
+# Эти цифры показываются на сайте (hero, FAQ, блок "Образование").
+# Можно менять вручную по мере накопления опыта — сайт пересоберётся с новыми значениями.
+stats:
+  practice_since: 2021
+  sessions: 2600
+  clients: 100
+  education_hours: 1600
+  therapy_hours: 390
+  supervision_hours: 240
