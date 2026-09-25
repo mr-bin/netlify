@@ -1,378 +1,248 @@
-{% macro pointer() -%}
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill"
-     viewBox="0 0 16 16">
-    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-</svg>
-{%- endmacro %}
-
-{% macro telegram() -%}
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-telegram"
-     viewBox="0 0 16 16">
-    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.666 2.01-.567.225-.595.442c-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016s.042.12.037.141c-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629q.14.092.27.187c.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.013-.315.34.34 0 0 0-.114-.217.53.53 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09"/>
-</svg>
-{%- endmacro %}
-
-{% macro whatsapp() -%}
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-whatsapp"
-     viewBox="0 0 16 16">
-    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-</svg>
-{%- endmacro %}
-
-{% macro email() -%}
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-envelope-at"
-     viewBox="0 0 16 16">
-    <path d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2zm3.708 6.208L1 11.105V5.383zM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2z"/>
-    <path d="M14.247 14.269c1.01 0 1.587-.857 1.587-2.025v-.21C15.834 10.43 14.64 9 12.52 9h-.035C10.42 9 9 10.36 9 12.432v.214C9 14.82 10.438 16 12.358 16h.044c.594 0 1.018-.074 1.237-.175v-.73c-.245.11-.673.18-1.18.18h-.044c-1.334 0-2.571-.788-2.571-2.655v-.157c0-1.657 1.058-2.724 2.64-2.724h.04c1.535 0 2.484 1.05 2.484 2.326v.118c0 .975-.324 1.39-.639 1.39-.232 0-.41-.148-.41-.42v-2.19h-.906v.569h-.03c-.084-.298-.368-.63-.954-.63-.778 0-1.259.555-1.259 1.4v.528c0 .892.49 1.434 1.26 1.434.471 0 .896-.227 1.014-.643h.043c.118.42.617.648 1.12.648m-2.453-1.588v-.227c0-.546.227-.791.573-.791.297 0 .572.192.572.708v.367c0 .573-.253.744-.564.744-.354 0-.581-.215-.581-.8Z"/>
-</svg>
-{%- endmacro %}
-
-{% macro youtube() -%}
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-youtube"
-     viewBox="0 0 16 16">
-      <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.01 2.01 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.01 2.01 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31 31 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.01 2.01 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A100 100 0 0 1 7.858 2zM6.4 5.209v4.818l4.157-2.408z"/>
-</svg>
-{%- endmacro %}
-
-{% macro contacts(show_header=True) -%}
-<div class="container">
-    <div class="row justify-content-center mt-5 mb-5">
-        {% if show_header %}
-        <div class="col-10 text-center">
-            <h1>Записаться на консультацию:</h1>
-        </div>
-
-
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-
-            <div class="box-part text-center">
-
-                <i class="fa fa-instagram fa-3x" aria-hidden="true"></i>
-
-                <div class="title">
-                    <h4>{{ telegram() }} <a href="https://t.me/katerina_zaikina"> Telegram </a></h4>
-                </div>
-
-             </div>
-        </div>
-
-         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-
-            <div class="box-part text-center">
-
-                <i class="fa fa-twitter fa-3x" aria-hidden="true"></i>
-
-                <div class="title">
-                    <h4> {{ whatsapp() }} <a href="https://wa.me/+447449131761"> WhatsApp </a></h4>
-                </div>
-
-             </div>
-        </div>
-
-         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-
-            <div class="box-part text-center">
-
-                <i class="fa fa-facebook fa-3x" aria-hidden="true"></i>
-
-                <div class="title">
-                    <h4>{{ email() }} <a href="mailto:zaikina.katerina@gmail.com"> Email </a></h4>
-                </div>
-
-             </div>
-        </div>
-
-        {% else %}
-        <span class="navbar-text mr-auto">
-            <a href="https://t.me/katerina_zaikina"> {{ telegram() }} </a> </span>
-        <span class="navbar-text mr-auto">
-            <a href="https://wa.me/+447449131761"> {{ whatsapp() }} </a> </span>
-        <span class="navbar-text mr-auto">
-            <a href="mailto:zaikina.katerina@gmail.com"> {{ email() }} </a> </span>
-        {% endif %}
-    </div>
-</div>
-{%- endmacro %}
-
+{% import "partials/icons.html" as ui %}
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{title}}</title>
+    <title>{{ title }}</title>
+    <meta name="description" content="Екатерина Заикина — психолог. Поддержка в репродуктивных трудностях и на пути к родительству: планирование, ЭКО, беременность, потери, менопауза. Онлайн, на русском языке.">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:url" content="{{ site_url }}/">
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:description" content="Поддержка в репродуктивных трудностях и на пути к родительству: планирование, ЭКО, беременность, потери, менопауза. Онлайн, на русском языке.">
+    <meta property="og:image" content="{{ site_url }}/resources/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div class="fixed-top">
-  <div class="position-fixed top-0 end-0 col-2">
-      {{contacts(False)}}
-  </div>
-</div>
+{{ ui.top_bar() }}
 
-<div class="px-8 py-5 my-5 text-center">
-    <img class="d-block mx-auto mb-4" src="/resources/img.png" alt="" width="200" height="200">
-    <h1 class="display-5 fw-bold text-body-emphasis">Екатерина Заикина</h1>
-    <div class="col-lg-6 mx-auto">
-        <p class="lead mb-4">Психолог, психотерапевт</p>
-        <p class="lead mb-4"></p>
+<a id="top"></a>
+
+<!-- Hero -->
+<header class="hero-section">
+    <div class="hero container">
+        <div class="hero-photo-frame">
+            <img class="hero-photo rounded-circle" src="/resources/profile.png" alt="Екатерина Заикина" width="168" height="168">
+        </div>
+        <h1 class="hero-name">Екатерина Заикина</h1>
+        <p class="hero-role">Психолог</p>
+        <p class="hero-tagline">Поддержка в репродуктивных трудностях и на пути к родительству: планирование, ЭКО, беременность, потери, менопауза. Онлайн, на русском языке.</p>
+        <div class="hero-stats">
+            <span class="hero-stat">Веду частную практику <strong>с {{ stats.practice_since }}</strong></span>
+            <span class="hero-stat">Провела более <strong>{{ stats.sessions }}</strong> клиентских сессий</span>
+            <span class="hero-stat">Работала с более чем <strong>{{ stats.clients }}</strong> клиентами</span>
+        </div>
+        {{ ui.cta_reveal("hero-contacts") }}
     </div>
-</div>
+    <div class="wave" aria-hidden="true">
+        <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,40 C220,90 380,0 620,36 C860,72 1000,10 1230,34 C1330,44 1400,40 1440,32 L1440,70 L0,70 Z" style="fill:var(--color-bg)"/>
+        </svg>
+    </div>
+</header>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-10 text-center">
-            <h1>Обо мне</h1>
+<!-- Topics -->
+<section class="section" id="topics">
+    <div class="container">
+        <h2 class="section-title">Я могу помочь в репродуктивной сфере в таких темах, как:</h2>
+        <div class="topic-grid">
+            <div class="topic-card"><span class="dot"></span><span>Планирование и ожидание беременности (тревога, долгое ожидание)</span></div>
+            <div class="topic-card"><span class="dot"></span><span>ЭКО (подготовка, неудачная попытка)</span></div>
+            <div class="topic-card"><span class="dot"></span><span>Беременность (страхи и тревога, образ себя как мамы, перемены в жизни и теле)</span></div>
+            <div class="topic-card"><span class="dot"></span><span>Потери (замершая беременность, выкидыш, удаление трубы)</span></div>
+            <div class="topic-card"><span class="dot"></span><span>Диагнозы (эндометриоз, миома, СПКЯ) и жизнь с ними</span></div>
+            <div class="topic-card"><span class="dot"></span><span>Менопауза</span></div>
+            <div class="topic-card" style="grid-column: 1 / -1;"><span class="dot"></span><span>Мужчины: переживания, связанные с бесплодием, ЭКО или потерей беременности у партнёрши</span></div>
         </div>
+        <p class="disclaimer">Психотерапия не заменяет медицинское лечение и работает как дополнение к наблюдению у врача.</p>
+    </div>
+</section>
 
-        <div class="col-10">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Практикую более 3 лет.</li>
-                <li class="list-group-item">Провела более 1400 клиентских сессий.</li>
-                <li class="list-group-item">Помогла более 90 клиентам.</li>
-            </ul>
+<!-- Benefits -->
+<section class="section section-alt">
+    <div class="container">
+        <h2 class="section-title">В работе со мной вы можете получить:</h2>
+        <div class="benefit-grid">
+            <div class="benefit-card"><span class="dot"></span><span>Внутреннюю опору в период неопределённости и ожидания</span></div>
+            <div class="benefit-card"><span class="dot"></span><span>Навык снижать тревогу и возвращаться в устойчивое состояние</span></div>
+            <div class="benefit-card"><span class="dot"></span><span>Возможность прожить чувства, о которых трудно говорить с близкими (горе, вину, зависть, злость)</span></div>
+            <div class="benefit-card"><span class="dot"></span><span>Понимание своих желаний и ценностей, в том числе в вопросе, как двигаться дальше</span></div>
+            <div class="benefit-card"><span class="dot"></span><span>Принятие перемен в теле и в жизни после беременности и родов</span></div>
+            <div class="benefit-card"><span class="dot"></span><span>Ощущение себя не только «пациентом» и «диагнозом», а целым человеком</span></div>
+            <div class="benefit-card" style="grid-column: 1 / -1;"><span class="dot"></span><span>Безопасное и доверительное пространство, где можно не держаться</span></div>
         </div>
+        <p class="disclaimer">А ещё я работаю с темами жизненных перемен и переезда в другую страну — <a href="#faq">подробнее в FAQ</a>.</p>
+    </div>
+</section>
 
-        <div class="col-10">
-            <div class="accordion" id="accordionExample">
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne"
-                                aria-expanded="true" aria-controls="collapseOne">
-                            Подробнее
-                        </button>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse"
-                         data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <p>Я недирективный терапевт — это значит, что свою задачу я вижу в том, чтобы
-                                создать условия,
-                                создать <strong>безопасное и доверительное пространство</strong>, в котором вы
-                                смогли бы
-                                <strong>открыть себя</strong>.</p>
-                            <p>Психология — моё второе образование. А по первому я — инженер-программист, и до
-                                декрета
-                                <strong>работала
-                                    в IT</strong>. Затем какое-то время я на общественных началах была учителем
-                                в частной
-                                русской
-                                школе.</p>
-                            <p>У меня двое детей. И я хорошо понимаю, что <strong>быть мамой</strong> — это
-                                работа, которая
-                                требует умения и выносливости. Глядя на своих детей и на детей в школе, я стала
-                                интересоваться
-                                детской психологией. Читала Петрановскую, Млодик. Тогда я и решила стать
-                                психологом — мне
-                                захотелось сделать это своей миссией. Исцеляя себя, человек несёт в свою семью и
-                                в мир
-                                уверенность, спокойствие и благополучие — и делает вклад в будущие поколения.
-                            </p>
-                            <p>Кардинальная <strong>смена профессии</strong> требует <strong>большой
-                                устойчивости и веры в
-                                себя</strong>. Если перед вами тоже стоит такой вопрос — я готова помочь.</p>
-                            <p>С 2016 года я живу в Англии. И мне очень понятны переживания человека, который
-                                меняет страну,
-                                сталкивается со <strong>сменой окружения</strong>. Чувствует разочарование,
-                                тревогу:
-                                «Справлюсь
-                                я или нет?
-                                Правильным ли было это решение или стоило выбрать другую страну?» У человека
-                                происходит
-                                большая
-                                <strong>переоценка ценностей</strong>, по-новой приходится выстраивать свою
-                                личность — и я
-                                готова быть с вами в
-                                этом процессе.</p>
-                            <p>Я <strong>верю в ваши силы и способности</strong>. И предоставлю свои
-                                профессиональные
-                                знания,
-                                навыки и поддержку
-                                для вашего развития, чтобы вы сами управляли своей жизнью. Чтобы вы могли
-                                понять, что хотите
-                                и
-                                какое решение является для вас самым верным. Чтобы вы обрели <strong>внутреннюю
-                                    опору и
-                                    уверенный взгляд
-                                    в будущее</strong>. В результате ваша жизнь может измениться целиком и
-                                полностью, а
-                                может
-                                внешне остаться
-                                такой же, как была — но у вас появится ощущение не «мной живут», а <strong>«я
-                                    живу»</strong>.
-                            </p>
-                            <p>Мне интересно, как устроены люди, я интроверт — <strong>внимательно слушаю и
-                                пропускаю
-                                человека
-                                через
-                                себя</strong>. Мне важно, что он думает, чего боится, как у него складывается
-                                жизнь. И как
-                                терапевту мне
-                                ценно увидеть то значимое, что порой скрыто за словами, и понять вас.</p>
-                            <p>Буду рада знакомству!</p>
-                        </div>
-                    </div>
-                </div>
+<!-- Video -->
+<section class="section section-alt">
+    <div class="container text-center">
+        <div class="video-frame">
+            <iframe src="https://www.youtube-nocookie.com/embed/I1egM49AIOM"
+                    title="Видео от Екатерины Заикиной" frameborder="0"
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <p class="mt-3"><a href="https://youtube.com/@psy_ekaterina_zaikina">{{ ui.youtube() }} YouTube канал</a></p>
+    </div>
+</section>
+
+<!-- Consultation -->
+<section class="section" id="consultation">
+    <div class="container">
+        <h2 class="section-title">Индивидуальная консультация</h2>
+        <div class="price-card">
+            <p class="text-soft mb-0">Сессия длится 60 минут, проводится онлайн (Google&nbsp;Meet)</p>
+            <p class="price-amount">£{{ price["gbp"] }} <small>GBP</small></p>
+            <p class="price-note">Стоимость одинакова для первой и для всех последующих сессий</p>
+            <p><strong>Первая сессия</strong> представляет собой интервью-знакомство, где вы знакомитесь со мной, а я — с вами. Мы обсуждаем возможные пути решения вашего запроса и принимаем решение о возможной совместной работе.</p>
+            <p>Перед первой встречей я пришлю информированное согласие: в нём описано, как устроена работа, что происходит с вашими данными и где границы конфиденциальности. Прочитать его можно заранее, вопросы можно задать до встречи.</p>
+            <div class="callout">
+                <strong>Правило о 24 часах:</strong> ваше время в моём расписании закреплено только за вами. Если вы отменяете или переносите встречу больше чем за 24 часа — перенос свободный. Если вы отменяете или переносите встречу менее чем за 24 часа, я прошу оплатить сессию: освободившееся время я уже не смогу предложить другому человеку. Если случилось что-то непредвиденное (срочный визит к врачу, перенос процедуры), напишите мне, и мы вместе решим, как быть.
             </div>
         </div>
-    </div>
-
-</div>
-
-<div class="container">
-    <div class="row justify-content-center mt-5 mb-5">
-        <div class="col-10 text-center">
-            <h1>Помогу вам, если</h1>
-        </div>
-        <div class="col-10">
-            <p>Вы переехали или только планируете переезд в другую страну и испытываете сложности в адаптации.</p>
-            <p>Вы переживаете эмоциональные качели от перемен в вашей жизни, когда</p>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">{{pointer()}} Вы ощущаете неуверенность в завтрашнем дне, когда появляются
-                    сомнения, а
-                    правильный ли выбор вы совершили
-                </li>
-                <li class="list-group-item">{{pointer()}} Поднимаются и обостряются все «тараканы»</li>
-                <li class="list-group-item">{{pointer()}} Вас накрывает паника «уехал(а) навсегда»</li>
-                <li class="list-group-item">{{pointer()}} Вы испытываете внутреннее сопротивление в изучении языка</li>
-            </ul>
+        <div class="text-center mt-4">
+            {{ ui.cta_reveal("consultation-contacts") }}
         </div>
     </div>
-</div>
+</section>
 
-<div class="container">
-    <div class="row justify-content-center mt-5 mb-5">
-        <div class="col-10 text-center">
-            <h1>Мои клиенты получают:</h1>
+<!-- Education -->
+<section class="section section-alt" id="education">
+    <div class="container">
+        <h2 class="section-title">Образование</h2>
+        <div class="edu-stats">
+            <span class="hero-stat"><strong>{{ stats.education_hours }}+</strong>&nbsp;часов дополнительного профессионального образования</span>
+            <span class="hero-stat"><strong>{{ stats.therapy_hours }}+</strong>&nbsp;часов личной терапии</span>
+            <span class="hero-stat"><strong>{{ stats.supervision_hours }}+</strong>&nbsp;часов супервизий</span>
         </div>
-        <div class="col-10">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">{{pointer()}} Внутреннюю опору</li>
-                <li class="list-group-item">{{pointer()}} Понимание себя и своих ценностей</li>
-                <li class="list-group-item">{{pointer()}} Умение слышать свои желания</li>
-                <li class="list-group-item">{{pointer()}} Навык справляться со своими эмоциями и выходить в устойчивое
-                    состояние
-                </li>
-                <li class="list-group-item">{{pointer()}} Ответ на вопрос «Кто я»</li>
-                <li class="list-group-item">{{pointer()}} Построение собственного сценария персонального будущего</li>
-                <li class="list-group-item">{{pointer()}} Бережное и комфортное пространство</li>
-            </ul>
+        <ol class="edu-timeline">
+            {% set timeline = [
+                ("2019", "Повышение квалификации «Логотерапия и экзистенциальный анализ», 240 ч"),
+                ("2020", "Профессиональная переподготовка «Логотерапия и экзистенциальный анализ», 384 ч"),
+                ("2021", "Высшее психологическое образование, бакалавриат, Московский институт психоанализа"),
+                ("2021–2023", "Повышение квалификации «Транзактный анализ — Восточная версия», 144 ч"),
+                ("2022", "«Терапия идентичности», работа с психотравмой, 48 ч"),
+                ("2022", "Повышение квалификации «Работа психолога с депрессивными состояниями», 72 ч"),
+                ("2023–2024", "Повышение квалификации «Эриксоновская терапия и эриксоновский гипноз», 164 ч"),
+                ("2026", "Повышение квалификации «Репродуктивная психосоматика» (И.В. Агеева), 144 ч"),
+            ] %}
+            {% for year, text in timeline %}
+            <li class="edu-timeline-item">
+                <span class="edu-timeline-dot"></span>
+                <span class="edu-timeline-year">{{ year }}</span>
+                <span class="edu-timeline-text">{{ text }}</span>
+            </li>
+            {% endfor %}
+        </ol>
+        <ul class="edu-status-list">
+            <li>{{ ui.chevron() }}<span>Действительный член Общероссийской Профессиональной Психотерапевтической Лиги</span></li>
+            <li>{{ ui.chevron() }}<span>Аккредитованный полимодальный психотерапевт (СРО «Союз психологов и психотерапевтов»)</span></li>
+            <li>{{ ui.chevron() }}<span>Аккредитованный психотерапевт «Транзактный анализ — Восточная версия» (СРО «Союз психологов и психотерапевтов»)</span></li>
+        </ul>
+
+        <p class="text-center text-soft mb-3" style="font-size:.9rem;">Дипломы и сертификаты — нажмите, чтобы увеличить</p>
+        <div class="doc-grid">
+            {% set docs = [
+                ("diplom-bakalavra", "Диплом бакалавра психологии, 2021"),
+                ("logoterapiya-diplom-perepodgotovka", "Диплом о проф. переподготовке «Логотерапия и экзистенциальный анализ», 2020"),
+                ("logoterapiya-udostoverenie", "Удостоверение «Логотерапия и экзистенциальный анализ», 2019"),
+                ("logoterapiya-frankl-sertifikat", "Сертификат Института Виктора Франкла (Австрия), 2018–2020"),
+                ("klinicheskaya-psihologiya-sertifikat", "Сертификат «Клиническая психология для логотерапевтов», 2021"),
+                ("terapiya-identichnosti-udostoverenie", "Удостоверение «Терапия идентичности». Авторский метод работы с психотравмой, 2022"),
+                ("depressivnye-sostoyaniya-udostoverenie", "Удостоверение «Работа психолога с депрессивными состояниями», 2022"),
+                ("tranzaktnyy-analiz-udostoverenie", "Удостоверение «Транзактный анализ — Восточная версия», 2022"),
+                ("tavv-prodvinutyy-udostoverenie", "Удостоверение «Транзактный анализ — Восточная версия», продвинутый курс, 2023"),
+                ("eriksonovskaya-terapiya-udostoverenie", "Удостоверение «Эриксоновская терапия и эриксоновский гипноз», 2024"),
+            ] %}
+            {% for slug, caption in docs %}
+            <a href="/resources/education/{{ slug }}.jpg" class="doc-thumb" data-full="/resources/education/{{ slug }}.jpg" data-title="{{ caption }}">
+                <img src="/resources/education/thumbs/{{ slug }}.jpg" alt="{{ caption }}" loading="lazy">
+            </a>
+            {% endfor %}
         </div>
     </div>
-</div>
+</section>
 
-<div class="container">
-    <div class="row justify-content-center mt-5 mb-5">
-        <div class="col-10 text-center">
-            <h1>Индивидуальная консультация</h1>
-        </div>
-        <div class="col-10">
-            <p>Сессия длится 60 минут, проводится онлайн (Google-Meet): {{price["gbp"]}}£ (GBP)</p>
-            <p><strong>Первая сессия</strong> представляет собой интервью-знакомство, где вы знакомитесь со мной, а я с
-                вами, мы обсуждаем
-                возможные пути решения вашего запроса и принимаем решение о возможной совместной работе.</p>
-            <p>В нашей работе есть важное <strong>правило о 24 часах</strong>:
-                <i>Если вы отменяете или переносите нашу встречу менее, чем за 24 часа до назначенного времени, то
-                    сессия
-                    должна быть оплачена</i>.</p>
+<!-- About -->
+<section class="section" id="about">
+    <div class="container text-center">
+        <button class="bio-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#bioBody" aria-expanded="false" aria-controls="bioBody">
+            + Подробнее обо мне
+        </button>
+        <div class="collapse bio-body text-start" id="bioBody">
+            <p>Я недирективный терапевт — это значит, что свою задачу я вижу в том, чтобы создать условия — <strong>безопасное и доверительное пространство</strong>, в котором вы смогли бы <strong>открыть себя</strong>.</p>
+            <p>Психология — моё второе образование. А по первому я — инженер-программист, и до декрета <strong>работала в IT</strong>. Затем какое-то время я на общественных началах была учителем в частной русской школе.</p>
+            <p>У меня двое детей. И я хорошо понимаю, что <strong>быть мамой</strong> — это работа, которая требует умения и выносливости. Глядя на своих детей и на детей в школе, я стала интересоваться детской психологией. Читала Петрановскую, Млодик. Тогда я и решила стать психологом — мне захотелось сделать это своей миссией. Исцеляя себя, человек несёт в свою семью и в мир уверенность, спокойствие и благополучие — и делает вклад в будущие поколения.</p>
+            <p>Тема репродуктивной сферы мне близка как женщине и как маме. Я вижу, как важно не оставаться один на один с тревогой, ожиданием и потерями. Мне важно, чтобы было пространство, где можно поделиться сомнениями и страхами. Поэтому я прошла обучение по репродуктивной психосоматике и хочу помогать в этом направлении.</p>
+            <p>С 2016 года я живу в Англии. И мне очень понятны переживания человека, который меняет страну, сталкивается со <strong>сменой окружения</strong>. Чувствует разочарование, тревогу: «Справлюсь я или нет? Правильным ли было это решение или стоило выбрать другую страну?» У человека происходит большая <strong>переоценка ценностей</strong>, заново приходится выстраивать свою личность — и я готова быть с вами в этом процессе. Я знаю, как непросто проходить через важные и уязвимые периоды жизни вдали от дома, в другой системе и на другом языке.</p>
+            <p>Мне интересно, как устроены люди, я внимательно слушаю и бережно отношусь к опыту другого. Мне важно, что он думает, чего боится, как у него складывается жизнь. И как терапевту мне ценно увидеть то значимое, что порой скрыто за словами, и понять вас.</p>
+            <p>Я верю, что у каждого есть <strong>внутренние ресурсы</strong>, даже если сейчас их трудно почувствовать. Моя задача не подсказывать, как вам жить, а быть рядом и помогать услышать себя: что вы чувствуете, чего хотите, какое решение для вас верное. Не всегда получается изменить обстоятельства, но можно изменить отношение к ним, вернуть опору и ощущение «я живу свою жизнь», а не «мной живут».</p>
+            <p>Буду рада знакомству!</p>
         </div>
     </div>
-</div>
+</section>
 
-<div class="container">
-    <div class="row justify-content-center mt-5 mb-5">
-        <div class="col-10 text-center">
-            <h1>Образование:</h1>
-        </div>
-        <div class="col-10">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"> {{pointer()}} 1400+ часов дополнительного профессионального образования
-                </li>
-                <li class="list-group-item"> {{pointer()}} 270+ часов личной терапии</li>
-                <li class="list-group-item"> {{pointer()}} 130+ часов супервизий</li>
-                <li class="list-group-item"> {{pointer()}} Действительный член ОППЛ</li>
-                <li class="list-group-item"> {{pointer()}} Аккредитованный полимодальный психотерапевт (СРО «Союз
-                    психологов и
-                    психотерапевтов»)
-                </li>
-                <li class="list-group-item"> {{pointer()}} Аккредитованный психотерапевт «Транзактный анализ Восточная
-                    версия «(СРО
-                    «Союз психологов и психотерапевтов»)
-                </li>
-                <li class="list-group-item"> {{pointer()}} 2021 - высшее психологическое образование, бакалавриат</li>
-                <li class="list-group-item"> {{pointer()}} 2020 - повышение квалификации «Логотерапия и экзистенциальный
-                    анализ»
-                </li>
-                <li class="list-group-item"> {{pointer()}} 2023 - повышение квалификации «Транзактный анализ - Восточная
-                    версия»
-                </li>
-                <li class="list-group-item"> {{pointer()}} 2024 - повышение квалификации «Эриксоновская терапия и
-                    эриксоновский гипноз»
-                </li>
-            </ul>
+<!-- FAQ -->
+<section class="section" id="faq">
+    <div class="container">
+        <h2 class="section-title">FAQ</h2>
+        <div class="faq-list narrow">
+            {% set opyt_answer = "Я практикую с " ~ stats.practice_since ~ " года, провела более " ~ stats.sessions ~ " сессий. У меня есть опыт сопровождения женщин во время беременности: мы работали со страхами и тревогой, с образом себя как мамы, с переживаниями о переменах в жизни и теле после родов. В 2026 году я прошла обучение по репродуктивной психосоматике (144 часа) и развиваю это направление, работая с супервизором." %}
+            {% set faqs = [
+                ("Нужно ли направление от врача?", "Нет, направление не нужно. Психотерапия не заменяет медицинское лечение и идёт параллельно с наблюдением у врача. Вопросы диагностики и лечения решаются с вашим врачом, я с ними не работаю."),
+                ("Нужно ли что-то подписывать?", "Да, перед первой встречей я отправляю информированное согласие. Подписывать на бумаге не нужно: достаточно ответить на письмо, что вы прочитали документ и согласны. Если у вас есть вопросы по тексту, задайте их до встречи."),
+                ("Вы работаете с парами?", "Нет, я веду только индивидуальные консультации. Если вы хотите прийти вместе с партнёром, я могу подсказать, как найти специалиста по парной терапии."),
+                ("Вы работаете с мужчинами?", "Да, индивидуально. Работаю с темой мужского бесплодия, а также с переживаниями, связанными с ЭКО или потерей беременности у партнёрши."),
+                ("Работаете ли вы с другими запросами?", "Да, помимо репродуктивной сферы я работаю и с другими личными запросами, среди них:<ul class=\"faq-inline-list\"><li>Самооценка и уверенность в себе</li><li>Сложные перемены и жизненные ситуации</li><li>Работа с эмоциями</li><li>Отношения с партнёром, родителями, друзьями</li><li>Расставание, потеря близкого</li><li>Трудный прошлый опыт</li><li>Смысл жизни, жизненные цели, самоопределение</li><li>Прокрастинация и личная эффективность</li><li>Трудоголизм и баланс между работой и личной жизнью</li><li>Переезд и адаптация в другой стране</li></ul>Если у вас другой запрос — напишите, и мы обсудим, подхожу ли я вам."),
+                ("Какой у вас опыт в репродуктивной теме?", opyt_answer),
+                ("Сколько встреч потребуется?", "Это зависит от запроса. Кому-то хватает нескольких встреч, чтобы справиться с тревогой перед процедурой, а работа с потерей или длительным ожиданием может занять больше времени. Мы вместе оцениваем это после первой встречи и пересматриваем по ходу работы."),
+                ("Как проходит первая сессия?", "Это знакомство. Вы рассказываете о своей ситуации, я рассказываю о том, как работаю, и мы решаем, подходим ли друг другу. Обязательств продолжать нет."),
+                ("Могу ли я прийти, если всё ещё на этапе «просто думаю о беременности»?", "Да. Тревога, сомнения и усталость от ожидания — сами по себе повод."),
+                ("Гарантирует ли терапия беременность или улучшение состояния здоровья?", "Нет. Я не обещаю медицинских результатов. Терапия помогает справляться со стрессом, неопределённостью и эмоциями, и жить с большей опорой на себя."),
+                ("Из каких стран вы принимаете?", "Из любой, консультации проходят онлайн. Я живу в Англии, время подбираем с учётом вашего часового пояса."),
+                ("На каком языке проходят сессии?", "На русском."),
+                ("Что, если мне нужна другая помощь?", "При острых состояниях (тяжёлая депрессия, мысли о самоповреждении) в первую очередь нужно обратиться к врачу или в кризисную службу. Я могу подсказать, куда обратиться, но сама такую помощь не оказываю."),
+            ] %}
+            {% for question, answer in faqs %}
+            <details>
+                <summary>{{ question }}</summary>
+                <div class="faq-body">{{ answer }}</div>
+            </details>
+            {% endfor %}
         </div>
     </div>
-</div>
+</section>
 
-<div class="container">
-    <div class="row justify-content-center mt-5 mb-5">
-        <div class="col-9 text-center">
-            <h1>Приветствие:</h1>
-        </div>
-        <div class="col-8 text-center">
-            <iframe width="100%" height="320" src="https://www.youtube.com/embed/hh2o3HF7pgM?si=1DSE5O2MN9nM6ZUp"
-                    title="YouTube video player" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-        </div>
-        <div class="col-8 text-left">
-            <div class="title">
-                <h4> {{ youtube() }} <a href="https://youtube.com/@psy_ekaterina_zaikina">Youtube канал </a></h4>
-            </div>
-        </div>
-    </div>
+<div class="footer-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C220,90 380,0 620,36 C860,72 1000,10 1230,34 C1330,44 1400,40 1440,32 L1440,70 L0,70 Z" style="fill:var(--color-bg-alt)"/>
+    </svg>
 </div>
+{{ ui.site_footer() }}
 
-<div class="container" data-bs-theme="dark">
-    <div class="row justify-content-center mt-5 mb-5">
-        <div class="col-10 text-center">
-            <h1>Отзывы</h1>
-        </div>
-        <div class="col-10">
-            <div id="carouselExampleIndicators" class="carousel slide">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                            class="active"
-                            aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                            aria-label="Slide 2"></button>
-                </div>
-                <div class="carousel-inner">
-                    <div class="carousel-item text-center col-md-2 col-sm-2 col-xs-12 active">
-                        <img src="/resources/review1.png" class="media-object img-rounded img-responsive" alt="Отзыв 1">
-                    </div>
-                    <div class="carousel-item text-center col-md-2 col-sm-2 col-xs-12">
-                        <img src="/resources/review2.png" class="media-object img-rounded img-responsive" alt="Отзыв 2">
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-        </div>
-    </div>
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Закрыть">&times;</button>
+    <button class="lightbox-prev" id="lightbox-prev" aria-label="Предыдущий документ">&#8249;</button>
+    <img id="lightbox-img" src="" alt="">
+    <button class="lightbox-next" id="lightbox-next" aria-label="Следующий документ">&#8250;</button>
 </div>
-
-{{contacts()}}
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
