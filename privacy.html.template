@@ -6,10 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Политика конфиденциальности — {{ title }}</title>
     <meta name="robots" content="noindex">
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" href="/favicon.ico?v={{ favicon_v }}" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v={{ favicon_v }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v={{ favicon_v }}">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v={{ favicon_v }}">
+    <link rel="canonical" href="{{ site_url }}/privacy.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:url" content="{{ site_url }}/privacy.html">
+    <meta property="og:title" content="Политика конфиденциальности — {{ title }}">
+    <meta property="og:description" content="Политика конфиденциальности сайта Екатерины Заикиной, психолога.">
+    <meta property="og:image" content="{{ site_url }}/resources/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ site_url }}/privacy.html">
+    <meta name="twitter:title" content="Политика конфиденциальности — {{ title }}">
+    <meta name="twitter:description" content="Политика конфиденциальности сайта Екатерины Заикиной, психолога.">
+    <meta name="twitter:image" content="{{ site_url }}/resources/og-image.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
