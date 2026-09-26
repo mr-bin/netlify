@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ title }}</title>
     <meta name="description" content="Екатерина Заикина — психолог. Поддержка в репродуктивных трудностях и на пути к родительству: планирование, ЭКО, беременность, потери, менопауза. Онлайн, на русском языке.">
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" href="/favicon.ico?v={{ favicon_v }}" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v={{ favicon_v }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v={{ favicon_v }}">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v={{ favicon_v }}">
+    <link rel="canonical" href="{{ site_url }}/">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="ru_RU">
     <meta property="og:url" content="{{ site_url }}/">
@@ -19,6 +20,10 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ site_url }}/">
+    <meta name="twitter:title" content="{{ title }}">
+    <meta name="twitter:description" content="Поддержка в репродуктивных трудностях и на пути к родительству: планирование, ЭКО, беременность, потери, менопауза. Онлайн, на русском языке.">
+    <meta name="twitter:image" content="{{ site_url }}/resources/og-image.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -41,6 +46,7 @@
         <h1 class="hero-name">Екатерина Заикина</h1>
         <p class="hero-role">Психолог</p>
         <p class="hero-tagline">Поддержка в репродуктивных трудностях и на пути к родительству: планирование, ЭКО, беременность, потери, менопауза. Онлайн, на русском языке.</p>
+        <p class="hero-subline">Работаю индивидуально с женщинами и мужчинами</p>
         <div class="hero-stats">
             <span class="hero-stat">Веду частную практику <strong>с {{ stats.practice_since }}</strong></span>
             <span class="hero-stat">Провела более <strong>{{ stats.sessions }}</strong> клиентских сессий</span>
@@ -66,7 +72,7 @@
             <div class="topic-card"><span class="dot"></span><span>Потери (замершая беременность, выкидыш, удаление трубы)</span></div>
             <div class="topic-card"><span class="dot"></span><span>Диагнозы (эндометриоз, миома, СПКЯ) и жизнь с ними</span></div>
             <div class="topic-card"><span class="dot"></span><span>Менопауза</span></div>
-            <div class="topic-card" style="grid-column: 1 / -1;"><span class="dot"></span><span>Мужчины: переживания, связанные с бесплодием, ЭКО или потерей беременности у партнёрши</span></div>
+            <div class="topic-card" style="grid-column: 1 / -1;"><span class="dot"></span><span>Мужское бесплодие и переживания партнёра<span class="topic-card-sub">Диагноз, ЭКО, ожидание, потеря беременности</span></span></div>
         </div>
         <p class="disclaimer">Психотерапия не заменяет медицинское лечение и работает как дополнение к наблюдению у врача.</p>
     </div>
