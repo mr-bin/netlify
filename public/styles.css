@@ -44,6 +44,8 @@ h1, h2, h3, h4, .display-heading {
     color: var(--color-text);
     font-weight: 700;
     letter-spacing: -0.01em;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
 }
 
 .hero-name {
@@ -105,6 +107,8 @@ a:hover { color: var(--color-accent); }
     text-decoration: none;
     font-size: 1.05rem;
     flex: none;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
 }
 .top-bar-name:hover { color: var(--color-accent-dark); }
 .top-bar .contact-bar { gap: .4rem; flex: none; }
@@ -362,6 +366,8 @@ a:hover { color: var(--color-accent); }
     font-style: italic;
     color: var(--color-text-soft);
     font-size: 1.0625rem;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
 }
 
 .simple-list {
@@ -406,14 +412,18 @@ a:hover { color: var(--color-accent); }
     font-size: 2.4rem;
     color: var(--color-accent-dark);
     margin: .25rem 0 1rem;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
 }
 .price-amount small { font-size: 1rem; color: var(--color-text-soft); font-weight: 400; }
 .price-note {
     margin: -.75rem 0 1.25rem;
     font-family: var(--font-display);
     font-style: italic;
-    font-size: 1rem;
+    font-size: 1.125rem;
     color: var(--color-text-soft);
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
 }
 .price-card p { text-align: left; }
 
@@ -473,6 +483,8 @@ a:hover { color: var(--color-accent); }
     color: var(--color-accent-dark);
     font-size: .95rem;
     margin-bottom: .15rem;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
 }
 .edu-timeline-text { color: var(--color-text-soft); }
 
@@ -571,6 +583,8 @@ a:hover { color: var(--color-accent); }
     font-style: italic;
     cursor: pointer;
     padding: .4rem 0;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
 }
 .bio-body { max-width: 760px; margin: 1rem auto 0; }
 .bio-body p { margin-bottom: 1rem; }
@@ -589,6 +603,8 @@ a:hover { color: var(--color-accent); }
     font-weight: 500;
     font-size: 1.25rem;
     color: var(--color-text);
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
 }
 .faq-list summary::-webkit-details-marker { display: none; }
 .faq-list summary::after {
@@ -632,6 +648,8 @@ a:hover { color: var(--color-accent); }
     font-family: var(--font-display);
     font-size: 1.3rem;
     margin-bottom: 1rem;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
 }
 .footer-meta {
     margin-top: 1.5rem;
@@ -641,6 +659,7 @@ a:hover { color: var(--color-accent); }
 .footer-meta a { color: var(--color-text-soft); text-decoration: underline; }
 .footer-meta a:hover { color: var(--color-accent-dark); }
 .footer-dot { margin: 0 .5rem; }
+.footer-copy { white-space: nowrap; }
 
 /* ---- Privacy page ---- */
 .legal-page { padding: 7rem 0 4rem; }
