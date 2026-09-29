@@ -1,12 +1,18 @@
 [
   {
+    "url": "https://www.youtube.com/Hf6WkiNUkJE",
+    "title": "Психолог | Екатерина Заикина",
+    "note": "Приветственное видео",
+    "featured": true
+  },
+  {
     "url": "https://www.youtube.com/shorts/I1egM49AIOM",
     "title": "Когда женщина становится мамой?",
     "note": "",
-    "featured": true
+    "featured": false
   }, 
   {
-      "url": "https://youtu.be/WD3hUimgmjc",
+      "url": "https://www.youtube.com/WD3hUimgmjc",
       "title": "Послания, которые вы должны были услышать в детстве",
       "note": "",
       "featured": false
