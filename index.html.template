@@ -96,15 +96,20 @@
 </section>
 
 <!-- Video -->
-<section class="section section-alt">
-    <div class="container text-center">
-        <div class="video-frame">
-            <iframe src="https://www.youtube-nocookie.com/embed/I1egM49AIOM"
-                    title="Видео от Екатерины Заикиной" frameborder="0"
-                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+<section class="section section-alt" id="video">
+    <div class="container">
+        <h2 class="section-title">Видео</h2>
+        <p class="section-lede">Знакомство и&nbsp;короткие видео о&nbsp;моей работе</p>
+        <div class="video-section" id="videoSection">
+            <div class="video-main" id="videoMain"></div>
+            <div class="video-more" id="videoMoreWrap" hidden>
+                <h3 class="video-more-title">Ещё видео</h3>
+                <div class="video-list" id="videoList"></div>
+                <button type="button" class="btn-video-more" id="videoShowMore" hidden>Показать ещё видео</button>
+            </div>
         </div>
-        <p class="mt-3"><a href="https://youtube.com/@psy_ekaterina_zaikina">{{ ui.youtube() }} YouTube канал</a></p>
+        <script type="application/json" id="videosData">{{ videos_json }}</script>
+        <p class="text-center mt-3"><a href="https://youtube.com/@psy_ekaterina_zaikina">{{ ui.youtube() }} Все видео на YouTube канале</a></p>
     </div>
 </section>
 

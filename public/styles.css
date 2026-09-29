@@ -386,15 +386,174 @@ a:hover { color: var(--color-accent); }
 .simple-list .pointer-icon { color: var(--color-sage-dark); flex: none; margin-top: .35rem; }
 
 /* ---- Video ---- */
-.video-frame {
-    max-width: 380px;
+.video-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 980px;
     margin: 0 auto;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-soft);
-    aspect-ratio: 9 / 16;
 }
-.video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+@media (min-width: 900px) {
+    .video-section { grid-template-columns: 3fr 2fr; align-items: start; }
+}
+
+.video-main-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    background: var(--color-hero-bg);
+}
+.video-main-card.is-shorts {
+    aspect-ratio: 9 / 16;
+    max-width: 320px;
+    margin: 0 auto;
+}
+.video-main-card iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+.video-main-title {
+    margin: .85rem 0 0;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: var(--color-text);
+}
+.video-main-note {
+    margin: .25rem 0 0;
+    font-size: .9375rem;
+    color: var(--color-text-soft);
+}
+.video-main-card.is-shorts ~ .video-main-title,
+.video-main-card.is-shorts ~ .video-main-note {
+    text-align: center;
+}
+
+.video-play-btn {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(50, 46, 39, 0.62);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .15s ease;
+}
+.video-play-btn:hover { background: rgba(50, 46, 39, 0.78); }
+.video-play-btn svg { margin-left: 3px; }
+
+.video-more-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.375rem;
+    margin-bottom: 1rem;
+}
+
+.video-list {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+}
+.video-list-item {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    width: 100%;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 12px;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: border-color .15s ease, transform .15s ease;
+}
+.video-list-item:hover { border-color: var(--color-accent); transform: translateY(-1px); }
+.video-list-item.is-hidden { display: none; }
+
+.video-thumb-wrap {
+    flex: none;
+    width: 128px; height: 72px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.video-thumb-wrap.is-shorts {
+    background: var(--color-accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-main-thumb, .video-thumb {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.video-thumb-wrap.is-shorts .video-thumb,
+.video-thumb-wrap.is-shorts .video-thumb-placeholder {
+    width: 41px;
+    height: 72px;
+    border-radius: 6px;
+}
+.video-thumb-placeholder {
+    background: var(--color-hero-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    text-align: center;
+}
+.video-thumb-placeholder span {
+    font-family: var(--font-display);
+    font-size: .72rem;
+    line-height: 1.15;
+    color: var(--color-text);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.video-list-text { min-width: 0; }
+.video-list-title {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--color-text);
+    display: block;
+}
+.video-list-shorts-tag {
+    display: block;
+    font-size: .875rem;
+    color: var(--color-text-soft);
+    margin-top: .15rem;
+}
+
+.btn-video-more {
+    display: block;
+    width: 100%;
+    margin-top: .75rem;
+    height: 52px;
+    border-radius: 26px;
+    background: var(--color-surface);
+    border: 1.5px solid var(--color-accent);
+    color: var(--color-accent-dark);
+    font-family: var(--font-body);
+    font-weight: 600;
+    cursor: pointer;
+}
+.btn-video-more:hover { background: var(--color-accent-soft); }
+
+.video-play-btn:focus-visible,
+.video-list-item:focus-visible,
+.btn-video-more:focus-visible {
+    outline: 2px solid var(--color-accent-dark);
+    outline-offset: 2px;
+}
 
 /* ---- Pricing / consultation ---- */
 .price-card {

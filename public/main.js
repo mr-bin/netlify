@@ -93,3 +93,118 @@
         if (e.key === "ArrowRight") show(1);
     });
 })();
+
+(function () {
+    var mainEl = document.getElementById("videoMain");
+    var listEl = document.getElementById("videoList");
+    var moreWrap = document.getElementById("videoMoreWrap");
+    var showMoreBtn = document.getElementById("videoShowMore");
+    var dataEl = document.getElementById("videosData");
+    if (!mainEl || !listEl || !moreWrap || !showMoreBtn || !dataEl) return;
+
+    var payload;
+    try {
+        payload = JSON.parse(dataEl.textContent);
+    } catch (e) {
+        return;
+    }
+    var videos = payload && payload.videos;
+    if (!videos || !videos.length) return;
+
+    var VISIBLE_LIMIT = 6;
+    var byId = {};
+    videos.forEach(function (v) { byId[v.id] = v; });
+
+    var activeId = payload.initialMainId && byId[payload.initialMainId] ? payload.initialMainId : videos[0].id;
+    var expanded = false;
+
+    function escapeHtml(s) {
+        return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+    }
+
+    function thumbMarkup(v, sizeClass) {
+        if (v.thumbOk) {
+            return '<img src="' + escapeHtml(v.thumb) + '" alt="" loading="lazy" class="' + sizeClass + '">';
+        }
+        return '<div class="' + sizeClass + ' video-thumb-placeholder"><span>' + escapeHtml(v.title) + "</span></div>";
+    }
+
+    function renderMain(autoplay) {
+        var v = byId[activeId];
+        if (!v) return;
+        var cardClass = "video-main-card" + (v.isShorts ? " is-shorts" : "");
+        var html;
+
+        if (autoplay) {
+            var src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(v.id) +
+                "?autoplay=1&rel=0&playsinline=1";
+            html = '<div class="' + cardClass + '">' +
+                '<iframe src="' + src + '" title="' + escapeHtml(v.title) + '" ' +
+                'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+                'referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div>';
+        } else {
+            html = '<div class="' + cardClass + '">' +
+                thumbMarkup(v, "video-main-thumb") +
+                '<button type="button" class="video-play-btn" aria-label="Смотреть: ' + escapeHtml(v.title) + '" data-play>' +
+                '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#fff"/></svg>' +
+                "</button></div>";
+        }
+
+        html += '<p class="video-main-title">' + escapeHtml(v.title) + "</p>";
+        if (v.note) html += '<p class="video-main-note">' + escapeHtml(v.note) + "</p>";
+        mainEl.innerHTML = html;
+    }
+
+    function renderList() {
+        var rest = videos
+            .filter(function (v) { return v.id !== activeId; })
+            .sort(function (a, b) { return a.order - b.order; });
+
+        if (!rest.length) {
+            moreWrap.hidden = true;
+            return;
+        }
+        moreWrap.hidden = false;
+
+        var hasMore = rest.length > VISIBLE_LIMIT;
+        var visible = expanded ? rest : rest.slice(0, VISIBLE_LIMIT);
+
+        listEl.innerHTML = visible.map(function (v) {
+            var wrapClass = "video-thumb-wrap" + (v.isShorts ? " is-shorts" : "");
+            var shortsTag = v.isShorts ? '<span class="video-list-shorts-tag">Shorts</span>' : "";
+            return '<button type="button" class="video-list-item" data-select="' + escapeHtml(v.id) + '">' +
+                '<span class="' + wrapClass + '">' + thumbMarkup(v, "video-thumb") + "</span>" +
+                '<span class="video-list-text"><span class="video-list-title">' + escapeHtml(v.title) + "</span>" + shortsTag + "</span>" +
+                "</button>";
+        }).join("");
+
+        showMoreBtn.hidden = !hasMore || expanded;
+    }
+
+    function selectVideo(id) {
+        if (!byId[id] || id === activeId) return;
+        activeId = id;
+        renderMain(true);
+        renderList();
+        mainEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    mainEl.addEventListener("click", function (e) {
+        if (e.target.closest("[data-play]")) renderMain(true);
+    });
+
+    listEl.addEventListener("click", function (e) {
+        var btn = e.target.closest(".video-list-item");
+        if (btn) selectVideo(btn.getAttribute("data-select"));
+    });
+
+    showMoreBtn.addEventListener("click", function () {
+        expanded = true;
+        renderList();
+    });
+
+    renderMain(false);
+    renderList();
+})();
