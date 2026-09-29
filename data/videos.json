@@ -3,12 +3,12 @@
     "url": "https://www.youtube.com/shorts/I1egM49AIOM",
     "title": "Когда женщина становится мамой?",
     "note": "",
-    "featured": false
+    "featured": true
   }, 
- {
+  {
       "url": "https://youtu.be/WD3hUimgmjc",
       "title": "Послания, которые вы должны были услышать в детстве",
       "note": "",
-      "featured": true
-    }
+      "featured": false
+  }
 ]
