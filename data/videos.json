@@ -3,7 +3,7 @@
     "url": "https://www.youtube.com/Hf6WkiNUkJE",
     "title": "Психолог | Екатерина Заикина",
     "note": "Приветственное видео",
-    "featured": true
+    "featured": false
   },
   {
     "url": "https://www.youtube.com/shorts/I1egM49AIOM",
@@ -15,6 +15,6 @@
       "url": "https://www.youtube.com/WD3hUimgmjc",
       "title": "Послания, которые вы должны были услышать в детстве",
       "note": "",
-      "featured": false
+      "featured": true
   }
 ]
