@@ -11,6 +11,14 @@ import yaml
 from yaml.loader import SafeLoader
 from jinja2 import Environment, FileSystemLoader
 
+try:
+    from PIL import Image, ImageOps
+except ImportError:
+    raise SystemExit(
+        "ОШИБКА: не установлена библиотека Pillow (нужна для обработки картинок дипломов). "
+        "Выполните: pip3 install --user -r requirements.txt"
+    )
+
 RU_MONTHS = [
     "января", "февраля", "марта", "апреля", "мая", "июня",
     "июля", "августа", "сентября", "октября", "ноября", "декабря",
@@ -20,6 +28,16 @@ VIDEOS_PATH = "data/videos.json"
 THUMB_DIR = os.path.join("public", "resources", "video-thumbs")
 THUMB_URL_PREFIX = "/resources/video-thumbs"
 MAXRES_MIN_BYTES = 10000  # a missing maxresdefault.jpg still returns HTTP 200 with a tiny grey placeholder
+
+EDUCATION_PATH = "data/education.yaml"
+DOCS_SRC_DIR = "assets/documents"
+DOCS_FULL_DIR = os.path.join("public", "resources", "education")
+DOCS_FULL_URL_PREFIX = "/resources/education"
+DOCS_THUMB_DIR = os.path.join("public", "resources", "education", "thumbs")
+DOCS_THUMB_URL_PREFIX = "/resources/education/thumbs"
+DOCS_FULL_MAX_SIDE = 1600  # не увеличиваем, только ограничиваем сверху
+DOCS_THUMB_MAX_SIDE = 500
+DOCS_JPEG_QUALITY = 82
 
 YOUTUBE_HOSTS = {
     "youtube.com", "www.youtube.com", "m.youtube.com",
@@ -187,6 +205,138 @@ def load_videos():
     return videos_json
 
 
+def process_document_image(file_name, src_path):
+    """Готовит из одной загруженной картинки документа две копии для сайта:
+    полноразмерную (для увеличения по клику) и маленькую (для плитки на
+    странице «Образование»). Возвращает (url_full, url_thumb). Если картинку
+    не получилось прочитать — останавливает сборку понятной ошибкой."""
+    try:
+        with Image.open(src_path) as img:
+            img = ImageOps.exif_transpose(img)
+            if img.mode not in ("RGB", "L"):
+                img = img.convert("RGB")
+
+            os.makedirs(DOCS_FULL_DIR, exist_ok=True)
+            os.makedirs(DOCS_THUMB_DIR, exist_ok=True)
+
+            full = img.copy()
+            full.thumbnail((DOCS_FULL_MAX_SIDE, DOCS_FULL_MAX_SIDE), Image.LANCZOS)
+            full.save(os.path.join(DOCS_FULL_DIR, file_name), "JPEG", quality=DOCS_JPEG_QUALITY)
+
+            thumb = img.copy()
+            thumb.thumbnail((DOCS_THUMB_MAX_SIDE, DOCS_THUMB_MAX_SIDE), Image.LANCZOS)
+            thumb.save(os.path.join(DOCS_THUMB_DIR, file_name), "JPEG", quality=DOCS_JPEG_QUALITY)
+    except SystemExit:
+        raise
+    except Exception as e:
+        raise SystemExit(
+            f"ОШИБКА: не получилось обработать картинку {src_path}: {e}. "
+            f"Проверьте, что это нормальный файл JPG и он не повреждён."
+        )
+
+    return f"{DOCS_FULL_URL_PREFIX}/{file_name}", f"{DOCS_THUMB_URL_PREFIX}/{file_name}"
+
+
+def _compose_timeline_text(title, hours, author):
+    text = title
+    if author:
+        text += f" ({author})"
+    if hours:
+        text += f", {hours}"
+    return text
+
+
+def load_education():
+    try:
+        with open(EDUCATION_PATH, "r", encoding="utf-8") as f:
+            raw = yaml.load(f, Loader=SafeLoader)
+    except FileNotFoundError:
+        raise SystemExit(f"ОШИБКА в {EDUCATION_PATH}: файл не найден.")
+    except yaml.YAMLError as e:
+        mark = getattr(e, "problem_mark", None)
+        where = f" (примерно строка {mark.line + 1})" if mark else ""
+        raise SystemExit(
+            f"ОШИБКА в {EDUCATION_PATH}: файл повреждён{where} — {e}. "
+            f"Скорее всего, рядом пропущен отступ, двоеточие или кавычка."
+        )
+
+    if not isinstance(raw, dict):
+        raise SystemExit(
+            f"ОШИБКА в {EDUCATION_PATH}: файл должен содержать три раздела — "
+            f"timeline, memberships, documents."
+        )
+
+    timeline = []
+    for i, item in enumerate(raw.get("timeline") or [], start=1):
+        label = f"запись №{i} таймлайна (timeline)"
+        if not isinstance(item, dict):
+            raise SystemExit(f"ОШИБКА в {EDUCATION_PATH}: {label} должна быть блоком с полями (year, title, ...).")
+        year = item.get("year")
+        title = item.get("title")
+        if not isinstance(year, str) or not year.strip():
+            raise SystemExit(f"ОШИБКА в {EDUCATION_PATH}: у {label} не указан \"year\".")
+        if not isinstance(title, str) or not title.strip():
+            raise SystemExit(f"ОШИБКА в {EDUCATION_PATH}: у {label} ({year}) не указан \"title\".")
+        if not bool(item.get("show", True)):
+            continue
+        hours = (item.get("hours") or "").strip()
+        author = (item.get("author") or "").strip()
+        timeline.append({
+            "year": apply_nbsp(year.strip()),
+            "text": apply_nbsp(_compose_timeline_text(title.strip(), hours, author)),
+        })
+
+    memberships = []
+    for i, item in enumerate(raw.get("memberships") or [], start=1):
+        label = f"запись №{i} в memberships"
+        if not isinstance(item, dict):
+            raise SystemExit(f"ОШИБКА в {EDUCATION_PATH}: {label} должна быть блоком с полями (text, show).")
+        text = item.get("text")
+        if not isinstance(text, str) or not text.strip():
+            raise SystemExit(f"ОШИБКА в {EDUCATION_PATH}: у {label} не указан \"text\".")
+        if not bool(item.get("show", True)):
+            continue
+        memberships.append({"text": apply_nbsp(text.strip())})
+
+    documents = []
+    seen_files = {}
+    for i, item in enumerate(raw.get("documents") or [], start=1):
+        label = f"документ №{i}"
+        if not isinstance(item, dict):
+            raise SystemExit(f"ОШИБКА в {EDUCATION_PATH}: {label} должен быть блоком с полями (file, caption, show).")
+        file_name = item.get("file")
+        caption = item.get("caption")
+        if not isinstance(file_name, str) or not file_name.strip():
+            raise SystemExit(f"ОШИБКА в {EDUCATION_PATH}: у {label} не указан \"file\".")
+        if not isinstance(caption, str) or not caption.strip():
+            raise SystemExit(f"ОШИБКА в {EDUCATION_PATH}: у {label} ({file_name}) не указана \"caption\".")
+        file_name = file_name.strip()
+        if file_name in seen_files:
+            raise SystemExit(
+                f"ОШИБКА в {EDUCATION_PATH}: файл «{file_name}» указан дважды — {label} и {seen_files[file_name]}."
+            )
+        seen_files[file_name] = label
+
+        if not bool(item.get("show", True)):
+            continue
+
+        src_path = os.path.join(DOCS_SRC_DIR, file_name)
+        if not os.path.isfile(src_path):
+            raise SystemExit(
+                f"ОШИБКА в {EDUCATION_PATH}: у {label} указан файл «{file_name}», "
+                f"но его нет в папке {DOCS_SRC_DIR}/. Проверьте имя файла (регистр букв важен)."
+            )
+
+        url_full, url_thumb = process_document_image(file_name, src_path)
+        documents.append({
+            "url_full": url_full,
+            "url_thumb": url_thumb,
+            "caption": apply_nbsp(caption.strip()),
+        })
+
+    return {"timeline": timeline, "memberships": memberships, "documents": documents}
+
+
 environment = Environment(loader=FileSystemLoader("."))
 settings = yaml.load(open("settings.yaml"), Loader=SafeLoader)
 today = datetime.date.today()
@@ -195,6 +345,7 @@ with open("public/favicon.ico", "rb") as f:
     favicon_v = hashlib.md5(f.read()).hexdigest()[:8]
 
 videos_json = load_videos()
+education = load_education()
 
 index_template = environment.get_template('index.html.template')
 index_content = index_template.render(
@@ -205,6 +356,9 @@ index_content = index_template.render(
     site_url=settings["site_url"],
     favicon_v=favicon_v,
     videos_json=videos_json,
+    edu_timeline=education["timeline"],
+    edu_memberships=education["memberships"],
+    edu_documents=education["documents"],
 )
 with open("public/index.html", mode="w", encoding="utf-8") as f:
     f.write(index_content)

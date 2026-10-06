@@ -143,47 +143,25 @@
             <span class="hero-stat"><strong>{{ stats.supervision_hours }}+</strong>&nbsp;часов супервизий</span>
         </div>
         <ol class="edu-timeline">
-            {% set timeline = [
-                ("2019", "Повышение квалификации «Логотерапия и&nbsp;экзистенциальный анализ», 240 ч"),
-                ("2020", "Профессиональная переподготовка «Логотерапия и&nbsp;экзистенциальный анализ», 384 ч"),
-                ("2021", "Высшее психологическое образование, бакалавриат, Московский институт психоанализа"),
-                ("2021–2023", "Повышение квалификации «Транзактный анализ — Восточная версия», 144 ч"),
-                ("2022", "«Терапия идентичности», работа с&nbsp;психотравмой, 48 ч"),
-                ("2022", "Повышение квалификации «Работа психолога с&nbsp;депрессивными состояниями», 72 ч"),
-                ("2023–2024", "Повышение квалификации «Эриксоновская терапия и&nbsp;эриксоновский гипноз», 164 ч"),
-                ("2026", "Повышение квалификации «Репродуктивная психосоматика» (И.В.&nbsp;Агеева), 144 ч"),
-            ] %}
-            {% for year, text in timeline %}
+            {% for item in edu_timeline %}
             <li class="edu-timeline-item">
                 <span class="edu-timeline-dot"></span>
-                <span class="edu-timeline-year">{{ year }}</span>
-                <span class="edu-timeline-text">{{ text }}</span>
+                <span class="edu-timeline-year">{{ item.year }}</span>
+                <span class="edu-timeline-text">{{ item.text }}</span>
             </li>
             {% endfor %}
         </ol>
         <ul class="edu-status-list">
-            <li>{{ ui.chevron() }}<span>Действительный член Общероссийской Профессиональной Психотерапевтической Лиги</span></li>
-            <li>{{ ui.chevron() }}<span>Аккредитованный полимодальный психотерапевт (СРО «Союз психологов и&nbsp;психотерапевтов»)</span></li>
-            <li>{{ ui.chevron() }}<span>Аккредитованный психотерапевт «Транзактный анализ — Восточная версия» (СРО «Союз психологов и&nbsp;психотерапевтов»)</span></li>
+            {% for m in edu_memberships %}
+            <li>{{ ui.chevron() }}<span>{{ m.text }}</span></li>
+            {% endfor %}
         </ul>
 
         <p class="text-center text-soft mb-3" style="font-size:.9rem;">Дипломы и сертификаты — нажмите, чтобы увеличить</p>
         <div class="doc-grid">
-            {% set docs = [
-                ("diplom-bakalavra", "Диплом бакалавра психологии, 2021"),
-                ("logoterapiya-diplom-perepodgotovka", "Диплом о проф. переподготовке «Логотерапия и экзистенциальный анализ», 2020"),
-                ("logoterapiya-udostoverenie", "Удостоверение «Логотерапия и экзистенциальный анализ», 2019"),
-                ("logoterapiya-frankl-sertifikat", "Сертификат Института Виктора Франкла (Австрия), 2018–2020"),
-                ("klinicheskaya-psihologiya-sertifikat", "Сертификат «Клиническая психология для логотерапевтов», 2021"),
-                ("terapiya-identichnosti-udostoverenie", "Удостоверение «Терапия идентичности». Авторский метод работы с психотравмой, 2022"),
-                ("depressivnye-sostoyaniya-udostoverenie", "Удостоверение «Работа психолога с депрессивными состояниями», 2022"),
-                ("tranzaktnyy-analiz-udostoverenie", "Удостоверение «Транзактный анализ — Восточная версия», 2022"),
-                ("tavv-prodvinutyy-udostoverenie", "Удостоверение «Транзактный анализ — Восточная версия», продвинутый курс, 2023"),
-                ("eriksonovskaya-terapiya-udostoverenie", "Удостоверение «Эриксоновская терапия и эриксоновский гипноз», 2024"),
-            ] %}
-            {% for slug, caption in docs %}
-            <a href="/resources/education/{{ slug }}.jpg" class="doc-thumb" data-full="/resources/education/{{ slug }}.jpg" data-title="{{ caption }}">
-                <img src="/resources/education/thumbs/{{ slug }}.jpg" alt="{{ caption }}" loading="lazy">
+            {% for doc in edu_documents %}
+            <a href="{{ doc.url_full }}" class="doc-thumb" data-full="{{ doc.url_full }}" data-title="{{ doc.caption }}">
+                <img src="{{ doc.url_thumb }}" alt="{{ doc.caption }}" loading="lazy">
             </a>
             {% endfor %}
         </div>
