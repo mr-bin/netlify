@@ -51,15 +51,27 @@ YOUTUBE_ID_RE = re.compile(r"^[A-Za-z0-9_-]{11}$")
 NBSP_WORDS = ["в", "с", "к", "о", "у", "и", "а", "на", "по", "за", "из", "от", "до", "не"]
 NBSP_RE = re.compile(r"\b(" + "|".join(NBSP_WORDS) + r")\b[ \t]+", re.IGNORECASE)
 
+# Инициалы вида "И.В." или "А." — неразрывный пробел перед фамилией. Отрицательный
+# lookbehind не даёт зацепить хвост обычного слова/аббревиатуры (например "США.").
+INITIALS_RE = re.compile(r"(?<![А-Яа-яЁё])((?:[А-ЯЁ]\.){1,3})[ \t]+")
+
+# Число и сокращение "ч" (часы) — неразрывный пробел между ними, например "144 ч".
+HOURS_RE = re.compile(r"(?<=\d)[ \t]+(?=ч\b)")
+
 
 def ru_date(d):
     return f"{d.day} {RU_MONTHS[d.month - 1]} {d.year}"
 
 
 def apply_nbsp(text):
+    """Расставляет неразрывные пробелы в обычном тексте без ручной разметки:
+    после инициалов, между числом и "ч", после коротких предлогов/союзов."""
     if not text:
         return text
-    return NBSP_RE.sub(lambda m: m.group(1) + " ", text)
+    text = INITIALS_RE.sub(lambda m: m.group(1) + " ", text)
+    text = HOURS_RE.sub(" ", text)
+    text = NBSP_RE.sub(lambda m: m.group(1) + " ", text)
+    return text
 
 
 def extract_youtube_id(raw_url):
@@ -212,18 +224,28 @@ def process_document_image(file_name, src_path):
     не получилось прочитать — останавливает сборку понятной ошибкой."""
     try:
         with Image.open(src_path) as img:
+            # exif_transpose разворачивает фото по EXIF-ориентации (например,
+            # повёрнутый бок к верху скан) — это нужно сделать ДО того, как
+            # EXIF будет выброшен.
             img = ImageOps.exif_transpose(img)
             if img.mode not in ("RGB", "L"):
                 img = img.convert("RGB")
+
+            # Удаляем метаданные (EXIF/GPS — геолокация, модель телефона и т.п.):
+            # явно вычищаем info и не передаём exif= при сохранении, чтобы
+            # приватные данные не попали на сайт ни при каких условиях.
+            img.info.pop("exif", None)
 
             os.makedirs(DOCS_FULL_DIR, exist_ok=True)
             os.makedirs(DOCS_THUMB_DIR, exist_ok=True)
 
             full = img.copy()
+            full.info.pop("exif", None)
             full.thumbnail((DOCS_FULL_MAX_SIDE, DOCS_FULL_MAX_SIDE), Image.LANCZOS)
             full.save(os.path.join(DOCS_FULL_DIR, file_name), "JPEG", quality=DOCS_JPEG_QUALITY)
 
             thumb = img.copy()
+            thumb.info.pop("exif", None)
             thumb.thumbnail((DOCS_THUMB_MAX_SIDE, DOCS_THUMB_MAX_SIDE), Image.LANCZOS)
             thumb.save(os.path.join(DOCS_THUMB_DIR, file_name), "JPEG", quality=DOCS_JPEG_QUALITY)
     except SystemExit:
