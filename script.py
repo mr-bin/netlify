@@ -58,6 +58,10 @@ INITIALS_RE = re.compile(r"(?<![А-Яа-яЁё])((?:[А-ЯЁ]\.){1,3})[ \t]+")
 # Число и сокращение "ч" (часы) — неразрывный пробел между ними, например "144 ч".
 HOURS_RE = re.compile(r"(?<=\d)[ \t]+(?=ч\b)")
 
+# Первый год из поля "year" таймлайна (например "2021" из "2021–2023") — по нему
+# таймлайн сортируется автоматически, независимо от порядка записей в файле.
+TIMELINE_YEAR_RE = re.compile(r"\d{4}")
+
 
 def ru_date(d):
     return f"{d.day} {RU_MONTHS[d.month - 1]} {d.year}"
@@ -301,12 +305,28 @@ def load_education():
             raise SystemExit(f"ОШИБКА в {EDUCATION_PATH}: у {label} ({year}) не указан \"title\".")
         if not bool(item.get("show", True)):
             continue
+        year = year.strip()
+        year_match = TIMELINE_YEAR_RE.search(year)
+        if not year_match:
+            raise SystemExit(
+                f"ОШИБКА в {EDUCATION_PATH}: у {label} поле \"year\" ({year!r}) должно содержать "
+                f"год из 4 цифр (например \"2022\" или \"2021–2023\") — по нему сайт сортирует таймлайн."
+            )
         hours = (item.get("hours") or "").strip()
         author = (item.get("author") or "").strip()
         timeline.append({
-            "year": apply_nbsp(year.strip()),
+            "_sort_year": int(year_match.group()),
+            "year": apply_nbsp(year),
             "text": apply_nbsp(_compose_timeline_text(title.strip(), hours, author)),
         })
+
+    # Таймлайн всегда сортируется по году (по возрастанию), независимо от порядка
+    # записей в файле — так записи можно дописывать куда угодно, не задумываясь
+    # о сортировке руками. sort() в Python устойчив (stable), поэтому записи
+    # с одинаковым годом остаются в том порядке, в котором их добавили в файл.
+    timeline.sort(key=lambda t: t["_sort_year"])
+    for t in timeline:
+        del t["_sort_year"]
 
     memberships = []
     for i, item in enumerate(raw.get("memberships") or [], start=1):
