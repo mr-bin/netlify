@@ -793,6 +793,8 @@ a:hover { color: var(--color-accent); }
     line-height: 1.6;
     max-width: 62ch;
 }
+.faq-list .faq-body p { margin: 0 0 1rem; }
+.faq-list .faq-body p:last-child { margin-bottom: 0; }
 .faq-inline-list {
     margin: .75rem 0;
     padding-left: 1.1rem;
