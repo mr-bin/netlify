@@ -41,6 +41,26 @@
 })();
 
 (function () {
+    function setupExpandable(toggleId) {
+        var toggle = document.getElementById(toggleId);
+        if (!toggle) return;
+        var container = document.getElementById(toggle.getAttribute("aria-controls"));
+        if (!container) return;
+        var labelMore = toggle.getAttribute("data-label-more") || toggle.textContent.trim();
+        var labelLess = toggle.getAttribute("data-label-less") || "Свернуть";
+
+        toggle.addEventListener("click", function () {
+            var isOpen = container.classList.toggle("is-expanded");
+            toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+            toggle.textContent = isOpen ? labelLess : labelMore;
+        });
+    }
+
+    setupExpandable("eduTimelineToggle");
+    setupExpandable("eduDocsToggle");
+})();
+
+(function () {
     var thumbs = Array.prototype.slice.call(document.querySelectorAll(".doc-thumb"));
     if (!thumbs.length) return;
 

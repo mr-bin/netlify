@@ -292,6 +292,21 @@ def load_education():
             f"timeline, memberships, documents."
         )
 
+    display_cfg = raw.get("display") or {}
+    if not isinstance(display_cfg, dict):
+        raise SystemExit(f"ОШИБКА в {EDUCATION_PATH}: раздел \"display\" должен быть блоком с числами.")
+
+    def _visible_count(key, default):
+        value = display_cfg.get(key, default)
+        if not isinstance(value, int) or isinstance(value, bool) or value < 1:
+            raise SystemExit(
+                f"ОШИБКА в {EDUCATION_PATH}: display.{key} должно быть целым числом не меньше 1."
+            )
+        return value
+
+    timeline_visible = _visible_count("timeline_visible", 5)
+    documents_visible = _visible_count("documents_visible", 4)
+
     timeline = []
     for i, item in enumerate(raw.get("timeline") or [], start=1):
         label = f"запись №{i} таймлайна (timeline)"
@@ -376,7 +391,13 @@ def load_education():
             "caption": apply_nbsp(caption.strip()),
         })
 
-    return {"timeline": timeline, "memberships": memberships, "documents": documents}
+    return {
+        "timeline": timeline,
+        "memberships": memberships,
+        "documents": documents,
+        "timeline_visible": timeline_visible,
+        "documents_visible": documents_visible,
+    }
 
 
 environment = Environment(loader=FileSystemLoader("."))
@@ -401,6 +422,8 @@ index_content = index_template.render(
     edu_timeline=education["timeline"],
     edu_memberships=education["memberships"],
     edu_documents=education["documents"],
+    edu_timeline_visible=education["timeline_visible"],
+    edu_documents_visible=education["documents_visible"],
 )
 with open("public/index.html", mode="w", encoding="utf-8") as f:
     f.write(index_content)
