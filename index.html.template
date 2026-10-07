@@ -158,14 +158,14 @@
             </button>
         </div>
         {% endif %}
-        <p class="text-center text-soft mb-3" style="font-size:.9rem;margin-top:2.25rem;">Членство и&nbsp;аккредитация</p>
+        <p class="video-more-title text-center" style="margin-top:2.25rem;">Членство и&nbsp;аккредитация</p>
         <ul class="edu-status-list">
             {% for m in edu_memberships %}
             <li>{{ ui.chevron() }}<span>{{ m.text }}</span></li>
             {% endfor %}
         </ul>
 
-        <p class="text-center text-soft mb-3" style="font-size:.9rem;">Публикации и&nbsp;выступления</p>
+        <p class="video-more-title text-center">Публикации и&nbsp;выступления</p>
         <ol class="edu-timeline">
             <li class="edu-timeline-item">
                 <span class="edu-timeline-dot"></span>
@@ -198,7 +198,8 @@
             </li>
         </ol>
 
-        <p class="text-center text-soft mb-3" style="font-size:.9rem;margin-top:2.25rem;">Дипломы и сертификаты&nbsp;— нажмите, чтобы увеличить</p>
+        <p class="video-more-title text-center" style="margin-top:2.25rem;margin-bottom:.2rem;">Дипломы и сертификаты</p>
+        <p class="text-center text-soft mb-3" style="font-size:.9rem;">Нажмите, чтобы увеличить</p>
         <div class="doc-grid" id="eduDocGrid">
             {% for doc in edu_documents %}
             <a href="{{ doc.url_full }}" class="doc-thumb{% if loop.index > edu_documents_visible %} doc-thumb--extra{% endif %}" data-full="{{ doc.url_full }}" data-title="{{ doc.caption }}">
