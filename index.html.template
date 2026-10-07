@@ -142,15 +142,22 @@
             <span class="hero-stat"><strong>{{ stats.therapy_hours }}+</strong>&nbsp;часов личной терапии</span>
             <span class="hero-stat"><strong>{{ stats.supervision_hours }}+</strong>&nbsp;часов супервизий</span>
         </div>
-        <ol class="edu-timeline">
+        <ol class="edu-timeline" id="eduTimeline">
             {% for item in edu_timeline %}
-            <li class="edu-timeline-item">
+            <li class="edu-timeline-item{% if loop.index > edu_timeline_visible %} edu-timeline-item--extra{% endif %}">
                 <span class="edu-timeline-dot"></span>
                 <span class="edu-timeline-year">{{ item.year }}</span>
                 <span class="edu-timeline-text">{{ item.text }}</span>
             </li>
             {% endfor %}
         </ol>
+        {% if edu_timeline|length > edu_timeline_visible %}
+        <div class="text-center mb-4">
+            <button class="bio-toggle" type="button" id="eduTimelineToggle" aria-expanded="false" aria-controls="eduTimeline" data-label-more="Показать всё обучение" data-label-less="Свернуть">
+                Показать всё обучение
+            </button>
+        </div>
+        {% endif %}
         <ul class="edu-status-list">
             {% for m in edu_memberships %}
             <li>{{ ui.chevron() }}<span>{{ m.text }}</span></li>
@@ -158,13 +165,20 @@
         </ul>
 
         <p class="text-center text-soft mb-3" style="font-size:.9rem;">Дипломы и сертификаты — нажмите, чтобы увеличить</p>
-        <div class="doc-grid">
+        <div class="doc-grid" id="eduDocGrid">
             {% for doc in edu_documents %}
-            <a href="{{ doc.url_full }}" class="doc-thumb" data-full="{{ doc.url_full }}" data-title="{{ doc.caption }}">
+            <a href="{{ doc.url_full }}" class="doc-thumb{% if loop.index > edu_documents_visible %} doc-thumb--extra{% endif %}" data-full="{{ doc.url_full }}" data-title="{{ doc.caption }}">
                 <img src="{{ doc.url_thumb }}" alt="{{ doc.caption }}" loading="lazy">
             </a>
             {% endfor %}
         </div>
+        {% if edu_documents|length > edu_documents_visible %}
+        <div class="text-center mt-3">
+            <button class="bio-toggle" type="button" id="eduDocsToggle" aria-expanded="false" aria-controls="eduDocGrid" data-label-more="Показать все документы" data-label-less="Свернуть">
+                Показать все документы
+            </button>
+        </div>
+        {% endif %}
     </div>
 </section>
 

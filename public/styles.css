@@ -646,6 +646,8 @@ a:hover { color: var(--color-accent); }
     font-feature-settings: "lnum" 1;
 }
 .edu-timeline-text { color: var(--color-text-soft); }
+.edu-timeline-item--extra { display: none; }
+#eduTimeline.is-expanded .edu-timeline-item--extra { display: block; }
 
 .edu-status-list {
     max-width: 620px;
@@ -688,6 +690,8 @@ a:hover { color: var(--color-accent); }
     object-fit: contain;
     border-radius: 6px;
 }
+.doc-thumb--extra { display: none; }
+#eduDocGrid.is-expanded .doc-thumb--extra { display: block; }
 
 /* Lightbox */
 .lightbox {
