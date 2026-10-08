@@ -65,5 +65,5 @@ materials:
     file: "teploe-odeyalo.pdf"
     # Видео к этому листу пока нет. Когда будет готово — вставьте ссылку сюда
     # между кавычками, и на карточке сама появится кнопка «Смотреть видео».
-    video_url: ""
+    video_url: "https://youtu.be/1nmHMzSGovE"
     show: true
