@@ -343,6 +343,10 @@ a:hover { color: var(--color-accent); }
     align-items: flex-start;
     box-shadow: var(--shadow-card);
 }
+.topic-card-title {
+    margin: 0;
+    font: inherit;
+}
 .topic-card-sub {
     display: block;
     margin-top: .2rem;
@@ -838,6 +842,11 @@ a:hover { color: var(--color-accent); }
     font-feature-settings: "lnum" 1;
 }
 .faq-list summary::-webkit-details-marker { display: none; }
+.faq-list summary .faq-question {
+    margin: 0;
+    font: inherit;
+    display: inline;
+}
 .faq-list summary::after {
     content: "";
     position: absolute; right: 4px; top: 50%;
