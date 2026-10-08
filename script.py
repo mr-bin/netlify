@@ -405,19 +405,6 @@ def load_education():
     }
 
 
-def ru_pages(n):
-    """Склоняет "страница" под число n (1 страница, 2 страницы, 5 страниц)."""
-    if 11 <= n % 100 <= 14:
-        word = "страниц"
-    elif n % 10 == 1:
-        word = "страница"
-    elif 2 <= n % 10 <= 4:
-        word = "страницы"
-    else:
-        word = "страниц"
-    return f"{n} {word}"
-
-
 def load_materials():
     try:
         with open(MATERIALS_PATH, "r", encoding="utf-8") as f:
@@ -487,7 +474,7 @@ def load_materials():
         materials.append({
             "title": apply_nbsp(title.strip()),
             "description": apply_nbsp(description.strip()),
-            "format": f"PDF · {ru_pages(pages)}",
+            "format": f"PDF · {pages} стр.",
             "url": f"{MATERIALS_URL_PREFIX}/{file_name}",
             "video_url": video_url,
         })
