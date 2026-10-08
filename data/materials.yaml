@@ -69,6 +69,6 @@ materials:
   - title: "К первой встрече"
     description: "Вопросы, которые можно обдумать до знакомства, и упражнение «Встреча через полгода»"
     pages: 4
-    file: "k-pervoy-vstreche.pdf"
+    file: "k_pervoy_vstreche.pdf"
     video_url: ""
     show: true
