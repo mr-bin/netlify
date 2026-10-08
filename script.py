@@ -263,13 +263,8 @@ def process_document_image(file_name, src_path):
     return f"{DOCS_FULL_URL_PREFIX}/{file_name}", f"{DOCS_THUMB_URL_PREFIX}/{file_name}"
 
 
-def _compose_timeline_text(title, hours, author):
-    text = title
-    if author:
-        text += f" ({author})"
-    if hours:
-        text += f", {hours}"
-    return text
+def _compose_timeline_meta(kind, author, hours):
+    return " · ".join(part for part in (kind, author, hours) if part)
 
 
 def load_education():
@@ -329,10 +324,14 @@ def load_education():
             )
         hours = (item.get("hours") or "").strip()
         author = (item.get("author") or "").strip()
+        kind = (item.get("kind") or "").strip()
+        note = (item.get("note") or "").strip()
         timeline.append({
             "_sort_year": int(year_match.group()),
             "year": apply_nbsp(year),
-            "text": apply_nbsp(_compose_timeline_text(title.strip(), hours, author)),
+            "title": apply_nbsp(title.strip()),
+            "meta": apply_nbsp(_compose_timeline_meta(kind, author, hours)),
+            "note": apply_nbsp(note),
         })
 
     # Таймлайн всегда сортируется по году (по возрастанию), независимо от порядка
