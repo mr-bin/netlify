@@ -522,3 +522,18 @@ privacy_content = privacy_template.render(
 )
 with open("public/privacy.html", mode="w", encoding="utf-8") as f:
     f.write(privacy_content)
+
+# sitemap.xml: главная страница + PDF из раздела "Материалы" (без privacy —
+# у неё noindex). Список материалов берётся из той же data/materials.yaml,
+# что и сама секция на сайте, так что сборка PDF и sitemap не расходятся.
+site_url = settings["site_url"]
+sitemap_urls = [f"{site_url}/"] + [f"{site_url}{m['url']}" for m in materials]
+sitemap_body = "\n".join(f"  <url><loc>{u}</loc></url>" for u in sitemap_urls)
+sitemap_content = (
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    f"{sitemap_body}\n"
+    "</urlset>\n"
+)
+with open("public/sitemap.xml", mode="w", encoding="utf-8") as f:
+    f.write(sitemap_content)

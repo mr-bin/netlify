@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v={{ favicon_v }}">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v={{ favicon_v }}">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v={{ favicon_v }}">
-    <link rel="canonical" href="{{ site_url }}/privacy.html">
+    <link rel="canonical" href="{{ site_url }}/privacy">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="ru_RU">
     <meta property="og:url" content="{{ site_url }}/privacy.html">
