@@ -113,6 +113,32 @@
     </div>
 </section>
 
+<!-- Materials -->
+<section class="section" id="materials">
+    <div class="container">
+        <h2 class="section-title">Материалы</h2>
+        <p class="section-lede">Листы для самостоятельной работы. Можно распечатать или заполнять с&nbsp;телефона</p>
+        <div class="materials-list">
+            {% for item in materials %}
+            <div class="material-card">
+                <span class="material-icon">{{ ui.document_icon() }}</span>
+                <div class="material-text">
+                    <p class="material-title">{{ item.title }}</p>
+                    <p class="material-desc">{{ item.description }}</p>
+                    <p class="material-format">{{ item.format }}</p>
+                    <div class="material-actions">
+                        <a class="btn-material" href="{{ item.url }}" target="_blank" rel="noopener">Скачать</a>
+                        {% if item.video_url %}
+                        <a class="btn-material btn-material-outline" href="{{ item.video_url }}" target="_blank" rel="noopener">Смотреть видео</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
 <!-- Consultation -->
 <section class="section" id="consultation">
     <div class="container">

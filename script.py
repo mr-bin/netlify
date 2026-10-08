@@ -3,6 +3,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import urllib.error
 import urllib.request
 from urllib.parse import parse_qs, urlparse
@@ -38,6 +39,11 @@ DOCS_THUMB_URL_PREFIX = "/resources/education/thumbs"
 DOCS_FULL_MAX_SIDE = 1600  # не увеличиваем, только ограничиваем сверху
 DOCS_THUMB_MAX_SIDE = 500
 DOCS_JPEG_QUALITY = 82
+
+MATERIALS_PATH = "data/materials.yaml"
+MATERIALS_SRC_DIR = "assets/materials"
+MATERIALS_DIR = os.path.join("public", "materials")
+MATERIALS_URL_PREFIX = "/materials"
 
 YOUTUBE_HOSTS = {
     "youtube.com", "www.youtube.com", "m.youtube.com",
@@ -399,6 +405,96 @@ def load_education():
     }
 
 
+def ru_pages(n):
+    """Склоняет "страница" под число n (1 страница, 2 страницы, 5 страниц)."""
+    if 11 <= n % 100 <= 14:
+        word = "страниц"
+    elif n % 10 == 1:
+        word = "страница"
+    elif 2 <= n % 10 <= 4:
+        word = "страницы"
+    else:
+        word = "страниц"
+    return f"{n} {word}"
+
+
+def load_materials():
+    try:
+        with open(MATERIALS_PATH, "r", encoding="utf-8") as f:
+            raw = yaml.load(f, Loader=SafeLoader)
+    except FileNotFoundError:
+        raise SystemExit(f"ОШИБКА в {MATERIALS_PATH}: файл не найден.")
+    except yaml.YAMLError as e:
+        mark = getattr(e, "problem_mark", None)
+        where = f" (примерно строка {mark.line + 1})" if mark else ""
+        raise SystemExit(
+            f"ОШИБКА в {MATERIALS_PATH}: файл повреждён{where} — {e}. "
+            f"Скорее всего, рядом пропущен отступ, двоеточие или кавычка."
+        )
+
+    if not isinstance(raw, dict):
+        raise SystemExit(f"ОШИБКА в {MATERIALS_PATH}: файл должен содержать раздел materials.")
+
+    materials = []
+    seen_files = {}
+    for i, item in enumerate(raw.get("materials") or [], start=1):
+        label = f"материал №{i}"
+        if not isinstance(item, dict):
+            raise SystemExit(
+                f"ОШИБКА в {MATERIALS_PATH}: {label} должен быть блоком с полями "
+                f"(title, description, pages, file, video_url, show)."
+            )
+        title = item.get("title")
+        description = item.get("description")
+        pages = item.get("pages")
+        file_name = item.get("file")
+        if not isinstance(title, str) or not title.strip():
+            raise SystemExit(f"ОШИБКА в {MATERIALS_PATH}: у {label} не указан \"title\".")
+        if not isinstance(description, str) or not description.strip():
+            raise SystemExit(f"ОШИБКА в {MATERIALS_PATH}: у {label} ({title}) не указан \"description\".")
+        if not isinstance(pages, int) or isinstance(pages, bool) or pages < 1:
+            raise SystemExit(
+                f"ОШИБКА в {MATERIALS_PATH}: у {label} ({title}) поле \"pages\" должно быть "
+                f"целым числом не меньше 1 (без кавычек)."
+            )
+        if not isinstance(file_name, str) or not file_name.strip():
+            raise SystemExit(f"ОШИБКА в {MATERIALS_PATH}: у {label} ({title}) не указан \"file\".")
+        file_name = file_name.strip()
+        if not file_name.lower().endswith(".pdf"):
+            raise SystemExit(
+                f"ОШИБКА в {MATERIALS_PATH}: у {label} ({title}) файл «{file_name}» должен быть "
+                f"в формате PDF (имя должно заканчиваться на .pdf)."
+            )
+        if file_name in seen_files:
+            raise SystemExit(
+                f"ОШИБКА в {MATERIALS_PATH}: файл «{file_name}» указан дважды — {label} и {seen_files[file_name]}."
+            )
+        seen_files[file_name] = label
+
+        if not bool(item.get("show", True)):
+            continue
+
+        src_path = os.path.join(MATERIALS_SRC_DIR, file_name)
+        if not os.path.isfile(src_path):
+            raise SystemExit(
+                f"ОШИБКА в {MATERIALS_PATH}: у {label} ({title}) указан файл «{file_name}», "
+                f"но его нет в папке {MATERIALS_SRC_DIR}/. Проверьте имя файла (регистр букв важен)."
+            )
+        os.makedirs(MATERIALS_DIR, exist_ok=True)
+        shutil.copyfile(src_path, os.path.join(MATERIALS_DIR, file_name))
+
+        video_url = (item.get("video_url") or "").strip()
+        materials.append({
+            "title": apply_nbsp(title.strip()),
+            "description": apply_nbsp(description.strip()),
+            "format": f"PDF · {ru_pages(pages)}",
+            "url": f"{MATERIALS_URL_PREFIX}/{file_name}",
+            "video_url": video_url,
+        })
+
+    return materials
+
+
 environment = Environment(loader=FileSystemLoader("."))
 settings = yaml.load(open("settings.yaml"), Loader=SafeLoader)
 today = datetime.date.today()
@@ -408,6 +504,7 @@ with open("public/favicon.ico", "rb") as f:
 
 videos_json = load_videos()
 education = load_education()
+materials = load_materials()
 
 index_template = environment.get_template('index.html.template')
 index_content = index_template.render(
@@ -423,6 +520,7 @@ index_content = index_template.render(
     edu_documents=education["documents"],
     edu_timeline_visible=education["timeline_visible"],
     edu_documents_visible=education["documents_visible"],
+    materials=materials,
 )
 with open("public/index.html", mode="w", encoding="utf-8") as f:
     f.write(index_content)
