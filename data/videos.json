@@ -1,13 +1,19 @@
 [
   {
       "url": "https://youtu.be/Hf6WkiNUkJE",
-      "title": "Психолог | Екатерина Заикина",
+      "title": "Давайте знакомиться",
       "note": "Приветственное видео",
       "featured": true
   },
   {
     "url": "https://www.youtube.com/shorts/I1egM49AIOM",
     "title": "Когда женщина становится мамой?",
+    "note": "",
+    "featured": false
+  },
+  {
+    "url": "https://youtu.be/1nmHMzSGovE",
+    "title": "«Тёплое одеяло»: упражнение, когда тревожно в ожидании",
     "note": "",
     "featured": false
   }, 

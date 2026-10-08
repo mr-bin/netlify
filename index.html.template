@@ -64,15 +64,15 @@
 <!-- Topics -->
 <section class="section" id="topics">
     <div class="container">
-        <h2 class="section-title">С&nbsp;чем можно прийти:</h2>
+        <h2 class="section-title">С&nbsp;чем можно прийти</h2>
         <div class="topic-grid">
-            <div class="topic-card"><span class="dot"></span><span>Планирование и&nbsp;ожидание беременности (тревога, долгое ожидание)</span></div>
+            <div class="topic-card"><span class="dot"></span><span>Планирование и&nbsp;ожидание беременности<span class="topic-card-sub">Тревога, долгое ожидание</span></span></div>
             <div class="topic-card"><span class="dot"></span><span>Бесплодие неясного генеза<span class="topic-card-sub">Когда обследования не&nbsp;находят причин: долгое ожидание, внутренние сомнения и&nbsp;страхи, отношения в&nbsp;паре</span></span></div>
-            <div class="topic-card"><span class="dot"></span><span>ЭКО (подготовка, неудачная попытка)</span></div>
-            <div class="topic-card"><span class="dot"></span><span>Беременность (страхи и&nbsp;тревога, образ себя как мамы, перемены в&nbsp;жизни и&nbsp;теле)</span></div>
+            <div class="topic-card"><span class="dot"></span><span>ЭКО<span class="topic-card-sub">Подготовка, неудачная попытка</span></span></div>
+            <div class="topic-card"><span class="dot"></span><span>Беременность<span class="topic-card-sub">Страхи и&nbsp;тревога, образ себя как мамы, перемены в&nbsp;жизни и&nbsp;теле</span></span></div>
             <div class="topic-card"><span class="dot"></span><span>Потери беременности<span class="topic-card-sub">Выкидыш, замершая и&nbsp;внематочная беременность, потеря на&nbsp;позднем сроке, прерывание по&nbsp;медицинским показаниям</span></span></div>
-            <div class="topic-card"><span class="dot"></span><span>Диагнозы (эндометриоз, миома, СПКЯ) и&nbsp;жизнь с&nbsp;ними</span></div>
-            <div class="topic-card"><span class="dot"></span><span>Менопауза</span></div>
+            <div class="topic-card"><span class="dot"></span><span>Диагнозы и&nbsp;жизнь с&nbsp;ними<span class="topic-card-sub">Эндометриоз, миома, СПКЯ и&nbsp;др.</span></span></div>
+            <div class="topic-card"><span class="dot"></span><span>Менопауза<span class="topic-card-sub">Перемены в&nbsp;теле и&nbsp;в&nbsp;ощущении себя</span></span></div>
             <div class="topic-card"><span class="dot"></span><span>Мужское бесплодие и&nbsp;переживания партнёра<span class="topic-card-sub">Диагноз, ЭКО, ожидание, потеря беременности</span></span></div>
         </div>
         <p class="disclaimer">Психотерапия не&nbsp;заменяет медицинское лечение и&nbsp;работает как дополнение к&nbsp;наблюдению у&nbsp;врача.</p>
@@ -82,7 +82,7 @@
 <!-- Benefits -->
 <section class="section section-alt">
     <div class="container">
-        <h2 class="section-title">В&nbsp;работе со мной вы можете получить:</h2>
+        <h2 class="section-title">В&nbsp;работе со мной вы можете получить</h2>
         <div class="benefit-grid">
             <div class="benefit-card"><span class="dot"></span><span>Внутреннюю опору и&nbsp;навык снижать тревогу в&nbsp;период неопределённости и&nbsp;ожидания</span></div>
             <div class="benefit-card"><span class="dot"></span><span>Возможность прожить чувства, о&nbsp;которых трудно говорить с&nbsp;близкими (горе, вину, зависть, злость)</span></div>
@@ -110,6 +110,32 @@
         </div>
         <script type="application/json" id="videosData">{{ videos_json }}</script>
         <p class="text-center mt-3"><a href="https://youtube.com/@psy_ekaterina_zaikina">{{ ui.youtube() }} Все видео на YouTube канале</a></p>
+    </div>
+</section>
+
+<!-- Materials -->
+<section class="section" id="materials">
+    <div class="container">
+        <h2 class="section-title">Материалы</h2>
+        <p class="section-lede">Листы для самостоятельной работы. Можно распечатать или заполнять с&nbsp;телефона</p>
+        <div class="materials-list">
+            {% for item in materials %}
+            <div class="material-card">
+                <div class="material-head">
+                    <span class="material-icon">{{ ui.document_icon() }}</span>
+                    <p class="material-title">{{ item.title }}</p>
+                </div>
+                <p class="material-desc">{{ item.description }}</p>
+                <p class="material-links">
+                    <a class="material-link-download" href="{{ item.url }}" target="_blank" rel="noopener">Скачать {{ item.format }}</a>
+                    {% if item.video_url %}
+                    <span class="material-link-sep">·</span>
+                    <a href="{{ item.video_url }}" target="_blank" rel="noopener">Смотреть видео</a>
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </section>
 
