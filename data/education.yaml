@@ -54,7 +54,7 @@
 # Оба числа — целые, без кавычек, минимум 1.
 #
 display:
-  timeline_visible: 5
+  timeline_visible: 4
   documents_visible: 4
 
 
@@ -124,7 +124,7 @@ timeline:
     title: "Клиническая психология для логотерапевтов"
     kind: "Сертификат"
     hours: "28 ч"
-    author: ""
+    author: "Московский институт психоанализа, Высшая школа логотерапии"
     show: true
 
   - year: "2021–2023"
