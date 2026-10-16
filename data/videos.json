@@ -6,6 +6,12 @@
       "featured": true
   },
   {
+    "url": "https://youtu.be/vS1httgjH-k",
+    "title": "Как проходит первая встреча с психологом",
+    "note": "",
+    "featured": false
+  },
+  {
     "url": "https://youtu.be/1nmHMzSGovE",
     "title": "«Тёплое одеяло»: упражнение, когда тревожно в ожидании",
     "note": "",
@@ -16,17 +22,5 @@
     "title": "Когда женщина становится мамой?",
     "note": "",
     "featured": false
-  },
-  {
-    "url": "https://youtu.be/vS1httgjH-k",
-    "title": "Как проходит первая встреча с психологом",
-    "note": "",
-    "featured": false
   }, 
-  {
-      "url": "https://youtu.be/WD3hUimgmjc",
-      "title": "Послания, которые вы должны были услышать в детстве",
-      "note": "",
-      "featured": false
-  }
 ]
