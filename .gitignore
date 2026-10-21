@@ -269,3 +269,7 @@ public/sitemap.xml
 public/resources/video-thumbs/
 public/resources/education/
 public/materials/
+
+# Тематические страницы (data/topics/*.yaml) — генерируются заново при
+# каждой сборке в public/<slug>/. Добавляйте сюда папку каждой новой страницы.
+public/poterya-beremennosti/
