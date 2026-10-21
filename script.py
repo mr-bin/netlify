@@ -682,6 +682,11 @@ def load_topics():
 
 
 environment = Environment(loader=FileSystemLoader("."))
+# Для <head> (title/meta content) нужен обычный пробел, а не &nbsp; — неразрывные
+# пробелы там не видны пользователю и не нужны, но могут случайно попасть в seo-текст
+# через apply_nbsp(). Фильтр подчищает и настоящий символ U+00A0, и буквальную
+# строку "&nbsp;", если она когда-нибудь попадёт в данные.
+environment.filters["plain_space"] = lambda text: (text or "").replace(" ", " ").replace("&nbsp;", " ")
 settings = yaml.load(open("settings.yaml"), Loader=SafeLoader)
 today = datetime.date.today()
 

@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ topic.seo_title }}</title>
-    <meta name="description" content="{{ topic.seo_description }}">
+    <title>{{ topic.seo_title|plain_space }}</title>
+    <meta name="description" content="{{ topic.seo_description|plain_space }}">
     <link rel="icon" href="/favicon.ico?v={{ favicon_v }}" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v={{ favicon_v }}">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v={{ favicon_v }}">
@@ -14,15 +14,15 @@
     <meta property="og:type" content="website">
     <meta property="og:locale" content="ru_RU">
     <meta property="og:url" content="{{ site_url }}/{{ topic.slug }}/">
-    <meta property="og:title" content="{{ topic.seo_title }}">
-    <meta property="og:description" content="{{ topic.seo_description }}">
+    <meta property="og:title" content="{{ topic.seo_title|plain_space }}">
+    <meta property="og:description" content="{{ topic.seo_description|plain_space }}">
     <meta property="og:image" content="{{ site_url }}/resources/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="{{ site_url }}/{{ topic.slug }}/">
-    <meta name="twitter:title" content="{{ topic.seo_title }}">
-    <meta name="twitter:description" content="{{ topic.seo_description }}">
+    <meta name="twitter:title" content="{{ topic.seo_title|plain_space }}">
+    <meta name="twitter:description" content="{{ topic.seo_description|plain_space }}">
     <meta name="twitter:image" content="{{ site_url }}/resources/og-image.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
