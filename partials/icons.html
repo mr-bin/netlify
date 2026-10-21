@@ -78,6 +78,21 @@
 </div>
 {%- endmacro %}
 
+{% macro topic_header() -%}
+<div class="topic-header">
+    <div class="container topic-header-inner">
+        <a href="/" class="topic-header-name">
+            <span class="topic-header-name-main">Екатерина Заикина</span>
+            <span class="topic-header-role">психолог</span>
+        </a>
+        <nav class="topic-header-nav">
+            <a href="/" class="topic-header-back">&larr; На главную</a>
+            <a href="#zapis" class="btn-cta topic-header-cta">Записаться</a>
+        </nav>
+    </div>
+</div>
+{%- endmacro %}
+
 {% macro site_footer() -%}
 <footer class="site-footer">
     <div class="container">

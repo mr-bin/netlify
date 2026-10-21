@@ -1,0 +1,227 @@
+{% import "partials/icons.html" as ui with context %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ topic.seo_title }}</title>
+    <meta name="description" content="{{ topic.seo_description }}">
+    <link rel="icon" href="/favicon.ico?v={{ favicon_v }}" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v={{ favicon_v }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v={{ favicon_v }}">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v={{ favicon_v }}">
+    <link rel="canonical" href="{{ site_url }}/{{ topic.slug }}/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:url" content="{{ site_url }}/{{ topic.slug }}/">
+    <meta property="og:title" content="{{ topic.seo_title }}">
+    <meta property="og:description" content="{{ topic.seo_description }}">
+    <meta property="og:image" content="{{ site_url }}/resources/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ site_url }}/{{ topic.slug }}/">
+    <meta name="twitter:title" content="{{ topic.seo_title }}">
+    <meta name="twitter:description" content="{{ topic.seo_description }}">
+    <meta name="twitter:image" content="{{ site_url }}/resources/og-image.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,600;0,700;1,400;1,500&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/styles.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Главная",
+                "item": "{{ site_url }}/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{{ topic.breadcrumb }}",
+                "item": "{{ site_url }}/{{ topic.slug }}/"
+            }
+        ]
+    }
+    </script>
+</head>
+<body>
+
+{{ ui.topic_header() }}
+
+<!-- Первый экран -->
+<header class="topic-hero">
+    <div class="container topic-hero-inner">
+        <div class="topic-hero-text">
+            <p class="topic-breadcrumbs"><a href="/">Главная</a> / {{ topic.breadcrumb }}</p>
+            <h1 class="topic-hero-title">{{ topic.hero.h1 }}</h1>
+            {% if topic.hero.lead %}<p class="topic-hero-lead">{{ topic.hero.lead }}</p>{% endif %}
+            {% if topic.hero.lead_soft %}<p class="topic-hero-lead-soft">{{ topic.hero.lead_soft }}</p>{% endif %}
+            <a href="#zapis" class="btn-cta">Записаться на&nbsp;консультацию</a>
+        </div>
+        <div class="topic-hero-photo-frame hero-photo-frame">
+            <img class="hero-photo rounded-circle" src="/resources/profile.png" alt="{{ topic.hero.photo_alt }}" width="168" height="168">
+        </div>
+    </div>
+    <div class="wave" aria-hidden="true">
+        <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,40 C220,90 380,0 620,36 C860,72 1000,10 1230,34 C1330,44 1400,40 1440,32 L1440,70 L0,70 Z" style="fill:var(--color-bg)"/>
+        </svg>
+    </div>
+</header>
+
+{% if topic.warning %}
+<div class="container">
+    <p class="topic-notice">{{ topic.warning }}</p>
+</div>
+{% endif %}
+
+{% if topic.intro %}
+<section class="section">
+    <div class="container topic-intro">
+        <h2 class="topic-intro-heading">{{ topic.intro.heading }}</h2>
+        <div class="topic-intro-body">
+            {% for p in topic.intro.paragraphs %}
+            <p>{{ p }}</p>
+            {% endfor %}
+            {% if topic.intro.highlight %}
+            <p class="topic-intro-highlight">{{ topic.intro.highlight }}</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if topic.topics_block %}
+<section class="section section-alt">
+    <div class="container">
+        <h2 class="section-title">{{ topic.topics_block.heading }}</h2>
+        <div class="topic-card-grid">
+            {% for item in topic.topics_block.cards %}
+            <div class="topic-page-card">
+                <span class="dot"></span>
+                <div>
+                    <h3 class="topic-page-card-title">{{ item.title }}</h3>
+                    {% if item.sub %}<p class="topic-page-card-sub">{{ item.sub }}</p>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if topic.topics_block.note %}
+        <p class="disclaimer">{{ topic.topics_block.note }}</p>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+{% if topic.steps %}
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">{{ topic.steps.heading }}</h2>
+        <div class="topic-steps">
+            {% for step in topic.steps.list %}
+            <div class="topic-step">
+                <span class="topic-step-num">{{ loop.index }}</span>
+                <h3 class="topic-step-title">{{ step.title }}</h3>
+                <p class="topic-step-text">{{ step.text }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% if topic.steps.footnote_text %}
+        <p class="topic-steps-footnote">
+            {{ topic.steps.footnote_text }}
+            {% if topic.steps.footnote_url %}<a href="{{ topic.steps.footnote_url }}" target="_blank" rel="noopener">&rarr;</a>{% endif %}
+        </p>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+{% if topic.medical_note %}
+<section class="section section-alt">
+    <div class="container">
+        <div class="topic-caution">
+            <h2 class="topic-caution-heading">{{ topic.medical_note.heading }}</h2>
+            {% if topic.medical_note.intro %}<p>{{ topic.medical_note.intro }}</p>{% endif %}
+            <ul class="topic-caution-list">
+                {% for item in topic.medical_note.list %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+            {% if topic.medical_note.extra %}<p>{{ topic.medical_note.extra }}</p>{% endif %}
+            {% if topic.medical_note.crisis %}<p class="topic-caution-crisis">{{ topic.medical_note.crisis }}</p>{% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if topic.video %}
+<section class="section" id="video">
+    <div class="container">
+        <h2 class="section-title">Видео</h2>
+        <div class="topic-video">
+            <div class="topic-video-frame">
+                <iframe src="https://www.youtube-nocookie.com/embed/{{ topic.video.id }}?rel=0&playsinline=1" title="{{ topic.video.title }}" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="topic-video-text">
+                <h3>{{ topic.video.title }}</h3>
+                {% if topic.video.description %}<p class="text-soft">{{ topic.video.description }}</p>{% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if topic.faq %}
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">{{ topic.faq.heading }}</h2>
+        <div class="topic-faq">
+            {% for item in topic.faq.list %}
+            <div class="topic-faq-item">
+                <h3 class="topic-faq-question">{{ item.q }}</h3>
+                <p class="topic-faq-answer">{{ item.a }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Записаться на консультацию -->
+<section class="section section-alt" id="zapis">
+    <div class="container topic-zapis">
+        <div class="topic-zapis-main">
+            <h2 class="topic-zapis-heading">Записаться на&nbsp;консультацию</h2>
+            <p>{{ topic.zapis.lead }}</p>
+            {% if topic.zapis.note %}
+            <p class="text-soft">{{ topic.zapis.note }} <a href="/#consultation">на&nbsp;главной странице</a>.</p>
+            {% endif %}
+            <a href="/#consultation" class="btn-cta">Написать</a>
+        </div>
+        <div class="price-card price-card--side">
+            <p class="price-amount">£{{ price["gbp"] }}</p>
+            <p class="mb-0">60 минут, онлайн (Google&nbsp;Meet)</p>
+            <p class="price-note" style="margin-top:.4rem;">Стоимость одинакова для первой и&nbsp;для всех последующих сессий</p>
+        </div>
+    </div>
+</section>
+
+<div class="footer-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C220,90 380,0 620,36 C860,72 1000,10 1230,34 C1330,44 1400,40 1440,32 L1440,70 L0,70 Z" style="fill:var(--color-bg-alt)"/>
+    </svg>
+</div>
+{{ ui.site_footer() }}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -13,6 +13,10 @@
   `assets/documents/`, инструкция — [`education_readme.md`](education_readme.md).
 - **Материалы** (PDF-листы для скачивания) — данные в `data/materials.yaml`,
   сами PDF в `assets/materials/`, инструкция — [`materials_readme.md`](materials_readme.md).
+- **Тематические страницы** (отдельные страницы по темам, например
+  «Поддержка после потери беременности» на `/poterya-beremennosti/`) —
+  данные в `data/topics/` (один файл на страницу), инструкция —
+  [`topics_readme.md`](topics_readme.md).
 - **Постоянные константы сайта** (цена консультации, цифры в hero/FAQ —
   сессии, клиенты, год начала практики, часы образования/терапии/супервизий,
   заголовок страницы `<title>`, адрес сайта) — в [`settings.yaml`](settings.yaml).
@@ -21,7 +25,7 @@
 ## Как опубликовать правку
 
 Любое изменение в `data/videos.json`, `data/education.yaml`,
-`data/materials.yaml`, `settings.yaml`, `assets/documents/` или
+`data/materials.yaml`, `data/topics/`, `settings.yaml`, `assets/documents/` или
 `assets/materials/` достаточно сохранить («Commit changes») на GitHub —
 Netlify пересоберёт и обновит сайт сам, через 1–2 минуты. Отдельного шага
 публикации не нужно.

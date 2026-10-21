@@ -45,6 +45,9 @@ MATERIALS_SRC_DIR = "assets/materials"
 MATERIALS_DIR = os.path.join("public", "materials")
 MATERIALS_URL_PREFIX = "/materials"
 
+TOPICS_DIR = "data/topics"
+TOPIC_TEMPLATE = "topic.html.template"
+
 YOUTUBE_HOSTS = {
     "youtube.com", "www.youtube.com", "m.youtube.com",
     "youtube-nocookie.com", "www.youtube-nocookie.com",
@@ -526,6 +529,158 @@ def load_materials():
     return materials, labels_order
 
 
+def _nbsp_lines(items):
+    return [apply_nbsp(s.strip()) for s in items if isinstance(s, str) and s.strip()]
+
+
+def load_topics():
+    """Загружает тематические страницы из data/topics/*.yaml — одна страница
+    на файл, адрес = имя файла (poterya-beremennosti.yaml → /poterya-beremennosti/).
+    Каждый раздел страницы необязателен: если данных для него нет, он просто
+    не передаётся в шаблон, и topic.html.template его не выводит."""
+    if not os.path.isdir(TOPICS_DIR):
+        return []
+
+    topics = []
+    for file_name in sorted(os.listdir(TOPICS_DIR)):
+        if not file_name.endswith(".yaml"):
+            continue
+        path = os.path.join(TOPICS_DIR, file_name)
+        slug = file_name[:-len(".yaml")]
+        label = f"тематическая страница «{slug}» ({path})"
+
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                raw = yaml.load(f, Loader=SafeLoader)
+        except yaml.YAMLError as e:
+            mark = getattr(e, "problem_mark", None)
+            where = f" (примерно строка {mark.line + 1})" if mark else ""
+            raise SystemExit(
+                f"ОШИБКА в {path}: файл повреждён{where} — {e}. "
+                f"Скорее всего, рядом пропущен отступ, двоеточие или кавычка."
+            )
+        if not isinstance(raw, dict):
+            raise SystemExit(f"ОШИБКА в {label}: файл должен быть блоком с полями (seo, hero, ...).")
+
+        seo = raw.get("seo") or {}
+        hero = raw.get("hero") or {}
+        if not isinstance(seo.get("title"), str) or not seo["title"].strip():
+            raise SystemExit(f"ОШИБКА в {label}: не указан seo.title.")
+        if not isinstance(seo.get("description"), str) or not seo["description"].strip():
+            raise SystemExit(f"ОШИБКА в {label}: не указан seo.description.")
+        if not isinstance(hero.get("h1"), str) or not hero["h1"].strip():
+            raise SystemExit(f"ОШИБКА в {label}: не указан hero.h1.")
+        breadcrumb = (raw.get("breadcrumb") or "").strip()
+        if not breadcrumb:
+            raise SystemExit(f"ОШИБКА в {label}: не указан breadcrumb (название в хлебных крошках).")
+        zapis = raw.get("zapis") or {}
+        if not isinstance(zapis.get("lead"), str) or not zapis["lead"].strip():
+            raise SystemExit(f"ОШИБКА в {label}: не указан zapis.lead.")
+
+        topic = {
+            "slug": slug,
+            "seo_title": apply_nbsp(seo["title"].strip()),
+            "seo_description": apply_nbsp(seo["description"].strip()),
+            "breadcrumb": apply_nbsp(breadcrumb),
+            "hero": {
+                "h1": apply_nbsp(hero["h1"].strip()),
+                "lead": apply_nbsp((hero.get("lead") or "").strip()),
+                "lead_soft": apply_nbsp((hero.get("lead_soft") or "").strip()),
+                "photo_alt": apply_nbsp((hero.get("photo_alt") or "Екатерина Заикина").strip()),
+            },
+            "warning": apply_nbsp((raw.get("warning") or "").strip()),
+            "zapis": {
+                "lead": apply_nbsp(zapis["lead"].strip()),
+                "note": apply_nbsp((zapis.get("note") or "").strip()),
+            },
+        }
+
+        intro = raw.get("intro") or {}
+        intro_paragraphs = _nbsp_lines(intro.get("paragraphs") or [])
+        if (intro.get("heading") or "").strip() and intro_paragraphs:
+            topic["intro"] = {
+                "heading": apply_nbsp(intro["heading"].strip()),
+                "paragraphs": intro_paragraphs,
+                "highlight": apply_nbsp((intro.get("highlight") or "").strip()),
+            }
+
+        topics_block = raw.get("topics") or {}
+        raw_items = topics_block.get("items") or []
+        if (topics_block.get("heading") or "").strip() and raw_items:
+            parsed_items = []
+            for item in raw_items:
+                title = (item.get("title") or "").strip()
+                if not title:
+                    raise SystemExit(f"ОШИБКА в {label}: у одной из карточек topics.items не указан title.")
+                parsed_items.append({
+                    "title": apply_nbsp(title),
+                    "sub": apply_nbsp((item.get("sub") or "").strip()),
+                })
+            topic["topics_block"] = {
+                "heading": apply_nbsp(topics_block["heading"].strip()),
+                "cards": parsed_items,
+                "note": apply_nbsp((topics_block.get("note") or "").strip()),
+            }
+
+        steps_block = raw.get("steps") or {}
+        raw_steps = steps_block.get("items") or []
+        if (steps_block.get("heading") or "").strip() and raw_steps:
+            parsed_steps = []
+            for item in raw_steps:
+                title = (item.get("title") or "").strip()
+                text = (item.get("text") or "").strip()
+                if not title or not text:
+                    raise SystemExit(f"ОШИБКА в {label}: у одного из шагов steps.items не указан title или text.")
+                parsed_steps.append({"title": apply_nbsp(title), "text": apply_nbsp(text)})
+            topic["steps"] = {
+                "heading": apply_nbsp(steps_block["heading"].strip()),
+                "list": parsed_steps,
+                "footnote_text": apply_nbsp((steps_block.get("footnote_text") or "").strip()),
+                "footnote_url": (steps_block.get("footnote_url") or "").strip(),
+            }
+
+        medical = raw.get("medical_note") or {}
+        medical_items = _nbsp_lines(medical.get("items") or [])
+        if (medical.get("heading") or "").strip() and medical_items:
+            topic["medical_note"] = {
+                "heading": apply_nbsp(medical["heading"].strip()),
+                "intro": apply_nbsp((medical.get("intro") or "").strip()),
+                "list": medical_items,
+                "extra": apply_nbsp((medical.get("extra") or "").strip()),
+                "crisis": apply_nbsp((medical.get("crisis") or "").strip()),
+            }
+
+        video = raw.get("video") or {}
+        video_url = (video.get("url") or "").strip()
+        if video_url:
+            video_id = extract_youtube_id(video_url)
+            if not video_id:
+                raise SystemExit(
+                    f"ОШИБКА в {label}: у video.url ({video_url}) не получилось распознать ссылку на YouTube."
+                )
+            topic["video"] = {
+                "id": video_id,
+                "title": apply_nbsp((video.get("title") or "").strip()),
+                "description": apply_nbsp((video.get("description") or "").strip()),
+            }
+
+        faq = raw.get("faq") or {}
+        raw_faq = faq.get("items") or []
+        if (faq.get("heading") or "").strip() and raw_faq:
+            parsed_faq = []
+            for item in raw_faq:
+                q = (item.get("q") or "").strip()
+                a = (item.get("a") or "").strip()
+                if not q or not a:
+                    raise SystemExit(f"ОШИБКА в {label}: у одного из вопросов faq.items не указан q или a.")
+                parsed_faq.append({"q": apply_nbsp(q), "a": apply_nbsp(a)})
+            topic["faq"] = {"heading": apply_nbsp(faq["heading"].strip()), "list": parsed_faq}
+
+        topics.append(topic)
+
+    return topics
+
+
 environment = Environment(loader=FileSystemLoader("."))
 settings = yaml.load(open("settings.yaml"), Loader=SafeLoader)
 today = datetime.date.today()
@@ -536,6 +691,7 @@ with open("public/favicon.ico", "rb") as f:
 videos_json = load_videos()
 education = load_education()
 materials, materials_labels_order = load_materials()
+topics = load_topics()
 
 # Данные для раздела "Материалы" на фронтенде (фильтры по меткам) и для
 # строки "Лист к этому видео" в разделе "Видео" — та же схема, что у
@@ -587,11 +743,32 @@ privacy_content = privacy_template.render(
 with open("public/privacy.html", mode="w", encoding="utf-8") as f:
     f.write(privacy_content)
 
-# sitemap.xml: главная страница + PDF из раздела "Материалы" (без privacy —
-# у неё noindex). Список материалов берётся из той же data/materials.yaml,
-# что и сама секция на сайте, так что сборка PDF и sitemap не расходятся.
+# Тематические страницы (data/topics/*.yaml) — каждая в свою папку
+# public/<slug>/index.html, Netlify отдаёт её по адресу /<slug>/.
+topic_template = environment.get_template(TOPIC_TEMPLATE)
+for topic in topics:
+    topic_content = topic_template.render(
+        topic=topic,
+        year=today.year,
+        site_url=settings["site_url"],
+        favicon_v=favicon_v,
+        price=settings["price"],
+    )
+    topic_dir = os.path.join("public", topic["slug"])
+    os.makedirs(topic_dir, exist_ok=True)
+    with open(os.path.join(topic_dir, "index.html"), mode="w", encoding="utf-8") as f:
+        f.write(topic_content)
+
+# sitemap.xml: главная страница + PDF из раздела "Материалы" + тематические
+# страницы (без privacy — у неё noindex). Списки берутся из тех же
+# data/materials.yaml и data/topics/*.yaml, что и сами разделы/страницы на
+# сайте, так что сборка и sitemap не расходятся.
 site_url = settings["site_url"]
-sitemap_urls = [f"{site_url}/"] + [f"{site_url}{m['url']}" for m in materials]
+sitemap_urls = (
+    [f"{site_url}/"]
+    + [f"{site_url}{m['url']}" for m in materials]
+    + [f"{site_url}/{t['slug']}/" for t in topics]
+)
 sitemap_body = "\n".join(f"  <url><loc>{u}</loc></url>" for u in sitemap_urls)
 sitemap_content = (
     '<?xml version="1.0" encoding="UTF-8"?>\n'
