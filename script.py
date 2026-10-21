@@ -71,6 +71,11 @@ HOURS_RE = re.compile(r"(?<=\d)[ \t]+(?=ч\b)")
 # таймлайн сортируется автоматически, независимо от порядка записей в файле.
 TIMELINE_YEAR_RE = re.compile(r"\d{4}")
 
+# Дефис между буквами ("по-разному", "интервью-знакомство") — неразрывный дефис
+# (U+2011), чтобы слово с дефисом не разрывалось переносом строки. Общее правило
+# для всего текста тематических страниц (data/topics/*.yaml), а не точечная правка.
+NOBREAK_HYPHEN_RE = re.compile(r"(?<=[A-Za-zА-Яа-яЁё])-(?=[A-Za-zА-Яа-яЁё])")
+
 
 def ru_date(d):
     return f"{d.day} {RU_MONTHS[d.month - 1]} {d.year}"
@@ -85,6 +90,15 @@ def apply_nbsp(text):
     text = HOURS_RE.sub(" ", text)
     text = NBSP_RE.sub(lambda m: m.group(1) + " ", text)
     return text
+
+
+def apply_topic_nbsp(text):
+    """Как apply_nbsp(), но дополнительно для текста тематических страниц —
+    делает дефис внутри слова неразрывным (см. NOBREAK_HYPHEN_RE)."""
+    text = apply_nbsp(text)
+    if not text:
+        return text
+    return NOBREAK_HYPHEN_RE.sub("‑", text)
 
 
 def extract_youtube_id(raw_url):
@@ -530,7 +544,7 @@ def load_materials():
 
 
 def _nbsp_lines(items):
-    return [apply_nbsp(s.strip()) for s in items if isinstance(s, str) and s.strip()]
+    return [apply_topic_nbsp(s.strip()) for s in items if isinstance(s, str) and s.strip()]
 
 
 def load_topics():
@@ -579,19 +593,19 @@ def load_topics():
 
         topic = {
             "slug": slug,
-            "seo_title": apply_nbsp(seo["title"].strip()),
-            "seo_description": apply_nbsp(seo["description"].strip()),
-            "breadcrumb": apply_nbsp(breadcrumb),
+            "seo_title": apply_topic_nbsp(seo["title"].strip()),
+            "seo_description": apply_topic_nbsp(seo["description"].strip()),
+            "breadcrumb": apply_topic_nbsp(breadcrumb),
             "hero": {
-                "h1": apply_nbsp(hero["h1"].strip()),
-                "lead": apply_nbsp((hero.get("lead") or "").strip()),
-                "lead_soft": apply_nbsp((hero.get("lead_soft") or "").strip()),
-                "photo_alt": apply_nbsp((hero.get("photo_alt") or "Екатерина Заикина").strip()),
+                "h1": apply_topic_nbsp(hero["h1"].strip()),
+                "lead": apply_topic_nbsp((hero.get("lead") or "").strip()),
+                "lead_soft": apply_topic_nbsp((hero.get("lead_soft") or "").strip()),
+                "photo_alt": apply_topic_nbsp((hero.get("photo_alt") or "Екатерина Заикина").strip()),
             },
-            "warning": apply_nbsp((raw.get("warning") or "").strip()),
+            "warning": apply_topic_nbsp((raw.get("warning") or "").strip()),
             "zapis": {
-                "lead": apply_nbsp(zapis["lead"].strip()),
-                "note": apply_nbsp((zapis.get("note") or "").strip()),
+                "lead": apply_topic_nbsp(zapis["lead"].strip()),
+                "note": apply_topic_nbsp((zapis.get("note") or "").strip()),
             },
         }
 
@@ -599,9 +613,9 @@ def load_topics():
         intro_paragraphs = _nbsp_lines(intro.get("paragraphs") or [])
         if (intro.get("heading") or "").strip() and intro_paragraphs:
             topic["intro"] = {
-                "heading": apply_nbsp(intro["heading"].strip()),
+                "heading": apply_topic_nbsp(intro["heading"].strip()),
                 "paragraphs": intro_paragraphs,
-                "highlight": apply_nbsp((intro.get("highlight") or "").strip()),
+                "highlight": apply_topic_nbsp((intro.get("highlight") or "").strip()),
             }
 
         topics_block = raw.get("topics") or {}
@@ -613,13 +627,13 @@ def load_topics():
                 if not title:
                     raise SystemExit(f"ОШИБКА в {label}: у одной из карточек topics.items не указан title.")
                 parsed_items.append({
-                    "title": apply_nbsp(title),
-                    "sub": apply_nbsp((item.get("sub") or "").strip()),
+                    "title": apply_topic_nbsp(title),
+                    "sub": apply_topic_nbsp((item.get("sub") or "").strip()),
                 })
             topic["topics_block"] = {
-                "heading": apply_nbsp(topics_block["heading"].strip()),
+                "heading": apply_topic_nbsp(topics_block["heading"].strip()),
                 "cards": parsed_items,
-                "note": apply_nbsp((topics_block.get("note") or "").strip()),
+                "note": apply_topic_nbsp((topics_block.get("note") or "").strip()),
             }
 
         steps_block = raw.get("steps") or {}
@@ -631,11 +645,11 @@ def load_topics():
                 text = (item.get("text") or "").strip()
                 if not title or not text:
                     raise SystemExit(f"ОШИБКА в {label}: у одного из шагов steps.items не указан title или text.")
-                parsed_steps.append({"title": apply_nbsp(title), "text": apply_nbsp(text)})
+                parsed_steps.append({"title": apply_topic_nbsp(title), "text": apply_topic_nbsp(text)})
             topic["steps"] = {
-                "heading": apply_nbsp(steps_block["heading"].strip()),
+                "heading": apply_topic_nbsp(steps_block["heading"].strip()),
                 "list": parsed_steps,
-                "footnote_text": apply_nbsp((steps_block.get("footnote_text") or "").strip()),
+                "footnote_text": apply_topic_nbsp((steps_block.get("footnote_text") or "").strip()),
                 "footnote_url": (steps_block.get("footnote_url") or "").strip(),
             }
 
@@ -643,11 +657,11 @@ def load_topics():
         medical_items = _nbsp_lines(medical.get("items") or [])
         if (medical.get("heading") or "").strip() and medical_items:
             topic["medical_note"] = {
-                "heading": apply_nbsp(medical["heading"].strip()),
-                "intro": apply_nbsp((medical.get("intro") or "").strip()),
+                "heading": apply_topic_nbsp(medical["heading"].strip()),
+                "intro": apply_topic_nbsp((medical.get("intro") or "").strip()),
                 "list": medical_items,
-                "extra": apply_nbsp((medical.get("extra") or "").strip()),
-                "crisis": apply_nbsp((medical.get("crisis") or "").strip()),
+                "extra": apply_topic_nbsp((medical.get("extra") or "").strip()),
+                "crisis": apply_topic_nbsp((medical.get("crisis") or "").strip()),
             }
 
         video = raw.get("video") or {}
@@ -660,8 +674,8 @@ def load_topics():
                 )
             topic["video"] = {
                 "id": video_id,
-                "title": apply_nbsp((video.get("title") or "").strip()),
-                "description": apply_nbsp((video.get("description") or "").strip()),
+                "title": apply_topic_nbsp((video.get("title") or "").strip()),
+                "description": apply_topic_nbsp((video.get("description") or "").strip()),
             }
 
         faq = raw.get("faq") or {}
@@ -673,8 +687,8 @@ def load_topics():
                 a = (item.get("a") or "").strip()
                 if not q or not a:
                     raise SystemExit(f"ОШИБКА в {label}: у одного из вопросов faq.items не указан q или a.")
-                parsed_faq.append({"q": apply_nbsp(q), "a": apply_nbsp(a)})
-            topic["faq"] = {"heading": apply_nbsp(faq["heading"].strip()), "list": parsed_faq}
+                parsed_faq.append({"q": apply_topic_nbsp(q), "a": apply_topic_nbsp(a)})
+            topic["faq"] = {"heading": apply_topic_nbsp(faq["heading"].strip()), "list": parsed_faq}
 
         topics.append(topic)
 
@@ -682,6 +696,11 @@ def load_topics():
 
 
 environment = Environment(loader=FileSystemLoader("."))
+# Для <head> (title/meta content) нужен обычный пробел, а не &nbsp; — неразрывные
+# пробелы там не видны пользователю и не нужны, но могут случайно попасть в seo-текст
+# через apply_nbsp(). Фильтр подчищает и настоящий символ U+00A0, и буквальную
+# строку "&nbsp;", если она когда-нибудь попадёт в данные.
+environment.filters["plain_space"] = lambda text: (text or "").replace(" ", " ").replace("&nbsp;", " ")
 settings = yaml.load(open("settings.yaml"), Loader=SafeLoader)
 today = datetime.date.today()
 

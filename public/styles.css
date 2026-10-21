@@ -50,6 +50,9 @@ h1, h2, h3, h4, .display-heading {
     font-variant-numeric: lining-nums;
     font-feature-settings: "lnum" 1;
 }
+@media (max-width: 700px) {
+    h2 { text-wrap: balance; }
+}
 
 .hero-name {
     font-style: italic;
@@ -1060,7 +1063,8 @@ a:hover { color: var(--color-accent); }
 /* ---- Первый экран ---- */
 .topic-hero { position: relative; background: var(--color-hero-bg); overflow: hidden; }
 .topic-hero-inner {
-    padding: 3.25rem 0 4rem;
+    padding-top: 3.25rem;
+    padding-bottom: 4rem;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -1081,14 +1085,13 @@ a:hover { color: var(--color-accent); }
 .topic-hero-lead-soft { font-size: 1.1rem; color: var(--color-text-soft); margin-bottom: 1.5rem; }
 .topic-hero-photo-frame { flex: none; margin: 0 auto; }
 @media (max-width: 700px) {
-    .topic-hero-inner { padding: 2.5rem 0 3rem; text-align: center; }
+    .topic-hero-inner { padding-top: 2.5rem; padding-bottom: 3rem; text-align: center; }
     .topic-hero-photo-frame { order: -1; }
 }
 
 /* ---- Бережное предупреждение ---- */
 .topic-notice {
-    max-width: 720px;
-    margin: 2rem auto 0;
+    margin: 2rem 0 0;
     font-family: var(--font-display);
     font-style: italic;
     color: var(--color-text-soft);
