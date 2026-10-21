@@ -105,8 +105,11 @@
         <div class="topic-card-grid">
             {% for item in topic.topics_block.cards %}
             <div class="topic-page-card">
-                <h3 class="topic-page-card-title">{{ item.title }}</h3>
-                {% if item.sub %}<p class="topic-page-card-sub">{{ item.sub }}</p>{% endif %}
+                <span class="dot"></span>
+                <div>
+                    <h3 class="topic-page-card-title">{{ item.title }}</h3>
+                    {% if item.sub %}<p class="topic-page-card-sub">{{ item.sub }}</p>{% endif %}
+                </div>
             </div>
             {% endfor %}
         </div>

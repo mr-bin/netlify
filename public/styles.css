@@ -356,7 +356,7 @@ a:hover { color: var(--color-accent); }
     font-size: .88rem;
     color: var(--color-text-soft);
 }
-.topic-card .dot, .benefit-card .dot {
+.topic-card .dot, .benefit-card .dot, .topic-page-card .dot {
     flex: none;
     width: 8px; height: 8px;
     border-radius: 50%;
@@ -1079,7 +1079,7 @@ a:hover { color: var(--color-accent); }
 }
 .topic-hero-lead { font-size: 1.1rem; margin-bottom: .6rem; }
 .topic-hero-lead-soft { font-size: 1.1rem; color: var(--color-text-soft); margin-bottom: 1.5rem; }
-.topic-hero-photo-frame { flex: 1 1 200px; margin: 0 auto; }
+.topic-hero-photo-frame { flex: none; margin: 0 auto; }
 @media (max-width: 700px) {
     .topic-hero-inner { padding: 2.5rem 0 3rem; text-align: center; }
     .topic-hero-photo-frame { order: -1; }
@@ -1137,6 +1137,9 @@ a:hover { color: var(--color-accent); }
 }
 .topic-card-grid > :last-child { grid-column: 1 / -1; }
 .topic-page-card {
+    display: flex;
+    gap: .7rem;
+    align-items: flex-start;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
