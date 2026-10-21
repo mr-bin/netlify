@@ -158,9 +158,13 @@
     <div class="container">
         <h2 class="section-title">Материалы</h2>
         <p class="section-lede">Листы для самостоятельной работы. Можно распечатать или заполнять с&nbsp;телефона</p>
-        <div class="materials-list">
+        <div class="materials-filters" id="materialsFilters" hidden>
+            <div class="materials-filters-row" id="materialsFilterButtons" role="group" aria-label="Фильтр листов по меткам"></div>
+            <p class="visually-hidden" aria-live="polite" id="materialsFilterStatus"></p>
+        </div>
+        <div class="materials-list" id="materialsList">
             {% for item in materials %}
-            <div class="material-card">
+            <div class="material-card" id="{{ item.card_id }}">
                 <div class="material-head">
                     <span class="material-icon">{{ ui.document_icon() }}</span>
                     <p class="material-title">{{ item.title }}</p>
@@ -176,6 +180,7 @@
             </div>
             {% endfor %}
         </div>
+        <script type="application/json" id="materialsData">{{ materials_json }}</script>
     </div>
 </section>
 

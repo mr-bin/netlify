@@ -29,6 +29,9 @@
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+}
 
 body {
     background-color: var(--color-bg);
@@ -430,8 +433,14 @@ a:hover { color: var(--color-accent); }
     color: var(--color-text-soft);
 }
 .video-main-card.is-shorts ~ .video-main-title,
-.video-main-card.is-shorts ~ .video-main-note {
+.video-main-card.is-shorts ~ .video-main-note,
+.video-main-card.is-shorts ~ .video-main-link {
     text-align: center;
+}
+
+.video-main-link {
+    margin: .4rem 0 0;
+    font-size: .9rem;
 }
 
 .video-play-btn {
@@ -560,6 +569,42 @@ a:hover { color: var(--color-accent); }
 }
 
 /* ---- Materials ---- */
+.materials-filters {
+    max-width: 880px;
+    margin: 0 auto 1.25rem;
+}
+.materials-filters-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: center;
+}
+.materials-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: .4rem 1rem;
+    border-radius: 999px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+.materials-filter-btn:hover { border-color: var(--color-accent); }
+.materials-filter-btn.is-active {
+    background: var(--color-accent-soft);
+    border-color: var(--color-accent);
+    color: var(--color-accent-dark);
+}
+.materials-filter-btn:focus-visible {
+    outline: 2px solid var(--color-accent-dark);
+    outline-offset: 2px;
+}
+
 .materials-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -578,6 +623,16 @@ a:hover { color: var(--color-accent); }
     border-radius: var(--radius-sm);
     padding: .65rem .85rem;
     box-shadow: var(--shadow-card);
+    transition: background-color .4s ease, border-color .4s ease;
+}
+.material-card--hidden { display: none; }
+.material-card.is-highlighted {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent-soft);
+}
+@media (prefers-reduced-motion: reduce) {
+    .material-card { transition: none; }
+    .material-card.is-highlighted { background-color: transparent; }
 }
 .material-head {
     display: flex;

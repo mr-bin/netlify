@@ -422,8 +422,17 @@ def load_materials():
     if not isinstance(raw, dict):
         raise SystemExit(f"ОШИБКА в {MATERIALS_PATH}: файл должен содержать раздел materials.")
 
+    labels_order = raw.get("labels") or []
+    if not isinstance(labels_order, list) or not all(isinstance(l, str) and l.strip() for l in labels_order):
+        raise SystemExit(
+            f"ОШИБКА в {MATERIALS_PATH}: раздел \"labels\" в начале файла должен быть списком названий меток."
+        )
+    labels_order = [l.strip() for l in labels_order]
+    valid_labels = set(labels_order)
+
     materials = []
     seen_files = {}
+    seen_card_ids = {}
     for i, item in enumerate(raw.get("materials") or [], start=1):
         label = f"материал №{i}"
         if not isinstance(item, dict):
@@ -458,6 +467,15 @@ def load_materials():
             )
         seen_files[file_name] = label
 
+        card_id = "list-" + file_name[:-4].replace("_", "-")
+        if card_id in seen_card_ids:
+            raise SystemExit(
+                f"ОШИБКА в {MATERIALS_PATH}: у {label} ({title}) и {seen_card_ids[card_id]} получается "
+                f"одинаковый id карточки «{card_id}» (имена файлов отличаются только подчёркиванием/дефисом). "
+                f"Переименуйте один из файлов."
+            )
+        seen_card_ids[card_id] = label
+
         if not bool(item.get("show", True)):
             continue
 
@@ -470,16 +488,42 @@ def load_materials():
         os.makedirs(MATERIALS_DIR, exist_ok=True)
         shutil.copyfile(src_path, os.path.join(MATERIALS_DIR, file_name))
 
+        raw_labels = item.get("labels") or []
+        if not isinstance(raw_labels, list) or not all(isinstance(l, str) and l.strip() for l in raw_labels):
+            raise SystemExit(
+                f"ОШИБКА в {MATERIALS_PATH}: у {label} ({title}) поле \"labels\" должно быть списком меток."
+            )
+        item_labels = []
+        for lbl in raw_labels:
+            lbl = lbl.strip()
+            if lbl not in valid_labels:
+                print(
+                    f"ПРЕДУПРЕЖДЕНИЕ в {MATERIALS_PATH}: у листа «{title}» метка «{lbl}» не входит в список "
+                    f"labels в начале файла — проверьте, нет ли опечатки, или допишите метку в этот список."
+                )
+                continue
+            item_labels.append(lbl)
+
+        favorite = bool(item.get("favorite", False))
         video_url = (item.get("video_url") or "").strip()
+        video_id = extract_youtube_id(video_url)
+        tags = list(item_labels)
+        if video_id:
+            tags.append("С видео")
+
         materials.append({
             "title": apply_nbsp(title.strip()),
             "description": apply_nbsp(description.strip()),
             "format": f"PDF · {pages} стр.",
             "url": f"{MATERIALS_URL_PREFIX}/{file_name}",
             "video_url": video_url,
+            "video_id": video_id,
+            "card_id": card_id,
+            "labels": tags,
+            "favorite": favorite,
         })
 
-    return materials
+    return materials, labels_order
 
 
 environment = Environment(loader=FileSystemLoader("."))
@@ -491,7 +535,26 @@ with open("public/favicon.ico", "rb") as f:
 
 videos_json = load_videos()
 education = load_education()
-materials = load_materials()
+materials, materials_labels_order = load_materials()
+
+# Данные для раздела "Материалы" на фронтенде (фильтры по меткам) и для
+# строки "Лист к этому видео" в разделе "Видео" — та же схема, что у
+# videos_json: один JSON-блок, который читает public/main.js.
+materials_json = json.dumps(
+    {
+        "labelsOrder": materials_labels_order,
+        "materials": [
+            {
+                "id": m["card_id"],
+                "title": m["title"],
+                "labels": m["labels"],
+                "videoId": m["video_id"],
+            }
+            for m in materials
+        ],
+    },
+    ensure_ascii=False,
+).replace("</", "<\\/")
 
 index_template = environment.get_template('index.html.template')
 index_content = index_template.render(
@@ -508,6 +571,7 @@ index_content = index_template.render(
     edu_timeline_visible=education["timeline_visible"],
     edu_documents_visible=education["documents_visible"],
     materials=materials,
+    materials_json=materials_json,
 )
 with open("public/index.html", mode="w", encoding="utf-8") as f:
     f.write(index_content)

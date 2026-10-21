@@ -135,6 +135,21 @@
     var byId = {};
     videos.forEach(function (v) { byId[v.id] = v; });
 
+    // Листы из раздела "Материалы", у которых указано видео из этого раздела —
+    // под совпадающим видео показываем ссылку на лист ("Лист к этому видео").
+    var materialsByVideoId = {};
+    var materialsDataEl = document.getElementById("materialsData");
+    if (materialsDataEl) {
+        try {
+            var materialsPayload = JSON.parse(materialsDataEl.textContent);
+            (materialsPayload && materialsPayload.materials || []).forEach(function (m) {
+                if (m.videoId) materialsByVideoId[m.videoId] = m;
+            });
+        } catch (e) {
+            // материалы необязательны для видео — просто не показываем строку
+        }
+    }
+
     var activeId = payload.initialMainId && byId[payload.initialMainId] ? payload.initialMainId : videos[0].id;
     var expanded = false;
 
@@ -174,6 +189,13 @@
 
         html += '<p class="video-main-title">' + escapeHtml(v.title) + "</p>";
         if (v.note) html += '<p class="video-main-note">' + escapeHtml(v.note) + "</p>";
+
+        var linkedMaterial = materialsByVideoId[v.id];
+        if (linkedMaterial) {
+            html += '<p class="video-main-link"><a href="#' + escapeHtml(linkedMaterial.id) + '">' +
+                "Лист к этому видео: «" + escapeHtml(linkedMaterial.title) + "» →</a></p>";
+        }
+
         mainEl.innerHTML = html;
     }
 
@@ -227,4 +249,156 @@
 
     renderMain(false);
     renderList();
+})();
+
+(function () {
+    // Одна настройка, чтобы включить/выключить фильтры по меткам целиком.
+    var FILTERS_ENABLED = true;
+
+    var list = document.getElementById("materialsList");
+    var dataEl = document.getElementById("materialsData");
+    if (!list || !dataEl) return;
+
+    var payload;
+    try {
+        payload = JSON.parse(dataEl.textContent);
+    } catch (e) {
+        payload = null;
+    }
+    var items = (payload && payload.materials) || [];
+    var labelsOrder = (payload && payload.labelsOrder) || [];
+
+    var cards = {};
+    items.forEach(function (m) {
+        var el = document.getElementById(m.id);
+        if (el) cards[m.id] = { el: el, labels: m.labels || [] };
+    });
+
+    function escapeHtml(s) {
+        return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+    }
+
+    function reduceMotion() {
+        return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+
+    function pluralListov(n) {
+        var mod10 = n % 10, mod100 = n % 100;
+        if (mod10 === 1 && mod100 !== 11) return "лист";
+        if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return "листа";
+        return "листов";
+    }
+
+    // ---- Фильтры по меткам ----
+    var filtersWrap = document.getElementById("materialsFilters");
+    var buttonsRow = document.getElementById("materialsFilterButtons");
+    var statusEl = document.getElementById("materialsFilterStatus");
+    var activeFilter = null; // null = «Все»
+
+    function applyFilter(value) {
+        activeFilter = value || null;
+
+        if (buttonsRow) {
+            Array.prototype.forEach.call(buttonsRow.querySelectorAll(".materials-filter-btn"), function (btn) {
+                var isActive = (btn.getAttribute("data-filter") || null) === activeFilter;
+                btn.classList.toggle("is-active", isActive);
+                btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+            });
+        }
+
+        var visibleCount = 0;
+        Object.keys(cards).forEach(function (id) {
+            var card = cards[id];
+            var visible = !activeFilter || card.labels.indexOf(activeFilter) !== -1;
+            card.el.classList.toggle("material-card--hidden", !visible);
+            if (visible) visibleCount++;
+        });
+
+        if (statusEl) {
+            statusEl.textContent = activeFilter
+                ? "Показано " + visibleCount + " " + pluralListov(visibleCount)
+                : "Показаны все листы";
+        }
+    }
+
+    function buildFilters() {
+        if (!FILTERS_ENABLED || !filtersWrap || !buttonsRow) return;
+
+        var counts = {};
+        Object.keys(cards).forEach(function (id) {
+            cards[id].labels.forEach(function (l) {
+                counts[l] = (counts[l] || 0) + 1;
+            });
+        });
+
+        var shown = labelsOrder.concat(["С видео"]).filter(function (l) {
+            return (counts[l] || 0) >= 2;
+        });
+        if (!shown.length) return;
+
+        var html = '<button type="button" class="materials-filter-btn is-active" data-filter="" aria-pressed="true">Все</button>';
+        shown.forEach(function (l) {
+            html += '<button type="button" class="materials-filter-btn" data-filter="' + escapeHtml(l) +
+                '" aria-pressed="false">' + escapeHtml(l) + "</button>";
+        });
+        buttonsRow.innerHTML = html;
+
+        buttonsRow.addEventListener("click", function (e) {
+            var btn = e.target.closest(".materials-filter-btn");
+            if (!btn) return;
+            var value = btn.getAttribute("data-filter") || null;
+            applyFilter(activeFilter === value && value ? null : value);
+        });
+
+        filtersWrap.hidden = false;
+    }
+
+    buildFilters();
+
+    // ---- Переход по якорю карточки (#list-...) ----
+    var HIGHLIGHT_MS = 2500;
+    var highlightTimer = null;
+
+    function goToCard(id) {
+        var card = cards[id];
+        if (!card) {
+            // Отдельной страницы материалов пока нет (все карточки — на главной),
+            // поэтому сейчас это никогда не срабатывает. Правило готово на будущее.
+            window.location.replace("/materials/#" + id);
+            return;
+        }
+
+        if (activeFilter && card.labels.indexOf(activeFilter) === -1) {
+            applyFilter(null);
+        }
+
+        card.el.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth", block: "start" });
+
+        if (highlightTimer) clearTimeout(highlightTimer);
+        card.el.classList.add("is-highlighted");
+        highlightTimer = setTimeout(function () {
+            card.el.classList.remove("is-highlighted");
+            highlightTimer = null;
+        }, HIGHLIGHT_MS);
+    }
+
+    document.addEventListener("click", function (e) {
+        var a = e.target.closest('a[href^="#list-"]');
+        if (!a) return;
+        var id = a.getAttribute("href").slice(1);
+        e.preventDefault();
+        if (window.history && history.pushState) history.pushState(null, "", "#" + id);
+        goToCard(id);
+    });
+
+    if (location.hash.indexOf("#list-") === 0) {
+        var initialId = location.hash.slice(1);
+        if (cards[initialId]) {
+            window.requestAnimationFrame(function () { goToCard(initialId); });
+        } else {
+            window.location.replace("/materials/" + location.hash);
+        }
+    }
 })();
