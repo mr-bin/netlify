@@ -44,7 +44,7 @@
             {
                 "@type": "ListItem",
                 "position": 2,
-                "name": "{{ topic.breadcrumb }}",
+                "name": "{{ topic.breadcrumb|plain_space }}",
                 "item": "{{ site_url }}/{{ topic.slug }}/"
             }
         ]
@@ -83,19 +83,7 @@
 {% endif %}
 
 {% if topic.intro %}
-<section class="section">
-    <div class="container topic-intro">
-        <h2 class="topic-intro-heading">{{ topic.intro.heading }}</h2>
-        <div class="topic-intro-body">
-            {% for p in topic.intro.paragraphs %}
-            <p>{{ p }}</p>
-            {% endfor %}
-            {% if topic.intro.highlight %}
-            <p class="topic-intro-highlight">{{ topic.intro.highlight }}</p>
-            {% endif %}
-        </div>
-    </div>
-</section>
+{{ ui.topic_text_split(topic.intro) }}
 {% endif %}
 
 {% if topic.topics_block %}
@@ -114,7 +102,7 @@
             {% endfor %}
         </div>
         {% if topic.topics_block.note %}
-        <p class="disclaimer">{{ topic.topics_block.note }}</p>
+        <p class="{% if topic.topics_block.note_style == 'box' %}topic-box topic-box--sage{% else %}disclaimer{% endif %}">{{ topic.topics_block.note }}</p>
         {% endif %}
     </div>
 </section>
@@ -141,6 +129,10 @@
         {% endif %}
     </div>
 </section>
+{% endif %}
+
+{% if topic.expect %}
+{{ ui.topic_text_split(topic.expect) }}
 {% endif %}
 
 {% if topic.medical_note %}
@@ -195,7 +187,7 @@
 {% endif %}
 
 <!-- Записаться на консультацию -->
-<section class="section section-alt" id="zapis">
+<section class="section{% if topic.zapis.bg == 'lavender' %} topic-section-lavender{% else %} section-alt{% endif %}" id="zapis">
     <div class="container topic-zapis">
         <div class="topic-zapis-main">
             <h2 class="topic-zapis-heading">Записаться на&nbsp;консультацию</h2>

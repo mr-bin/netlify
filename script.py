@@ -547,6 +547,35 @@ def _nbsp_lines(items):
     return [apply_topic_nbsp(s.strip()) for s in items if isinstance(s, str) and s.strip()]
 
 
+def _parse_text_split(block):
+    """Общий разбор текстового блока «заголовок слева, текст справа» для
+    тематических страниц (используется и для intro, и для expect, и для
+    любых будущих блоков такого вида — например на странице про менопаузу).
+    bg — необязательный фон секции ("" — белый, "sage" — светло-зелёный).
+    lead — крупный вводный абзац шрифтом Alegreya, показывается первым.
+    highlight — выделенная курсивом строка без фона (как на странице
+    «Потери беременности»). callout — светлая плашка с фоном внутри блока."""
+    paragraphs = _nbsp_lines(block.get("paragraphs") or [])
+    heading = (block.get("heading") or "").strip()
+    lead = (block.get("lead") or "").strip()
+    if not heading or not (paragraphs or lead):
+        return None
+    result = {
+        "heading": apply_topic_nbsp(heading),
+        "bg": (block.get("bg") or "").strip(),
+        "paragraphs": paragraphs,
+    }
+    if lead:
+        result["lead"] = apply_topic_nbsp(lead)
+    highlight = (block.get("highlight") or "").strip()
+    if highlight:
+        result["highlight"] = apply_topic_nbsp(highlight)
+    callout = (block.get("callout") or "").strip()
+    if callout:
+        result["callout"] = apply_topic_nbsp(callout)
+    return result
+
+
 def load_topics():
     """Загружает тематические страницы из data/topics/*.yaml — одна страница
     на файл, адрес = имя файла (poterya-beremennosti.yaml → /poterya-beremennosti/).
@@ -606,17 +635,17 @@ def load_topics():
             "zapis": {
                 "lead": apply_topic_nbsp(zapis["lead"].strip()),
                 "note": apply_topic_nbsp((zapis.get("note") or "").strip()),
+                "bg": (zapis.get("bg") or "").strip(),
             },
         }
 
-        intro = raw.get("intro") or {}
-        intro_paragraphs = _nbsp_lines(intro.get("paragraphs") or [])
-        if (intro.get("heading") or "").strip() and intro_paragraphs:
-            topic["intro"] = {
-                "heading": apply_topic_nbsp(intro["heading"].strip()),
-                "paragraphs": intro_paragraphs,
-                "highlight": apply_topic_nbsp((intro.get("highlight") or "").strip()),
-            }
+        intro_block = _parse_text_split(raw.get("intro") or {})
+        if intro_block:
+            topic["intro"] = intro_block
+
+        expect_block = _parse_text_split(raw.get("expect") or {})
+        if expect_block:
+            topic["expect"] = expect_block
 
         topics_block = raw.get("topics") or {}
         raw_items = topics_block.get("items") or []
@@ -634,6 +663,7 @@ def load_topics():
                 "heading": apply_topic_nbsp(topics_block["heading"].strip()),
                 "cards": parsed_items,
                 "note": apply_topic_nbsp((topics_block.get("note") or "").strip()),
+                "note_style": (topics_block.get("note_style") or "").strip(),
             }
 
         steps_block = raw.get("steps") or {}
