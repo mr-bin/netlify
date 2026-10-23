@@ -994,6 +994,7 @@ a:hover { color: var(--color-accent); }
 .topic-card-row { display: flex; gap: .7rem; align-items: flex-start; }
 .topic-card-more {
     align-self: flex-end;
+    margin-top: auto;
     font-size: .85rem;
     font-weight: 600;
     color: var(--color-accent-dark);
