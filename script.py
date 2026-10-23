@@ -1,5 +1,6 @@
 import datetime
 import hashlib
+import html
 import json
 import os
 import re
@@ -76,6 +77,11 @@ TIMELINE_YEAR_RE = re.compile(r"\d{4}")
 # для всего текста тематических страниц (data/topics/*.yaml), а не точечная правка.
 NOBREAK_HYPHEN_RE = re.compile(r"(?<=[A-Za-zА-Яа-яЁё])-(?=[A-Za-zА-Яа-яЁё])")
 
+# Ссылка внутри текста тематической страницы: [текст](адрес). Адрес не проходит
+# через расстановку неразрывных пробелов/дефисов, внешние ссылки (http…)
+# открываются в новой вкладке, внутренние (/#…, #…) — в той же.
+TOPIC_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)")
+
 
 def ru_date(d):
     return f"{d.day} {RU_MONTHS[d.month - 1]} {d.year}"
@@ -92,13 +98,29 @@ def apply_nbsp(text):
     return text
 
 
-def apply_topic_nbsp(text):
-    """Как apply_nbsp(), но дополнительно для текста тематических страниц —
-    делает дефис внутри слова неразрывным (см. NOBREAK_HYPHEN_RE)."""
+def _topic_typography(text):
     text = apply_nbsp(text)
     if not text:
         return text
     return NOBREAK_HYPHEN_RE.sub("‑", text)
+
+
+def apply_topic_nbsp(text):
+    """Как apply_nbsp(), но дополнительно для текста тематических страниц —
+    делает дефис внутри слова неразрывным (см. NOBREAK_HYPHEN_RE) и превращает
+    [текст](адрес) в ссылку (см. TOPIC_LINK_RE)."""
+    if not text:
+        return text
+    parts = []
+    pos = 0
+    for m in TOPIC_LINK_RE.finditer(text):
+        parts.append(_topic_typography(text[pos:m.start()]))
+        url = m.group(2)
+        external = ' target="_blank" rel="noopener"' if url.startswith(("http://", "https://")) else ""
+        parts.append(f'<a href="{html.escape(url)}"{external}>{_topic_typography(m.group(1))}</a>')
+        pos = m.end()
+    parts.append(_topic_typography(text[pos:]))
+    return "".join(parts)
 
 
 def extract_youtube_id(raw_url):
@@ -717,6 +739,11 @@ def load_topics():
                 a = (item.get("a") or "").strip()
                 if not q or not a:
                     raise SystemExit(f"ОШИБКА в {label}: у одного из вопросов faq.items не указан q или a.")
+                # if_video — продолжение ответа, которое показывается, только
+                # когда на странице есть блок «Видео» (заполнен video.url).
+                if_video = (item.get("if_video") or "").strip()
+                if if_video and "video" in topic:
+                    a = f"{a} {if_video}"
                 parsed_faq.append({"q": apply_topic_nbsp(q), "a": apply_topic_nbsp(a)})
             topic["faq"] = {"heading": apply_topic_nbsp(faq["heading"].strip()), "list": parsed_faq}
 
