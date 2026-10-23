@@ -93,6 +93,22 @@
 </div>
 {%- endmacro %}
 
+{% macro topic_text_split(block) -%}
+<section class="section{% if block.bg == 'sage' %} topic-section-sage{% endif %}">
+    <div class="container topic-intro">
+        <h2 class="topic-intro-heading">{{ block.heading }}</h2>
+        <div class="topic-intro-body">
+            {% if block.lead %}<p class="topic-intro-lead">{{ block.lead }}</p>{% endif %}
+            {% for p in block.paragraphs %}
+            <p>{{ p }}</p>
+            {% endfor %}
+            {% if block.highlight %}<p class="topic-intro-highlight">{{ block.highlight }}</p>{% endif %}
+            {% if block.callout %}<p class="topic-intro-callout">{{ block.callout }}</p>{% endif %}
+        </div>
+    </div>
+</section>
+{%- endmacro %}
+
 {% macro site_footer() -%}
 <footer class="site-footer">
     <div class="container">
