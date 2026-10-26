@@ -576,7 +576,9 @@ def _parse_text_split(block):
     bg — необязательный фон секции ("" — белый, "sage" — светло-зелёный).
     lead — крупный вводный абзац шрифтом Alegreya, показывается первым.
     highlight — выделенная курсивом строка без фона (как на странице
-    «Потери беременности»). callout — светлая плашка с фоном внутри блока."""
+    «Потери беременности»). callout — светлая плашка с фоном внутри блока.
+    footnote — мелкая серая строка в самом конце блока (например ссылка на
+    соседнюю тематическую страницу, как на странице «ЭКО»)."""
     paragraphs = _nbsp_lines(block.get("paragraphs") or [])
     heading = (block.get("heading") or "").strip()
     lead = (block.get("lead") or "").strip()
@@ -595,6 +597,9 @@ def _parse_text_split(block):
     callout = (block.get("callout") or "").strip()
     if callout:
         result["callout"] = apply_topic_nbsp(callout)
+    footnote = (block.get("footnote") or "").strip()
+    if footnote:
+        result["footnote"] = apply_topic_nbsp(footnote)
     return result
 
 
