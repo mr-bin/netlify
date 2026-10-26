@@ -1137,6 +1137,17 @@ a:hover { color: var(--color-accent); }
     padding: 1.1rem 1.375rem;
     margin: 0;
 }
+/* Список сразу под абзацем-подводкой: отрицательный отступ съедает
+   margin-bottom абзаца и gap колонки, чтобы подводка стояла вплотную.
+   Маркеры и плотность — как у .topic-caution-list. */
+.topic-intro-list { margin: -1.6rem 0 1rem; padding-left: 1.2rem; }
+.topic-intro-list li { margin-bottom: .3rem; }
+.topic-intro-footnote {
+    margin-top: .25rem;
+    font-size: .9rem;
+    color: var(--color-text-soft);
+    text-wrap: balance;
+}
 
 /* ---- Текстовый блок "заголовок слева, текст справа" с цветным фоном ---- */
 .topic-section-sage { background: var(--color-sage-soft); }
