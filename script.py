@@ -577,6 +577,8 @@ def _parse_text_split(block):
     lead — крупный вводный абзац шрифтом Alegreya, показывается первым.
     highlight — выделенная курсивом строка без фона (как на странице
     «Потери беременности»). callout — светлая плашка с фоном внутри блока.
+    items — список с маркерами сразу после абзацев (последний абзац
+    становится подводкой к нему, как «Что может измениться:» на странице «ЭКО»).
     footnote — мелкая серая строка в самом конце блока (например ссылка на
     соседнюю тематическую страницу, как на странице «ЭКО»)."""
     paragraphs = _nbsp_lines(block.get("paragraphs") or [])
@@ -589,6 +591,9 @@ def _parse_text_split(block):
         "bg": (block.get("bg") or "").strip(),
         "paragraphs": paragraphs,
     }
+    list_items = _nbsp_lines(block.get("items") or [])
+    if list_items:
+        result["list"] = list_items
     if lead:
         result["lead"] = apply_topic_nbsp(lead)
     highlight = (block.get("highlight") or "").strip()

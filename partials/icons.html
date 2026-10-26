@@ -102,6 +102,12 @@
             {% for p in block.paragraphs %}
             <p>{{ p }}</p>
             {% endfor %}
+            {%- if block.list %}
+            <ul class="topic-intro-list">
+                {% for item in block.list %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>{% endif %}
             {% if block.highlight %}<p class="topic-intro-highlight">{{ block.highlight }}</p>{% endif %}
             {% if block.callout %}<p class="topic-intro-callout">{{ block.callout }}</p>{% endif %}
             {%- if block.footnote %}
