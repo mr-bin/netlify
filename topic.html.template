@@ -101,12 +101,6 @@
             </div>
             {% endfor %}
         </div>
-        {%- if topic.topics_block.links %}
-        <div class="topic-card-links">
-            {% for line in topic.topics_block.links %}
-            <p>{{ line }}</p>
-            {% endfor %}
-        </div>{% endif %}
         {% if topic.topics_block.note %}
         <p class="{% if topic.topics_block.note_style == 'box' %}topic-box topic-box--sage{% else %}disclaimer{% endif %}">{{ topic.topics_block.note }}</p>
         {% endif %}

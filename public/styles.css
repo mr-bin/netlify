@@ -1148,6 +1148,8 @@ a:hover { color: var(--color-accent); }
     color: var(--color-text-soft);
     text-wrap: balance;
 }
+/* Несколько строк подряд — без gap колонки и margin абзаца, вплотную. */
+.topic-intro-footnote + .topic-intro-footnote { margin-top: -1.65rem; }
 
 /* ---- Текстовый блок "заголовок слева, текст справа" с цветным фоном ---- */
 .topic-section-sage { background: var(--color-sage-soft); }
@@ -1176,18 +1178,6 @@ a:hover { color: var(--color-accent); }
     .topic-card-grid { grid-template-columns: 1fr; }
 }
 .topic-card-grid > :last-child { grid-column: 1 / -1; }
-/* Строки-развилки под карточками (topics.links) — оформление как у
-   .topic-intro-footnote, по центру, как оговорка .disclaimer под ними. */
-.topic-card-links {
-    max-width: 980px;
-    margin: 1.25rem auto 0;
-    text-align: center;
-    font-size: .9rem;
-    color: var(--color-text-soft);
-    text-wrap: balance;
-}
-.topic-card-links p { margin: 0 0 .35rem; }
-.topic-card-links + .disclaimer { margin-top: .75rem; }
 .topic-page-card {
     display: flex;
     gap: .7rem;
