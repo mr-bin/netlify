@@ -110,8 +110,8 @@
             </ul>{% endif %}
             {% if block.highlight %}<p class="topic-intro-highlight">{{ block.highlight }}</p>{% endif %}
             {% if block.callout %}<p class="topic-intro-callout">{{ block.callout }}</p>{% endif %}
-            {%- if block.footnote %}
-            <p class="topic-intro-footnote">{{ block.footnote }}</p>{% endif %}
+            {%- if block.footnotes %}
+            <p class="topic-intro-footnote">{{ block.footnotes|join("<br>\n            ") }}</p>{% endif %}
         </div>
     </div>
 </section>

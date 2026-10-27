@@ -580,7 +580,8 @@ def _parse_text_split(block):
     items — список с маркерами сразу после абзацев (последний абзац
     становится подводкой к нему, как «Что может измениться:» на странице «ЭКО»).
     footnote — мелкая серая строка в самом конце блока (например ссылка на
-    соседнюю тематическую страницу, как на странице «ЭКО»)."""
+    соседнюю тематическую страницу, как на странице «ЭКО»); можно и список
+    строк — они выводятся одним абзацем, каждая с новой строки."""
     paragraphs = _nbsp_lines(block.get("paragraphs") or [])
     heading = (block.get("heading") or "").strip()
     lead = (block.get("lead") or "").strip()
@@ -602,9 +603,8 @@ def _parse_text_split(block):
     callout = (block.get("callout") or "").strip()
     if callout:
         result["callout"] = apply_topic_nbsp(callout)
-    footnote = (block.get("footnote") or "").strip()
-    if footnote:
-        result["footnote"] = apply_topic_nbsp(footnote)
+    footnote = block.get("footnote") or []
+    result["footnotes"] = _nbsp_lines([footnote] if isinstance(footnote, str) else footnote)
     return result
 
 
