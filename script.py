@@ -667,6 +667,8 @@ def load_topics():
             "zapis": {
                 "lead": apply_topic_nbsp(zapis["lead"].strip()),
                 "note": apply_topic_nbsp((zapis.get("note") or "").strip()),
+                # disclaimer — необязательная строка-оговорка под кнопкой «Написать».
+                "disclaimer": apply_topic_nbsp((zapis.get("disclaimer") or "").strip()),
                 "bg": (zapis.get("bg") or "").strip(),
             },
         }
@@ -694,6 +696,9 @@ def load_topics():
             topic["topics_block"] = {
                 "heading": apply_topic_nbsp(topics_block["heading"].strip()),
                 "cards": parsed_items,
+                # links — необязательные строки-развилки под карточками (обычно
+                # со ссылкой на соседнюю тематическую страницу).
+                "links": _nbsp_lines(topics_block.get("links") or []),
                 "note": apply_topic_nbsp((topics_block.get("note") or "").strip()),
                 "note_style": (topics_block.get("note_style") or "").strip(),
             }
