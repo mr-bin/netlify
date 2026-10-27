@@ -1148,8 +1148,6 @@ a:hover { color: var(--color-accent); }
     color: var(--color-text-soft);
     text-wrap: balance;
 }
-/* Несколько строк подряд — без gap колонки и margin абзаца, вплотную. */
-.topic-intro-footnote + .topic-intro-footnote { margin-top: -1.65rem; }
 
 /* ---- Текстовый блок "заголовок слева, текст справа" с цветным фоном ---- */
 .topic-section-sage { background: var(--color-sage-soft); }
