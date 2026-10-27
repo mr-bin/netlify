@@ -667,8 +667,6 @@ def load_topics():
             "zapis": {
                 "lead": apply_topic_nbsp(zapis["lead"].strip()),
                 "note": apply_topic_nbsp((zapis.get("note") or "").strip()),
-                # disclaimer — необязательная строка-оговорка под кнопкой «Написать».
-                "disclaimer": apply_topic_nbsp((zapis.get("disclaimer") or "").strip()),
                 "bg": (zapis.get("bg") or "").strip(),
             },
         }

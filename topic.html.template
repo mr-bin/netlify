@@ -202,8 +202,6 @@
             <p class="text-soft">{{ topic.zapis.note }} <a href="/#consultation">на&nbsp;главной странице</a>.</p>
             {% endif %}
             <a href="/#consultation" class="btn-cta">Написать</a>
-            {%- if topic.zapis.disclaimer %}
-            <p class="topic-zapis-disclaimer">{{ topic.zapis.disclaimer }}</p>{% endif %}
         </div>
         <div class="price-card price-card--side">
             <p class="price-amount">£{{ price["gbp"] }}</p>

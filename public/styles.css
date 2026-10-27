@@ -1303,16 +1303,6 @@ a:hover { color: var(--color-accent); }
     margin: 0 0 .9rem;
 }
 .topic-zapis-main .btn-cta { margin-top: .5rem; margin-bottom: 0; }
-/* Оговорка под кнопкой «Написать» (zapis.disclaimer) — шрифт как у .disclaimer. */
-.topic-zapis-disclaimer {
-    margin: 1.25rem 0 0;
-    font-family: var(--font-display);
-    font-style: italic;
-    color: var(--color-text-soft);
-    font-size: 1.0625rem;
-    font-variant-numeric: lining-nums;
-    font-feature-settings: "lnum" 1;
-}
 .price-card--side {
     flex: 1 1 260px;
     max-width: 320px;
