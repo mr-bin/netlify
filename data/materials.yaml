@@ -132,3 +132,12 @@ materials:
       - "Когда тревожно"
     favorite: false
     show: true
+
+  - title: "Пауза или следующая попытка"
+    description: "Бланк решения: дать чувствам выход, услышать три части и назначить срок, когда пересмотреть"
+    pages: 4
+    file: "pauza-ili-popytka.pdf"
+    video_url: ""
+    labels: []
+    favorite: false
+    show: true
