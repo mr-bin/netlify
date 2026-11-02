@@ -318,7 +318,7 @@
 <!-- FAQ -->
 <section class="section" id="faq">
     <div class="container">
-        <h2 class="section-title">FAQ</h2>
+        <h2 class="section-title">Частые вопросы</h2>
         <div class="faq-list narrow">
             {% set opyt_answer = "Я практикую с&nbsp;" ~ stats.practice_since ~ " года, провела более " ~ stats.sessions ~ " сессий. У&nbsp;меня есть опыт сопровождения женщин во время беременности: мы работали со страхами и&nbsp;тревогой, с&nbsp;образом себя как мамы, с&nbsp;переживаниями о&nbsp;переменах в&nbsp;жизни и&nbsp;теле после родов. В&nbsp;2026 году я прошла обучение по&nbsp;репродуктивной психосоматике (144 часа) и&nbsp;развиваю это направление, работая с&nbsp;супервизором." %}
             {% set faqs = [
