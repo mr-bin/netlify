@@ -639,7 +639,7 @@ a:hover { color: var(--color-accent); }
 }
 .material-head {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: .6rem;
     margin-bottom: .3rem;
 }
@@ -661,6 +661,8 @@ a:hover { color: var(--color-accent); }
     font-weight: 600;
     font-size: 1rem;
     margin: 0;
+    /* Значок прижат к верху; отступ ставит первую строку по центру значка (40px). */
+    padding-top: calc((40px - 1.6em) / 2);
     min-width: 0;
 }
 .material-desc {
