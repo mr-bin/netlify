@@ -154,3 +154,13 @@ materials:
       - "Перед решением"
     favorite: false
     show: true
+
+  - title: "Тело, дом, дерево, предмет"
+    description: "Нарисовать тело, дом, дерево и предмет — какими они есть сейчас и какими хочется, — и услышать, о чём говорит разница."
+    pages: 6
+    file: "telo-dom-derevo-predmet.pdf"
+    video_url: ""        
+    labels: 
+      - "Лучше узнать себя"
+    favorite: false
+    show: true
