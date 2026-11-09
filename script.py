@@ -608,6 +608,17 @@ def _parse_text_split(block):
     return result
 
 
+VIDEO_MORE_LEAD_DEFAULT = "Продолжение серии&nbsp;— в видео"
+
+
+def _external_link(url, text):
+    """Ссылка на внешний адрес (видео на YouTube) — в новой вкладке. Текст
+    проходит ту же типографику, что и остальной текст тематических страниц;
+    в отличие от [текст](адрес), название может содержать любые скобки."""
+    return (f'<a href="{html.escape(url)}" target="_blank" rel="noopener">'
+            f'{_topic_typography(text)}</a>')
+
+
 def load_topics():
     """Загружает тематические страницы из data/topics/*.yaml — одна страница
     на файл, адрес = имя файла (poterya-beremennosti.yaml → /poterya-beremennosti/).
@@ -739,6 +750,13 @@ def load_topics():
                 "title": apply_topic_nbsp((video.get("title") or "").strip()),
                 "description": apply_topic_nbsp((video.get("description") or "").strip()),
             }
+            # more_url/more_title/more_lead — строка-ссылка на продолжение
+            # серии под видео; пустой more_url — строки нет.
+            more_url = (video.get("more_url") or "").strip()
+            if more_url:
+                more_lead = (video.get("more_lead") or "").strip() or VIDEO_MORE_LEAD_DEFAULT
+                more_title = (video.get("more_title") or "").strip()
+                topic["video"]["more"] = _external_link(more_url, f"{more_lead} «{more_title}»&nbsp;→")
 
         faq = raw.get("faq") or {}
         raw_faq = faq.get("items") or []
@@ -754,7 +772,16 @@ def load_topics():
                 if_video = (item.get("if_video") or "").strip()
                 if if_video and "video" in topic:
                     a = f"{a} {if_video}"
-                parsed_faq.append({"q": apply_topic_nbsp(q), "a": apply_topic_nbsp(a)})
+                parsed_item = {"q": apply_topic_nbsp(q), "a": apply_topic_nbsp(a)}
+                # more_video_url/more_video_title — отдельная строка в конце
+                # ответа со ссылкой на другое видео; пустой url — строки нет.
+                more_video_url = (item.get("more_video_url") or "").strip()
+                if more_video_url:
+                    more_video_title = (item.get("more_video_title") or "").strip()
+                    parsed_item["more"] = "Подробнее&nbsp;— в видео " + _external_link(
+                        more_video_url, f"«{more_video_title}»&nbsp;→"
+                    )
+                parsed_faq.append(parsed_item)
             topic["faq"] = {"heading": apply_topic_nbsp(faq["heading"].strip()), "list": parsed_faq}
 
         topics.append(topic)

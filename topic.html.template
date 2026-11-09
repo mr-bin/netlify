@@ -164,6 +164,9 @@
             <div class="topic-video-text">
                 <h3>{{ topic.video.title }}</h3>
                 {% if topic.video.description %}<p class="text-soft">{{ topic.video.description }}</p>{% endif %}
+                {%- if topic.video.more %}
+                <p class="topic-video-more">{{ topic.video.more }}</p>
+                {%- endif %}
             </div>
         </div>
     </div>
@@ -179,6 +182,9 @@
             <div class="topic-faq-item">
                 <h3 class="topic-faq-question">{{ item.q }}</h3>
                 <p class="topic-faq-answer">{{ item.a }}</p>
+                {%- if item.more %}
+                <p class="topic-faq-answer topic-faq-more">{{ item.more }}</p>
+                {%- endif %}
             </div>
             {% endfor %}
         </div>
