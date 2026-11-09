@@ -768,6 +768,17 @@ environment = Environment(loader=FileSystemLoader("."))
 # через apply_nbsp(). Фильтр подчищает и настоящий символ U+00A0, и буквальную
 # строку "&nbsp;", если она когда-нибудь попадёт в данные.
 environment.filters["plain_space"] = lambda text: (text or "").replace(" ", " ").replace("&nbsp;", " ")
+
+
+def plain_head(page_html):
+    """Страховка поверх plain_space: перед записью любой страницы убирает
+    &nbsp; и U+00A0 из всего <head> (title, meta, JSON-LD), даже если они
+    пришли из шаблона или settings.yaml. Текст страницы (<body>) не трогается."""
+    head, sep, body = page_html.partition("</head>")
+    if not sep:
+        return page_html
+    return environment.filters["plain_space"](head) + sep + body
+
 settings = yaml.load(open("settings.yaml"), Loader=SafeLoader)
 today = datetime.date.today()
 
@@ -816,7 +827,7 @@ index_content = index_template.render(
     materials_json=materials_json,
 )
 with open("public/index.html", mode="w", encoding="utf-8") as f:
-    f.write(index_content)
+    f.write(plain_head(index_content))
 
 privacy_template = environment.get_template('privacy.html.template')
 privacy_content = privacy_template.render(
@@ -827,7 +838,7 @@ privacy_content = privacy_template.render(
     favicon_v=favicon_v,
 )
 with open("public/privacy.html", mode="w", encoding="utf-8") as f:
-    f.write(privacy_content)
+    f.write(plain_head(privacy_content))
 
 # Тематические страницы (data/topics/*.yaml) — каждая в свою папку
 # public/<slug>/index.html, Netlify отдаёт её по адресу /<slug>/.
@@ -843,7 +854,7 @@ for topic in topics:
     topic_dir = os.path.join("public", topic["slug"])
     os.makedirs(topic_dir, exist_ok=True)
     with open(os.path.join(topic_dir, "index.html"), mode="w", encoding="utf-8") as f:
-        f.write(topic_content)
+        f.write(plain_head(topic_content))
 
 # sitemap.xml: главная страница + PDF из раздела "Материалы" + тематические
 # страницы (без privacy — у неё noindex). Списки берутся из тех же
