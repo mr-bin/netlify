@@ -984,6 +984,7 @@ def load_practice_pages(materials):
             page["invite"] = {
                 "heading": _practice_text(invite["heading"]),
                 "paragraphs": [_practice_text(p) for p in invite.get("paragraphs") or [] if (p or "").strip()],
+                "more": _practice_text(invite.get("more")),
                 "note": _practice_text(invite.get("note")),
             }
 

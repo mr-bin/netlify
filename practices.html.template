@@ -134,6 +134,7 @@
             {% for p in topic.invite.paragraphs %}
             <p>{{ p }}</p>
             {% endfor %}
+            {% if topic.invite.more %}<p>{{ topic.invite.more }}</p>{% endif %}
             {% if topic.invite.note %}<p class="disclaimer practice-invite-note">{{ topic.invite.note }}</p>{% endif %}
         </div>
     </div>
