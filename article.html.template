@@ -1,0 +1,72 @@
+{% import "partials/icons.html" as ui with context %}
+<!doctype html>
+<html lang="ru">
+<head>
+    {{ ui.topic_head(topic, og_type="article", og_image=topic.og_image) }}
+    {%- if topic.video_ld %}
+    <script type="application/ld+json">
+{{ topic.video_ld }}
+    </script>
+    {%- endif %}
+</head>
+<body>
+
+{{ ui.topic_header() }}
+
+<!-- Первый экран -->
+<header class="topic-hero article-hero">
+    <div class="container">
+        <div class="article-column">
+            <p class="topic-breadcrumbs"><a href="/">Главная</a>
+                {%- for crumb in topic.crumbs %} / {% if loop.last %}{{ crumb.name }}{% else %}<a href="{{ crumb.url }}">{{ crumb.name }}</a>{% endif %}{% endfor %}</p>
+            <h1 class="topic-hero-title">{{ topic.h1 }}</h1>
+            {% for p in topic.intro %}
+            <p class="topic-hero-lead">{{ p }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    {{ ui.hero_wave() }}
+</header>
+
+<!-- Статья -->
+<main class="section article-main">
+    <div class="container">
+        <article class="article-column">
+            <figure class="article-video">
+                <div class="article-video-frame">
+                    <iframe src="https://www.youtube-nocookie.com/embed/{{ topic.video.id }}?rel=0&playsinline=1" title="{{ topic.video.title }}" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                {% if topic.video_caption %}<figcaption class="article-video-caption">{{ topic.video_caption }}</figcaption>{% endif %}
+            </figure>
+            {% for section in topic.sections %}
+            <h2 class="article-heading">{{ section.heading }}</h2>
+            {% for p in section.paragraphs %}
+            <p>{{ p }}</p>
+            {% endfor %}
+            {% endfor %}
+        </article>
+    </div>
+</main>
+
+<!-- Концовка: связанные материалы, запись, оговорка. id="zapis" — сюда ведёт
+     кнопка «Записаться» в шапке. -->
+<section class="section topic-section-lavender" id="zapis">
+    <div class="container">
+        <div class="article-column article-end">
+            {% for line in topic.related %}
+            <p>{{ line }}</p>
+            {% endfor %}
+            {% if topic.cta %}<p class="article-cta-lead">{{ topic.cta }}</p>{% endif %}
+            <a href="/#consultation" class="btn-cta">Записаться на&nbsp;консультацию</a>
+            <p class="topic-box topic-box--sage">Психотерапия не&nbsp;заменяет медицинское лечение и&nbsp;работает как дополнение к&nbsp;наблюдению&nbsp;у&nbsp;врача.</p>
+        </div>
+    </div>
+</section>
+
+{{ ui.topic_footer() }}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>
