@@ -164,20 +164,7 @@
         </div>
         <div class="materials-list" id="materialsList">
             {% for item in materials %}
-            <div class="material-card" id="{{ item.card_id }}">
-                <div class="material-head">
-                    <span class="material-icon">{{ ui.document_icon() }}</span>
-                    <p class="material-title">{{ item.title }}</p>
-                </div>
-                <p class="material-desc">{{ item.description }}</p>
-                <p class="material-links">
-                    <a class="material-link-download" href="{{ item.url }}" target="_blank" rel="noopener">Скачать {{ item.format }}</a>
-                    {% if item.video_url %}
-                    <span class="material-link-sep">·</span>
-                    <a href="{{ item.video_url }}" target="_blank" rel="noopener">Смотреть видео</a>
-                    {% endif %}
-                </p>
-            </div>
+            {{ ui.material_card(item) }}
             {% endfor %}
         </div>
         <script type="application/json" id="materialsData">{{ materials_json }}</script>

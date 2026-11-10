@@ -1,0 +1,153 @@
+{% import "partials/icons.html" as ui with context %}
+<!doctype html>
+<html lang="ru">
+<head>
+    {{ ui.topic_head(topic) }}
+</head>
+<body>
+
+{{ ui.topic_header() }}
+
+<!-- Первый экран -->
+{{ ui.topic_hero(topic) }}
+
+{% if topic.intro %}
+<section class="section">
+    <div class="container topic-intro">
+        <h2 class="topic-intro-heading">{{ topic.intro.heading }}</h2>
+        <div class="topic-intro-body">
+            {% for p in topic.intro.paragraphs %}
+            <p>{{ p }}</p>
+            {% endfor %}
+            {% if topic.intro.how_items %}
+            <div class="practice-box">
+                {% if topic.intro.how_title %}<p class="practice-box-title">{{ topic.intro.how_title }}</p>{% endif %}
+                <ul class="practice-box-list">
+                    {% for item in topic.intro.how_items %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% if topic.intro.video %}
+    <div class="container practice-video">
+        {{ ui.topic_video(topic.intro.video) }}
+    </div>
+    {% endif %}
+</section>
+{% endif %}
+
+{% if topic.medical_note %}
+<section class="section section-alt">
+    <div class="container">
+        <div class="topic-caution">
+            <h2 class="topic-caution-heading">{{ topic.medical_note.heading }}</h2>
+            {% if topic.medical_note.intro %}<p>{{ topic.medical_note.intro }}</p>{% endif %}
+            <ul class="topic-caution-list">
+                {% for item in topic.medical_note.list %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% if topic.medical_note.footnote %}<p class="practice-footnote">{{ topic.medical_note.footnote }}</p>{% endif %}
+    </div>
+</section>
+{% endif %}
+
+{% if topic.practices %}
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">{{ topic.practices.heading }}</h2>
+        <div class="practice-situations">
+            {% for sit in topic.practices.situations %}
+            <div class="practice-situation">
+                <h3 class="practice-situation-title">{{ sit.title }}</h3>
+                {% if sit.caption %}<p class="practice-situation-caption">{{ sit.caption }}</p>{% endif %}
+                {% for pr in sit.practices %}
+                {% if pr.video %}
+                <div class="practice-with-short">
+                    <p class="practice-text"><strong class="practice-name">{{ pr.name }}.</strong> {{ pr.text }}</p>
+                    <figure class="practice-short">
+                        <div class="practice-short-frame">
+                            <iframe src="https://www.youtube-nocookie.com/embed/{{ pr.video.id }}?rel=0&playsinline=1" title="{{ pr.video.title or pr.name }}" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        {% if pr.video.title %}<figcaption class="practice-short-caption">{{ pr.video.title }}</figcaption>{% endif %}
+                    </figure>
+                </div>
+                {% else %}
+                <p class="practice-text"><strong class="practice-name">{{ pr.name }}.</strong> {{ pr.text }}</p>
+                {% endif %}
+                {% endfor %}
+                {% if sit.note_text %}
+                <div class="practice-box">
+                    {% if sit.note_title %}<p class="practice-box-title">{{ sit.note_title }}</p>{% endif %}
+                    <p>{{ sit.note_text }}</p>
+                </div>
+                {% endif %}
+                {% if sit.footnote %}<p class="practice-situation-footnote">{{ sit.footnote }}</p>{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% if topic.practices.footnote %}<p class="practice-footnote">{{ topic.practices.footnote }}</p>{% endif %}
+    </div>
+</section>
+{% endif %}
+
+{% if topic.warm_blanket %}
+<section class="section topic-section-sage"{% if topic.warm_blanket.id %} id="{{ topic.warm_blanket.id }}"{% endif %}>
+    <div class="container">
+        <h2 class="section-title">{{ topic.warm_blanket.heading }}</h2>
+        <div class="practice-narrow">
+            {% if topic.warm_blanket.text %}<p>{{ topic.warm_blanket.text }}</p>{% endif %}
+            {% if topic.warm_blanket.small_note %}<p class="practice-small">{{ topic.warm_blanket.small_note }}</p>{% endif %}
+        </div>
+        {% if topic.warm_blanket.video %}
+        <div class="practice-video">
+            {{ ui.topic_video(topic.warm_blanket.video) }}
+        </div>
+        {% endif %}
+        {% if topic.warm_blanket.footnote %}<p class="practice-footnote">{{ topic.warm_blanket.footnote }}</p>{% endif %}
+    </div>
+</section>
+{% endif %}
+
+{% if topic.sheets %}
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">{{ topic.sheets.heading }}</h2>
+        <div class="materials-list practice-sheets">
+            {% for item in topic.sheets.cards %}
+            {{ ui.material_card(item, with_id=false, extra_link=false) }}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if topic.invite %}
+<section class="section section-alt">
+    <div class="container topic-intro">
+        <h2 class="topic-intro-heading">{{ topic.invite.heading }}</h2>
+        <div class="topic-intro-body practice-invite-body">
+            {% for p in topic.invite.paragraphs %}
+            <p>{{ p }}</p>
+            {% endfor %}
+            {% if topic.invite.more %}<p>{{ topic.invite.more }}</p>{% endif %}
+            {% if topic.invite.note %}<p class="disclaimer practice-invite-note">{{ topic.invite.note }}</p>{% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Записаться на консультацию -->
+{{ ui.topic_zapis(topic.zapis) }}
+
+{{ ui.topic_footer() }}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>
