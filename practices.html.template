@@ -66,14 +66,18 @@
                 <h3 class="practice-situation-title">{{ sit.title }}</h3>
                 {% if sit.caption %}<p class="practice-situation-caption">{{ sit.caption }}</p>{% endif %}
                 {% for pr in sit.practices %}
-                <p class="practice-text"><strong class="practice-name">{{ pr.name }}.</strong> {{ pr.text }}</p>
                 {% if pr.video %}
-                <figure class="practice-short">
-                    <div class="practice-short-frame">
-                        <iframe src="https://www.youtube-nocookie.com/embed/{{ pr.video.id }}?rel=0&playsinline=1" title="{{ pr.video.title or pr.name }}" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    {% if pr.video.title %}<figcaption class="practice-short-caption">{{ pr.video.title }}</figcaption>{% endif %}
-                </figure>
+                <div class="practice-with-short">
+                    <p class="practice-text"><strong class="practice-name">{{ pr.name }}.</strong> {{ pr.text }}</p>
+                    <figure class="practice-short">
+                        <div class="practice-short-frame">
+                            <iframe src="https://www.youtube-nocookie.com/embed/{{ pr.video.id }}?rel=0&playsinline=1" title="{{ pr.video.title or pr.name }}" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        {% if pr.video.title %}<figcaption class="practice-short-caption">{{ pr.video.title }}</figcaption>{% endif %}
+                    </figure>
+                </div>
+                {% else %}
+                <p class="practice-text"><strong class="practice-name">{{ pr.name }}.</strong> {{ pr.text }}</p>
                 {% endif %}
                 {% endfor %}
                 {% if sit.note_text %}

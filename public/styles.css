@@ -1393,6 +1393,18 @@ a:hover { color: var(--color-accent); }
     background: var(--color-bg-alt);
 }
 .practice-short-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+/* От 760px: текст практики слева, Short 240px справа, верх колонок на одном уровне */
+@media (min-width: 760px) {
+    .practice-with-short {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 240px;
+        column-gap: 2rem;
+        align-items: start;
+        margin-bottom: 1.25rem;
+    }
+    .practice-with-short .practice-text { margin-bottom: 0; }
+    .practice-with-short .practice-short { margin: .3rem 0 0; }
+}
 .practice-short-caption {
     margin-top: .45rem;
     font-size: .9rem;
