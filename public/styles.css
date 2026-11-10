@@ -783,6 +783,12 @@ a.video-play-btn { text-decoration: none; }
 .edu-timeline-text { color: var(--color-text-soft); }
 .edu-timeline-item--extra { display: none; }
 #eduTimeline.is-expanded .edu-timeline-item--extra { display: block; }
+.edu-timeline-summary {
+    max-width: 620px;
+    margin: 0 auto .5rem;
+    font-size: .9rem;
+}
+#eduTimeline.is-expanded + .edu-timeline-more .edu-timeline-summary { display: none; }
 
 .edu-status-list {
     max-width: 620px;
