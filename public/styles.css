@@ -1419,5 +1419,10 @@ a:hover { color: var(--color-accent); }
 /* Оговорка последней строкой блока «Если хочется разобраться вместе» —
    оформление .disclaimer, но в колонке текста, по левому краю */
 .practice-invite-note { max-width: none; margin: 0; text-align: left; }
+/* «Если хочется разобраться вместе»: абзацы без пустой строки между ними,
+   перед оговоркой — небольшой отступ */
+.practice-invite-body { gap: 0; }
+.practice-invite-body p { margin: 0; }
+.practice-invite-body .practice-invite-note { margin-top: .5rem; }
 /* Листы на подборке: не больше двух в ряд, по центру */
 .materials-list.practice-sheets { max-width: 580px; }

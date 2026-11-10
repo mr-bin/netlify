@@ -130,7 +130,7 @@
 <section class="section section-alt">
     <div class="container topic-intro">
         <h2 class="topic-intro-heading">{{ topic.invite.heading }}</h2>
-        <div class="topic-intro-body">
+        <div class="topic-intro-body practice-invite-body">
             {% for p in topic.invite.paragraphs %}
             <p>{{ p }}</p>
             {% endfor %}
