@@ -995,6 +995,11 @@ a:hover { color: var(--color-accent); }
     border-color: var(--color-accent);
     box-shadow: var(--shadow-soft);
 }
+.topic-card--link:focus-visible {
+    border-color: var(--color-accent);
+    outline: 2px solid var(--color-accent-dark);
+    outline-offset: 2px;
+}
 .topic-card-row { display: flex; gap: .7rem; align-items: flex-start; }
 .topic-card-more {
     align-self: flex-end;

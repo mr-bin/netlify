@@ -698,14 +698,20 @@ def load_topics():
                 title = (item.get("title") or "").strip()
                 if not title:
                     raise SystemExit(f"ОШИБКА в {label}: у одной из карточек topics.items не указан title.")
+                # url — необязательная ссылка: вся карточка ведёт на другую
+                # страницу сайта, внизу «Подробнее →» (как карточки на главной).
                 parsed_items.append({
                     "title": apply_topic_nbsp(title),
                     "sub": apply_topic_nbsp((item.get("sub") or "").strip()),
+                    "url": (item.get("url") or "").strip(),
                 })
+            # note — строка под карточками; можно и список строк — они
+            # выводятся одним абзацем, каждая с новой строки.
+            note = topics_block.get("note") or []
             topic["topics_block"] = {
                 "heading": apply_topic_nbsp(topics_block["heading"].strip()),
                 "cards": parsed_items,
-                "note": apply_topic_nbsp((topics_block.get("note") or "").strip()),
+                "notes": _nbsp_lines([note] if isinstance(note, str) else note),
                 "note_style": (topics_block.get("note_style") or "").strip(),
             }
 
