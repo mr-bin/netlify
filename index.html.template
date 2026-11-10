@@ -203,7 +203,7 @@
         </div>
         <ol class="edu-timeline" id="eduTimeline">
             {% for item in edu_timeline %}
-            <li class="edu-timeline-item{% if loop.index > edu_timeline_visible %} edu-timeline-item--extra{% endif %}">
+            <li class="edu-timeline-item{% if item.extra %} edu-timeline-item--extra{% endif %}">
                 <span class="edu-timeline-dot"></span>
                 <span class="edu-timeline-year">{{ item.year }}</span>
                 <span class="edu-timeline-text">{{ item.title }}</span>
@@ -216,10 +216,13 @@
             </li>
             {% endfor %}
         </ol>
-        {% if edu_timeline|length > edu_timeline_visible %}
-        <div class="text-center mb-4">
-            <button class="bio-toggle" type="button" id="eduTimelineToggle" aria-expanded="false" aria-controls="eduTimeline" data-label-more="Показать всё обучение" data-label-less="Свернуть">
-                Показать всё обучение
+        {% if edu_timeline|selectattr("extra")|list %}
+        <div class="text-center mb-4 edu-timeline-more">
+            {% if edu_timeline_has_featured %}
+            <p class="edu-timeline-summary text-soft">Показаны основные программы. Всего&nbsp;— {{ stats.education_hours }}+&nbsp;часов дополнительного образования</p>
+            {% endif %}
+            <button class="bio-toggle" type="button" id="eduTimelineToggle" aria-expanded="false" aria-controls="eduTimeline" data-label-more="Показать всё обучение&nbsp;({{ edu_timeline|length }})" data-label-less="Свернуть">
+                Показать всё обучение&nbsp;({{ edu_timeline|length }})
             </button>
         </div>
         {% endif %}

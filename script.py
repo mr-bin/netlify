@@ -387,12 +387,19 @@ def load_education():
         author = (item.get("author") or "").strip()
         kind = (item.get("kind") or "").strip()
         note = (item.get("note") or "").strip()
+        featured = item.get("featured", False)
+        if not isinstance(featured, bool):
+            raise SystemExit(
+                f"ОШИБКА в {EDUCATION_PATH}: у {label} ({year}) поле \"featured\" должно быть "
+                f"true или false (без кавычек)."
+            )
         timeline.append({
             "_sort_year": int(year_match.group()),
             "year": apply_nbsp(year),
             "title": apply_nbsp(title.strip()),
             "meta": apply_nbsp(_compose_timeline_meta(kind, author, hours)),
             "note": apply_nbsp(note),
+            "featured": featured,
         })
 
     # Таймлайн всегда сортируется по году (по возрастанию), независимо от порядка
@@ -400,8 +407,13 @@ def load_education():
     # о сортировке руками. sort() в Python устойчив (stable), поэтому записи
     # с одинаковым годом остаются в том порядке, в котором их добавили в файл.
     timeline.sort(key=lambda t: t["_sort_year"])
-    for t in timeline:
+    # Свёрнутый вид: если хотя бы одна запись помечена featured: true, сразу
+    # видны только такие записи; иначе — первые timeline_visible по году.
+    # Остальные помечаются "extra" и прячутся через CSS, но остаются в HTML.
+    timeline_has_featured = any(t["featured"] for t in timeline)
+    for i, t in enumerate(timeline, start=1):
         del t["_sort_year"]
+        t["extra"] = not t["featured"] if timeline_has_featured else i > timeline_visible
 
     memberships = []
     for i, item in enumerate(raw.get("memberships") or [], start=1):
@@ -455,7 +467,7 @@ def load_education():
         "timeline": timeline,
         "memberships": memberships,
         "documents": documents,
-        "timeline_visible": timeline_visible,
+        "timeline_has_featured": timeline_has_featured,
         "documents_visible": documents_visible,
     }
 
@@ -1262,7 +1274,7 @@ index_content = index_template.render(
     edu_timeline=education["timeline"],
     edu_memberships=education["memberships"],
     edu_documents=education["documents"],
-    edu_timeline_visible=education["timeline_visible"],
+    edu_timeline_has_featured=education["timeline_has_featured"],
     edu_documents_visible=education["documents_visible"],
     materials=materials,
     materials_json=materials_json,
