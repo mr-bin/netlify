@@ -156,8 +156,10 @@
 {%- endmacro %}
 
 {# Общие блоки тематических страниц (topic.html.template) и страниц-подборок
-   (practices.html.template). page — данные страницы (seo_title, slug, hero...). #}
-{% macro topic_head(page) -%}
+   (practices.html.template). page — данные страницы (seo_title, slug, hero...).
+   Статьи к видео (article.html.template) передают в topic_head свой og:type,
+   картинку-миниатюру видео и page.crumbs — крошки после «Главной». #}
+{% macro topic_head(page, og_type="website", og_image="") -%}
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ page.seo_title|plain_space }}</title>
@@ -167,19 +169,25 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v={{ favicon_v }}">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v={{ favicon_v }}">
     <link rel="canonical" href="{{ site_url }}/{{ page.slug }}/">
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="{{ og_type }}">
     <meta property="og:locale" content="ru_RU">
     <meta property="og:url" content="{{ site_url }}/{{ page.slug }}/">
     <meta property="og:title" content="{{ page.seo_title|plain_space }}">
     <meta property="og:description" content="{{ page.seo_description|plain_space }}">
+    {%- if og_image %}
+    <meta property="og:image" content="{{ og_image }}">
+    <meta property="og:image:width" content="480">
+    <meta property="og:image:height" content="360">
+    {%- else %}
     <meta property="og:image" content="{{ site_url }}/resources/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    {%- endif %}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="{{ site_url }}/{{ page.slug }}/">
     <meta name="twitter:title" content="{{ page.seo_title|plain_space }}">
     <meta name="twitter:description" content="{{ page.seo_description|plain_space }}">
-    <meta name="twitter:image" content="{{ site_url }}/resources/og-image.jpg">
+    <meta name="twitter:image" content="{{ og_image or site_url ~ '/resources/og-image.jpg' }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,600;0,700;1,400;1,500&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -197,12 +205,14 @@
                 "name": "Главная",
                 "item": "{{ site_url }}/"
             },
+            {%- for crumb in page.crumbs or [{"plain": page.breadcrumb, "url": "/" ~ page.slug ~ "/"}] %}
             {
                 "@type": "ListItem",
-                "position": 2,
-                "name": "{{ page.breadcrumb|plain_space }}",
-                "item": "{{ site_url }}/{{ page.slug }}/"
-            }
+                "position": {{ loop.index + 1 }},
+                "name": "{{ crumb.plain|plain_space }}",
+                "item": "{{ site_url }}{{ crumb.url }}"
+            }{% if not loop.last %},{% endif %}
+            {%- endfor %}
         ]
     }
     </script>
@@ -222,12 +232,16 @@
             <img class="hero-photo rounded-circle" src="{{ page.hero.image or '/resources/profile.png' }}" alt="{{ page.hero.photo_alt }}" width="168" height="168">
         </div>
     </div>
-    <div class="wave" aria-hidden="true">
+    {{ hero_wave() }}
+</header>
+{%- endmacro %}
+
+{% macro hero_wave() -%}
+<div class="wave" aria-hidden="true">
         <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0,40 C220,90 380,0 620,36 C860,72 1000,10 1230,34 C1330,44 1400,40 1440,32 L1440,70 L0,70 Z" style="fill:var(--color-bg)"/>
         </svg>
     </div>
-</header>
 {%- endmacro %}
 
 {% macro topic_zapis(zapis) -%}
@@ -259,14 +273,33 @@
 {{ site_footer() }}
 {%- endmacro %}
 
+{# Превью видео вместо iframe: обложка, скачанная при сборке, и кнопка
+   воспроизведения, как в разделе «Видео» на главной. До клика страница
+   не обращается к YouTube; по клику public/video-facade.js ставит на место
+   превью плеер youtube-nocookie. Без JS кнопка — ссылка на видео на YouTube. #}
+{% macro video_facade(video, title) -%}
+{%- set label = title|striptags|e -%}
+<div class="video-facade" data-video-id="{{ video.id }}" data-video-title="{{ label }}">
+                    {%- if video.thumb %}
+                    <img class="video-main-thumb" src="{{ video.thumb }}" alt="" loading="lazy">
+                    {%- else %}
+                    <div class="video-main-thumb video-thumb-placeholder"><span>{{ label }}</span></div>
+                    {%- endif %}
+                    <a class="video-play-btn" href="https://www.youtube.com/watch?v={{ video.id }}" target="_blank" rel="noopener" aria-label="Смотреть: {{ label }}" data-play><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#fff"/></svg></a>
+                </div>
+{%- endmacro %}
+
 {% macro topic_video(video) -%}
 <div class="topic-video">
             <div class="topic-video-frame">
-                <iframe src="https://www.youtube-nocookie.com/embed/{{ video.id }}?rel=0&playsinline=1" title="{{ video.title }}" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                {{ video_facade(video, video.title) }}
             </div>
             <div class="topic-video-text">
                 <h3>{{ video.title }}</h3>
                 {% if video.description %}<p class="text-soft">{{ video.description }}</p>{% endif %}
+                {%- if video.article %}
+                <p class="topic-video-more"><a href="{{ video.article }}">Прочитать текстом&nbsp;&rarr;</a></p>
+                {%- endif %}
                 {%- if video.more %}
                 <p class="topic-video-more">{{ video.more }}</p>
                 {%- endif %}

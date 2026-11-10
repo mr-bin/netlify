@@ -50,6 +50,9 @@ TOPICS_DIR = "data/topics"
 TOPIC_TEMPLATE = "topic.html.template"
 PRACTICES_TEMPLATE = "practices.html.template"
 
+VIDEO_ARTICLES_DIR = "data/video"
+ARTICLE_TEMPLATE = "article.html.template"
+
 YOUTUBE_HOSTS = {
     "youtube.com", "www.youtube.com", "m.youtube.com",
     "youtube-nocookie.com", "www.youtube-nocookie.com",
@@ -189,6 +192,18 @@ def fetch_thumbnail(video_id):
     return None
 
 
+_thumb_cache = {}
+
+
+def video_thumb(video_id):
+    """Обложка для превью видео на тематических страницах, подборках и в
+    статьях — та же, что в разделе «Видео» на главной (скачивается при
+    сборке, один раз на видео). None — обложку скачать не удалось."""
+    if video_id not in _thumb_cache:
+        _thumb_cache[video_id] = fetch_thumbnail(video_id)
+    return _thumb_cache[video_id]
+
+
 def load_videos():
     try:
         with open(VIDEOS_PATH, "r", encoding="utf-8") as f:
@@ -243,7 +258,7 @@ def load_videos():
             )
         seen_ids[video_id] = label
 
-        thumb_url = fetch_thumbnail(video_id)
+        thumb_url = video_thumb(video_id)
         videos.append({
             "id": video_id,
             "title": apply_nbsp(title.strip()),
@@ -779,9 +794,15 @@ def load_topics():
                 )
             topic["video"] = {
                 "id": video_id,
+                "thumb": video_thumb(video_id),
                 "title": apply_topic_nbsp((video.get("title") or "").strip()),
                 "description": apply_topic_nbsp((video.get("description") or "").strip()),
             }
+            # article — адрес статьи к этому видео (/video/<имя>/): строка
+            # «Прочитать текстом →» под описанием видео, та же вкладка.
+            article = (video.get("article") or "").strip()
+            if article:
+                topic["video"]["article"] = article
             # more_url/more_title/more_lead — строка-ссылка на продолжение
             # серии под видео; пустой more_url — строки нет.
             more_url = (video.get("more_url") or "").strip()
@@ -852,6 +873,7 @@ def _practice_video(block, label, where):
         raise SystemExit(f"ОШИБКА в {label}: у {where}.url ({url}) не получилось распознать ссылку на YouTube.")
     return {
         "id": video_id,
+        "thumb": video_thumb(video_id),
         "title": _practice_text(block.get("title")),
         "description": _practice_text(block.get("description")),
     }
@@ -940,7 +962,8 @@ def load_practice_pages(materials):
                             f"ОШИБКА в {label}: у практики «{name}» video_url ({video_url}) — "
                             f"не получилось распознать ссылку на YouTube."
                         )
-                    item["video"] = {"id": video_id, "title": _practice_text(pr.get("video_title"))}
+                    item["video"] = {"id": video_id, "thumb": video_thumb(video_id),
+                                     "title": _practice_text(pr.get("video_title"))}
                 items.append(item)
             note_box = sit.get("note_box") or {}
             situations.append({
@@ -992,6 +1015,175 @@ def load_practice_pages(materials):
     return pages
 
 
+# Статьи к видео (data/video/*.yaml) — адрес /video/<имя файла>/.
+ARTICLE_KEYS = {
+    "show", "crumb", "parent", "title", "description", "h1", "intro",
+    "video_url", "video_name", "video_description", "upload_date", "duration",
+    "video_caption", "sections", "related", "cta",
+}
+ARTICLE_REQUIRED = ("title", "description", "h1", "video_url", "sections")
+ARTICLE_SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+UPLOAD_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+DURATION_RE = re.compile(r"^P(?:\d+D)?(?:T(?=\d)(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$")
+# Тире после пробела в тексте статьи — неразрывный пробел перед ним, чтобы
+# тире не начинало строку (на тематических страницах его ставят вручную).
+DASH_RE = re.compile(r" +—")
+
+
+def _article_text(text):
+    return apply_topic_nbsp(DASH_RE.sub("&nbsp;—", (text or "").strip()))
+
+
+def _plain(text):
+    """Текст для <head> и JSON-LD: только обычные пробелы."""
+    return re.sub(r"\s+", " ", str(text or "").replace("&nbsp;", " ")).strip()
+
+
+def _warn_unknown_keys(block, allowed, label, where):
+    for key in block:
+        if key not in allowed:
+            print(f"ПРЕДУПРЕЖДЕНИЕ в {label}: незнакомый ключ «{where}{key}» — он не выводится. "
+                  f"Проверьте, нет ли опечатки.")
+
+
+def load_video_articles(site_url):
+    """Статьи к видео: один файл data/video/<имя>.yaml — одна страница
+    /video/<имя>/ (шаблон article.html.template). show: false — страница
+    не собирается и не попадает в sitemap. Необязательные блоки без данных
+    не выводятся."""
+    if not os.path.isdir(VIDEO_ARTICLES_DIR):
+        return []
+
+    articles = []
+    seen = {}
+    for file_name in sorted(os.listdir(VIDEO_ARTICLES_DIR)):
+        if not file_name.endswith((".yaml", ".yml")):
+            continue
+        path = os.path.join(VIDEO_ARTICLES_DIR, file_name)
+        name = file_name.rsplit(".", 1)[0]
+        label = f"статья к видео «{name}» ({path})"
+        if not ARTICLE_SLUG_RE.match(name):
+            raise SystemExit(
+                f"ОШИБКА в {label}: имя файла — это адрес страницы, в нём можно только "
+                f"строчные латинские буквы, цифры и дефис (например psihosomatika.yaml)."
+            )
+        if name in seen:
+            raise SystemExit(f"ОШИБКА: адрес /video/{name}/ повторяется — файлы {seen[name]} и {path}.")
+        seen[name] = path
+
+        raw = _read_topic_file(path, label)
+        if raw.get("show") is False:
+            continue
+        _warn_unknown_keys(raw, ARTICLE_KEYS, label, "")
+        for key in ARTICLE_REQUIRED:
+            if not raw.get(key):
+                raise SystemExit(f"ОШИБКА в {label}: не заполнено обязательное поле {key}.")
+        crumb = (raw.get("crumb") or "").strip()
+        if not crumb:
+            raise SystemExit(f"ОШИБКА в {label}: не указан crumb (название в хлебных крошках).")
+
+        video_url = str(raw["video_url"]).strip()
+        video_id = extract_youtube_id(video_url)
+        if not video_id or is_shorts_url(video_url):
+            raise SystemExit(
+                f"ОШИБКА в {label}: video_url ({video_url}) — не получилось распознать ссылку на видео "
+                f"YouTube. Подходят ссылки вида https://youtu.be/ID и https://www.youtube.com/watch?v=ID."
+            )
+
+        slug = f"video/{name}"
+        crumbs = []
+        parent = raw.get("parent") or {}
+        if parent:
+            _warn_unknown_keys(parent, {"name", "url"}, label, "parent.")
+            if not (parent.get("name") or "").strip() or not (parent.get("url") or "").strip():
+                raise SystemExit(f"ОШИБКА в {label}: у parent должны быть заполнены и name, и url.")
+            crumbs.append({"name": apply_topic_nbsp(parent["name"].strip()),
+                           "plain": _plain(parent["name"]),
+                           "url": parent["url"].strip()})
+        crumbs.append({"name": apply_topic_nbsp(crumb), "plain": _plain(crumb), "url": f"/{slug}/"})
+
+        sections = []
+        for i, sec in enumerate(raw["sections"], start=1):
+            if not isinstance(sec, dict):
+                raise SystemExit(f"ОШИБКА в {label}: раздел №{i} в sections должен быть блоком с heading и paragraphs.")
+            _warn_unknown_keys(sec, {"heading", "paragraphs"}, label, f"sections[{i}].")
+            heading = (sec.get("heading") or "").strip()
+            paragraphs = [_article_text(p) for p in sec.get("paragraphs") or [] if (p or "").strip()]
+            if not heading or not paragraphs:
+                raise SystemExit(f"ОШИБКА в {label}: у раздела №{i} в sections не указан heading или paragraphs.")
+            sections.append({"heading": _article_text(heading), "paragraphs": paragraphs})
+
+        related = []
+        for i, rel in enumerate(raw.get("related") or [], start=1):
+            _warn_unknown_keys(rel, {"text", "link_text", "url", "new_tab"}, label, f"related[{i}].")
+            url = (rel.get("url") or "").strip()
+            link_text = (rel.get("link_text") or "").strip()
+            if not url or not link_text:
+                raise SystemExit(f"ОШИБКА в {label}: у строки №{i} в related не указан url или link_text.")
+            target = ' target="_blank" rel="noopener"' if rel.get("new_tab") else ""
+            link = (f'<a href="{html.escape(url)}"{target}>'
+                    f'{_topic_typography(DASH_RE.sub("&nbsp;—", link_text))}&nbsp;→</a>')
+            text = _article_text(rel.get("text"))
+            related.append(f"{text} {link}" if text else link)
+
+        # VideoObject для поисковиков. Без upload_date (обязательное поле
+        # у Google) блок не выводится — дату не угадываем.
+        upload_date = raw.get("upload_date")
+        if isinstance(upload_date, datetime.date):
+            upload_date = upload_date.isoformat()
+        upload_date = str(upload_date or "").strip()
+        video_ld = ""
+        if not upload_date:
+            print(f"ПРЕДУПРЕЖДЕНИЕ в {label}: не заполнен upload_date (дата публикации видео, ГГГГ-ММ-ДД) — "
+                  f"разметка VideoObject для поисковиков не выводится.")
+        else:
+            try:
+                if not UPLOAD_DATE_RE.match(upload_date):
+                    raise ValueError
+                datetime.date.fromisoformat(upload_date)
+            except ValueError:
+                raise SystemExit(f"ОШИБКА в {label}: upload_date ({upload_date}) должен быть датой вида ГГГГ-ММ-ДД.")
+            video_obj = {
+                "@context": "https://schema.org",
+                "@type": "VideoObject",
+                "name": _plain(raw.get("video_name") or raw["h1"]),
+                "description": _plain(raw.get("video_description") or raw["description"]),
+                "thumbnailUrl": [f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg"],
+                "uploadDate": upload_date,
+            }
+            duration = str(raw.get("duration") or "").strip()
+            if duration:
+                if not DURATION_RE.match(duration) or duration in ("P", "PT"):
+                    print(f"ПРЕДУПРЕЖДЕНИЕ в {label}: duration ({duration}) не в формате ISO 8601 "
+                          f"(например PT5M42S) — в разметку не попадает.")
+                else:
+                    video_obj["duration"] = duration
+            video_obj.update({
+                "embedUrl": f"https://www.youtube.com/embed/{video_id}",
+                "inLanguage": "ru",
+                "author": {"@type": "Person", "name": "Екатерина Заикина", "url": f"{site_url}/"},
+            })
+            video_ld = json.dumps(video_obj, ensure_ascii=False, indent=4).replace("</", "<\\/")
+
+        articles.append({
+            "slug": slug,
+            "seo_title": html.escape(_plain(raw["title"])),
+            "seo_description": html.escape(_plain(raw["description"])),
+            "crumbs": crumbs,
+            "og_image": f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg",
+            "h1": _article_text(raw["h1"]),
+            "intro": [_article_text(p) for p in raw.get("intro") or [] if (p or "").strip()],
+            "video": {"id": video_id, "thumb": video_thumb(video_id),
+                      "title": html.escape(_plain(raw.get("video_name") or raw["h1"]))},
+            "video_caption": _article_text(raw.get("video_caption")),
+            "video_ld": video_ld,
+            "sections": sections,
+            "related": related,
+            "cta": _article_text(raw.get("cta")),
+        })
+    return articles
+
+
 environment = Environment(loader=FileSystemLoader("."))
 # Для <head> (title/meta content) нужен обычный пробел, а не &nbsp; — неразрывные
 # пробелы там не видны пользователю и не нужны, но могут случайно попасть в seo-текст
@@ -1020,6 +1212,14 @@ education = load_education()
 materials, materials_labels_order = load_materials()
 topics = load_topics()
 practice_pages = load_practice_pages(materials)
+video_articles = load_video_articles(settings["site_url"])
+
+article_urls = {f"/{a['slug']}/" for a in video_articles}
+for topic in topics:
+    article = topic.get("video", {}).get("article")
+    if article and article not in article_urls:
+        print(f"ПРЕДУПРЕЖДЕНИЕ в data/topics/{topic['slug']}.yaml: video.article ({article}) — "
+              f"такой статьи к видео нет (или у неё show: false). Ссылка «Прочитать текстом» ведёт в никуда.")
 
 # Данные для раздела "Материалы" на фронтенде (фильтры по меткам) и для
 # строки "Лист к этому видео" в разделе "Видео" — та же схема, что у
@@ -1103,8 +1303,23 @@ for page in practice_pages:
     with open(os.path.join(page_dir, "index.html"), mode="w", encoding="utf-8") as f:
         f.write(plain_head(page_content))
 
+# Статьи к видео (data/video/*.yaml) — public/video/<имя>/index.html,
+# адрес /video/<имя>/. Страницы /video/ нет.
+article_template = environment.get_template(ARTICLE_TEMPLATE)
+for article in video_articles:
+    article_content = article_template.render(
+        topic=article,
+        year=today.year,
+        site_url=settings["site_url"],
+        favicon_v=favicon_v,
+    )
+    article_dir = os.path.join("public", article["slug"])
+    os.makedirs(article_dir, exist_ok=True)
+    with open(os.path.join(article_dir, "index.html"), mode="w", encoding="utf-8") as f:
+        f.write(plain_head(article_content))
+
 # sitemap.xml: главная страница + PDF из раздела "Материалы" + тематические
-# страницы (без privacy — у неё noindex). Списки берутся из тех же
+# страницы + статьи к видео (без privacy — у неё noindex). Списки берутся из тех же
 # data/materials.yaml и data/topics/*.yaml, что и сами разделы/страницы на
 # сайте, так что сборка и sitemap не расходятся.
 site_url = settings["site_url"]
@@ -1112,6 +1327,7 @@ sitemap_urls = (
     [f"{site_url}/"]
     + [f"{site_url}{m['url']}" for m in materials]
     + [f"{site_url}/{t['slug']}/" for t in sorted(topics + practice_pages, key=lambda t: t["slug"])]
+    + [f"{site_url}/{a['slug']}/" for a in video_articles]
 )
 sitemap_body = "\n".join(f"  <url><loc>{u}</loc></url>" for u in sitemap_urls)
 sitemap_content = (

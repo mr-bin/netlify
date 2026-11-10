@@ -71,7 +71,7 @@
                     <p class="practice-text"><strong class="practice-name">{{ pr.name }}.</strong> {{ pr.text }}</p>
                     <figure class="practice-short">
                         <div class="practice-short-frame">
-                            <iframe src="https://www.youtube-nocookie.com/embed/{{ pr.video.id }}?rel=0&playsinline=1" title="{{ pr.video.title or pr.name }}" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            {{ ui.video_facade(pr.video, pr.video.title or pr.name) }}
                         </div>
                         {% if pr.video.title %}<figcaption class="practice-short-caption">{{ pr.video.title }}</figcaption>{% endif %}
                     </figure>
@@ -149,5 +149,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+<script src="/video-facade.js"></script>
 </body>
 </html>
