@@ -896,7 +896,6 @@ def load_practice_pages(materials):
                 "photo_alt": apply_topic_nbsp((hero.get("photo_alt") or "Екатерина Заикина").strip()),
             },
             "zapis": {k: apply_topic_nbsp(v) if k != "bg" else v for k, v in PRACTICES_ZAPIS.items()},
-            "disclaimer": _practice_text(raw.get("disclaimer")),
         }
 
         intro = raw.get("intro") or {}
@@ -985,6 +984,7 @@ def load_practice_pages(materials):
             page["invite"] = {
                 "heading": _practice_text(invite["heading"]),
                 "paragraphs": [_practice_text(p) for p in invite.get("paragraphs") or [] if (p or "").strip()],
+                "note": _practice_text(invite.get("note")),
             }
 
         pages.append(page)

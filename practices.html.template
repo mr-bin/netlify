@@ -134,6 +134,7 @@
             {% for p in topic.invite.paragraphs %}
             <p>{{ p }}</p>
             {% endfor %}
+            {% if topic.invite.note %}<p class="disclaimer practice-invite-note">{{ topic.invite.note }}</p>{% endif %}
         </div>
     </div>
 </section>
@@ -141,12 +142,6 @@
 
 <!-- Записаться на консультацию -->
 {{ ui.topic_zapis(topic.zapis) }}
-
-{% if topic.disclaimer %}
-<div class="container">
-    <p class="disclaimer practice-disclaimer">{{ topic.disclaimer }}</p>
-</div>
-{% endif %}
 
 {{ ui.topic_footer() }}
 

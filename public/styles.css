@@ -1416,7 +1416,8 @@ a:hover { color: var(--color-accent); }
 .practice-narrow p { margin: 0 0 .75rem; }
 .practice-small { font-size: .88rem; color: var(--color-text-soft); }
 
-/* Оговорка после блока записи, перед подвалом */
-.practice-disclaimer { margin: 1.75rem auto .5rem; font-size: .92rem; }
+/* Оговорка последней строкой блока «Если хочется разобраться вместе» —
+   оформление .disclaimer, но в колонке текста, по левому краю */
+.practice-invite-note { max-width: none; margin: 0; text-align: left; }
 /* Листы на подборке: не больше двух в ряд, по центру */
 .materials-list.practice-sheets { max-width: 580px; }
