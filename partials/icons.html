@@ -130,3 +130,146 @@
     </div>
 </footer>
 {%- endmacro %}
+
+{# Карточка листа из data/materials.yaml — в «Материалах» на главной и в блоке
+   листов на странице-подборке. with_id — id="list-..." для ссылок /#list-...
+   (только на главной); extra_link — ссылка extra_link_url/extra_link_text. #}
+{% macro material_card(item, with_id=true, extra_link=true) -%}
+<div class="material-card"{% if with_id %} id="{{ item.card_id }}"{% endif %}>
+                <div class="material-head">
+                    <span class="material-icon">{{ document_icon() }}</span>
+                    <p class="material-title">{{ item.title }}</p>
+                </div>
+                <p class="material-desc">{{ item.description }}</p>
+                <p class="material-links">
+                    <a class="material-link-download" href="{{ item.url }}" target="_blank" rel="noopener">Скачать {{ item.format }}</a>
+                    {% if item.video_url %}
+                    <span class="material-link-sep">·</span>
+                    <a href="{{ item.video_url }}" target="_blank" rel="noopener">Смотреть видео</a>
+                    {% endif %}
+                    {%- if extra_link and item.extra_link_url %}
+                    <span class="material-link-sep">·</span>
+                    <a href="{{ item.extra_link_url }}">{{ item.extra_link_text }}</a>
+                    {%- endif %}
+                </p>
+            </div>
+{%- endmacro %}
+
+{# Общие блоки тематических страниц (topic.html.template) и страниц-подборок
+   (practices.html.template). page — данные страницы (seo_title, slug, hero...). #}
+{% macro topic_head(page) -%}
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.seo_title|plain_space }}</title>
+    <meta name="description" content="{{ page.seo_description|plain_space }}">
+    <link rel="icon" href="/favicon.ico?v={{ favicon_v }}" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v={{ favicon_v }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v={{ favicon_v }}">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v={{ favicon_v }}">
+    <link rel="canonical" href="{{ site_url }}/{{ page.slug }}/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:url" content="{{ site_url }}/{{ page.slug }}/">
+    <meta property="og:title" content="{{ page.seo_title|plain_space }}">
+    <meta property="og:description" content="{{ page.seo_description|plain_space }}">
+    <meta property="og:image" content="{{ site_url }}/resources/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ site_url }}/{{ page.slug }}/">
+    <meta name="twitter:title" content="{{ page.seo_title|plain_space }}">
+    <meta name="twitter:description" content="{{ page.seo_description|plain_space }}">
+    <meta name="twitter:image" content="{{ site_url }}/resources/og-image.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,600;0,700;1,400;1,500&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/styles.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Главная",
+                "item": "{{ site_url }}/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{{ page.breadcrumb|plain_space }}",
+                "item": "{{ site_url }}/{{ page.slug }}/"
+            }
+        ]
+    }
+    </script>
+{%- endmacro %}
+
+{% macro topic_hero(page) -%}
+<header class="topic-hero">
+    <div class="container topic-hero-inner">
+        <div class="topic-hero-text">
+            <p class="topic-breadcrumbs"><a href="/">Главная</a> / {{ page.breadcrumb }}</p>
+            <h1 class="topic-hero-title">{{ page.hero.h1 }}</h1>
+            {% if page.hero.lead %}<p class="topic-hero-lead">{{ page.hero.lead }}</p>{% endif %}
+            {% if page.hero.lead_soft %}<p class="topic-hero-lead-soft">{{ page.hero.lead_soft }}</p>{% endif %}
+            <a href="#zapis" class="btn-cta">Записаться на&nbsp;консультацию</a>
+        </div>
+        <div class="topic-hero-photo-frame hero-photo-frame">
+            <img class="hero-photo rounded-circle" src="{{ page.hero.image or '/resources/profile.png' }}" alt="{{ page.hero.photo_alt }}" width="168" height="168">
+        </div>
+    </div>
+    <div class="wave" aria-hidden="true">
+        <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,40 C220,90 380,0 620,36 C860,72 1000,10 1230,34 C1330,44 1400,40 1440,32 L1440,70 L0,70 Z" style="fill:var(--color-bg)"/>
+        </svg>
+    </div>
+</header>
+{%- endmacro %}
+
+{% macro topic_zapis(zapis) -%}
+<section class="section{% if zapis.bg == 'lavender' %} topic-section-lavender{% else %} section-alt{% endif %}" id="zapis">
+    <div class="container topic-zapis">
+        <div class="topic-zapis-main">
+            <h2 class="topic-zapis-heading">Записаться на&nbsp;консультацию</h2>
+            <p>{{ zapis.lead }}</p>
+            {% if zapis.note %}
+            <p class="text-soft">{{ zapis.note }} <a href="/#consultation">на&nbsp;главной странице</a>.</p>
+            {% endif %}
+            <a href="/#consultation" class="btn-cta">Написать</a>
+        </div>
+        <div class="price-card price-card--side">
+            <p class="price-amount">£{{ price["gbp"] }}</p>
+            <p class="mb-0">60 минут, онлайн (Google&nbsp;Meet)</p>
+            <p class="price-note" style="margin-top:.4rem;">Стоимость одинакова для первой и&nbsp;для всех последующих сессий</p>
+        </div>
+    </div>
+</section>
+{%- endmacro %}
+
+{% macro topic_footer() -%}
+<div class="footer-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C220,90 380,0 620,36 C860,72 1000,10 1230,34 C1330,44 1400,40 1440,32 L1440,70 L0,70 Z" style="fill:var(--color-bg-alt)"/>
+    </svg>
+</div>
+{{ site_footer() }}
+{%- endmacro %}
+
+{% macro topic_video(video) -%}
+<div class="topic-video">
+            <div class="topic-video-frame">
+                <iframe src="https://www.youtube-nocookie.com/embed/{{ video.id }}?rel=0&playsinline=1" title="{{ video.title }}" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="topic-video-text">
+                <h3>{{ video.title }}</h3>
+                {% if video.description %}<p class="text-soft">{{ video.description }}</p>{% endif %}
+                {%- if video.more %}
+                <p class="topic-video-more">{{ video.more }}</p>
+                {%- endif %}
+            </div>
+        </div>
+{%- endmacro %}

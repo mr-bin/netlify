@@ -1229,6 +1229,8 @@ a:hover { color: var(--color-accent); }
 }
 .topic-step-title { margin: 0; font-size: 1.15rem; font-weight: 500; }
 .topic-step-text { margin: 0; color: var(--color-text-soft); font-size: .95rem; }
+/* Строка-ссылка под текстом шага (link_line) — как строки со стрелкой в конце вводного блока */
+.topic-step-link { margin: .25rem 0 0; font-size: .9rem; color: var(--color-text-soft); }
 .topic-steps-footnote {
     max-width: 880px;
     margin: 2rem auto 0;
@@ -1309,3 +1311,100 @@ a:hover { color: var(--color-accent); }
     margin: 0;
     text-align: left;
 }
+
+/* ==========================================================================
+   Страница-подборка практик (/trevoga-v-ozhidanii/, practices.html.template)
+   ========================================================================== */
+
+/* Рамка «Как пользоваться» / «Вместо поиска в интернете» — спокойная, лавандовая */
+.practice-box {
+    background: var(--color-hero-bg);
+    border-radius: var(--radius-md);
+    padding: 1.1rem 1.375rem;
+}
+.practice-box p { margin: 0 0 .5rem; }
+.practice-box p:last-child { margin-bottom: 0; }
+.practice-box-title { font-weight: 600; }
+.practice-box-list { margin: 0; padding-left: 1.2rem; }
+.practice-box-list li { margin-bottom: .3rem; }
+.practice-box-list li:last-child { margin-bottom: 0; }
+
+/* Длинное видео под текстом блока — оформление блока «Видео» тематических страниц */
+.practice-video { margin-top: 2.5rem; }
+
+/* Строка-ссылка под блоком */
+.practice-footnote {
+    max-width: 760px;
+    margin: 1.25rem auto 0;
+    text-align: center;
+    font-size: .9rem;
+    color: var(--color-text-soft);
+    text-wrap: balance;
+}
+
+/* Ситуации с практиками */
+.practice-situations {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+.practice-situation {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.75rem;
+    box-shadow: var(--shadow-card);
+}
+@media (max-width: 575.98px) {
+    .practice-situation { padding: 1.25rem 1.1rem; }
+}
+.practice-situation-title {
+    font-size: clamp(1.3rem, 1.2rem + .5vw, 1.45rem);
+    line-height: 1.3;
+    margin: 0 0 .2rem;
+}
+.practice-situation-caption {
+    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--color-text-soft);
+}
+.practice-text { margin: 0 0 1rem; }
+.practice-name { font-weight: 600; white-space: nowrap; }
+.practice-situation > .practice-box { margin-top: 1.25rem; }
+.practice-situation-footnote {
+    margin: 1rem 0 0;
+    font-size: .9rem;
+    color: var(--color-text-soft);
+}
+
+/* Вертикальный Short у практики: 9:16, до 320px, у левого края текста */
+.practice-short {
+    width: 100%;
+    max-width: 320px;
+    margin: -.25rem 0 1.25rem;
+}
+.practice-short-frame {
+    aspect-ratio: 9 / 16;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-bg-alt);
+}
+.practice-short-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+.practice-short-caption {
+    margin-top: .45rem;
+    font-size: .9rem;
+    color: var(--color-text-soft);
+}
+
+/* «Тёплое одеяло»: текст по центру над видео */
+.practice-narrow { max-width: 760px; margin: 0 auto; }
+.practice-narrow p { margin: 0 0 .75rem; }
+.practice-small { font-size: .88rem; color: var(--color-text-soft); }
+
+/* Оговорка после блока записи, перед подвалом */
+.practice-disclaimer { margin: 1.75rem auto .5rem; font-size: .92rem; }
+/* Листы на подборке: не больше двух в ряд, по центру */
+.materials-list.practice-sheets { max-width: 580px; }

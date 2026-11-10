@@ -48,6 +48,7 @@ MATERIALS_URL_PREFIX = "/materials"
 
 TOPICS_DIR = "data/topics"
 TOPIC_TEMPLATE = "topic.html.template"
+PRACTICES_TEMPLATE = "practices.html.template"
 
 YOUTUBE_HOSTS = {
     "youtube.com", "www.youtube.com", "m.youtube.com",
@@ -550,6 +551,16 @@ def load_materials():
         if video_id:
             tags.append("С видео")
 
+        # extra_link_url/extra_link_text — необязательная ссылка на месте
+        # «Смотреть видео» (на метку «С видео» не влияет).
+        extra_link_url = (item.get("extra_link_url") or "").strip()
+        extra_link_text = (item.get("extra_link_text") or "").strip()
+        if extra_link_url and not extra_link_text:
+            raise SystemExit(
+                f"ОШИБКА в {MATERIALS_PATH}: у {label} ({title}) заполнен \"extra_link_url\", "
+                f"но не указан \"extra_link_text\" (текст ссылки)."
+            )
+
         materials.append({
             "title": apply_nbsp(title.strip()),
             "description": apply_nbsp(description.strip()),
@@ -560,6 +571,8 @@ def load_materials():
             "card_id": card_id,
             "labels": tags,
             "favorite": favorite,
+            "extra_link_url": extra_link_url,
+            "extra_link_text": apply_nbsp(extra_link_text),
         })
 
     return materials, labels_order
@@ -619,6 +632,22 @@ def _external_link(url, text):
             f'{_topic_typography(text)}</a>')
 
 
+def _read_topic_file(path, label):
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            raw = yaml.load(f, Loader=SafeLoader)
+    except yaml.YAMLError as e:
+        mark = getattr(e, "problem_mark", None)
+        where = f" (примерно строка {mark.line + 1})" if mark else ""
+        raise SystemExit(
+            f"ОШИБКА в {path}: файл повреждён{where} — {e}. "
+            f"Скорее всего, рядом пропущен отступ, двоеточие или кавычка."
+        )
+    if not isinstance(raw, dict):
+        raise SystemExit(f"ОШИБКА в {label}: файл должен быть блоком с полями (seo, hero, ...).")
+    return raw
+
+
 def load_topics():
     """Загружает тематические страницы из data/topics/*.yaml — одна страница
     на файл, адрес = имя файла (poterya-beremennosti.yaml → /poterya-beremennosti/).
@@ -635,18 +664,10 @@ def load_topics():
         slug = file_name[:-len(".yaml")]
         label = f"тематическая страница «{slug}» ({path})"
 
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                raw = yaml.load(f, Loader=SafeLoader)
-        except yaml.YAMLError as e:
-            mark = getattr(e, "problem_mark", None)
-            where = f" (примерно строка {mark.line + 1})" if mark else ""
-            raise SystemExit(
-                f"ОШИБКА в {path}: файл повреждён{where} — {e}. "
-                f"Скорее всего, рядом пропущен отступ, двоеточие или кавычка."
-            )
-        if not isinstance(raw, dict):
-            raise SystemExit(f"ОШИБКА в {label}: файл должен быть блоком с полями (seo, hero, ...).")
+        raw = _read_topic_file(path, label)
+        # Страницы-подборки (type: practices) собирает load_practice_pages().
+        if raw.get("type") == "practices":
+            continue
 
         seo = raw.get("seo") or {}
         hero = raw.get("hero") or {}
@@ -724,7 +745,12 @@ def load_topics():
                 text = (item.get("text") or "").strip()
                 if not title or not text:
                     raise SystemExit(f"ОШИБКА в {label}: у одного из шагов steps.items не указан title или text.")
-                parsed_steps.append({"title": apply_topic_nbsp(title), "text": apply_topic_nbsp(text)})
+                # link_line — необязательная строка-ссылка под текстом шага.
+                parsed_steps.append({
+                    "title": apply_topic_nbsp(title),
+                    "text": apply_topic_nbsp(text),
+                    "link_line": apply_topic_nbsp((item.get("link_line") or "").strip()),
+                })
             topic["steps"] = {
                 "heading": apply_topic_nbsp(steps_block["heading"].strip()),
                 "list": parsed_steps,
@@ -795,6 +821,176 @@ def load_topics():
     return topics
 
 
+# Блок «Записаться на консультацию» на страницах-подборках — тот же, что на
+# тематических страницах (там он задаётся в zapis каждого data/topics/*.yaml).
+PRACTICES_ZAPIS = {
+    "lead": "Напишите, с чем хотели бы прийти (можно в двух словах) и какое время вам удобно. "
+            "Я отвечу в течение одного рабочего дня. Я не служба экстренной помощи: если сейчас "
+            "очень тяжело, обратитесь к врачу или в местную экстренную службу.",
+    "note": "Перед первой встречей я пришлю информированное согласие. Правило 24 часов и подробности&nbsp;—",
+    "bg": "lavender",
+}
+
+BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
+
+
+def _practice_text(text):
+    """Текст страницы-подборки: типографика и ссылки как на тематических
+    страницах плюс **жирное начало**."""
+    return BOLD_RE.sub(r"<strong>\1</strong>", apply_topic_nbsp((text or "").strip()))
+
+
+def _practice_video(block, label, where):
+    """Длинное видео в оформлении блока «Видео» тематических страниц;
+    пустой url — None (блок не выводится)."""
+    block = block or {}
+    url = (block.get("url") or "").strip()
+    if not url:
+        return None
+    video_id = extract_youtube_id(url)
+    if not video_id:
+        raise SystemExit(f"ОШИБКА в {label}: у {where}.url ({url}) не получилось распознать ссылку на YouTube.")
+    return {
+        "id": video_id,
+        "title": _practice_text(block.get("title")),
+        "description": _practice_text(block.get("description")),
+    }
+
+
+def load_practice_pages(materials):
+    """Страницы-подборки практик (data/topics/*.yaml с type: practices) —
+    свой шаблон practices.html.template, общие с тематическими страницами
+    шапка, первый экран, блок записи и подвал. Листы берутся из materials
+    по метке sheets.label."""
+    if not os.path.isdir(TOPICS_DIR):
+        return []
+    pages = []
+    for file_name in sorted(os.listdir(TOPICS_DIR)):
+        if not file_name.endswith(".yaml"):
+            continue
+        path = os.path.join(TOPICS_DIR, file_name)
+        slug = file_name[:-len(".yaml")]
+        label = f"страница-подборка «{slug}» ({path})"
+        raw = _read_topic_file(path, label)
+        if raw.get("type") != "practices":
+            continue
+
+        seo = raw.get("seo") or {}
+        hero = raw.get("hero") or {}
+        breadcrumb = (raw.get("breadcrumb") or "").strip()
+        for value, name in ((seo.get("title"), "seo.title"), (seo.get("description"), "seo.description"),
+                            (hero.get("h1"), "hero.h1"), (breadcrumb, "breadcrumb")):
+            if not isinstance(value, str) or not value.strip():
+                raise SystemExit(f"ОШИБКА в {label}: не указан {name}.")
+
+        page = {
+            "slug": slug,
+            "seo_title": apply_topic_nbsp(seo["title"].strip()),
+            "seo_description": apply_topic_nbsp(seo["description"].strip()),
+            "breadcrumb": apply_topic_nbsp(breadcrumb),
+            "hero": {
+                "h1": apply_topic_nbsp(hero["h1"].strip()),
+                "lead": _practice_text(hero.get("lead")),
+                "lead_soft": _practice_text(hero.get("lead_soft")),
+                "image": (hero.get("image") or "").strip(),
+                "photo_alt": apply_topic_nbsp((hero.get("photo_alt") or "Екатерина Заикина").strip()),
+            },
+            "zapis": {k: apply_topic_nbsp(v) if k != "bg" else v for k, v in PRACTICES_ZAPIS.items()},
+            "disclaimer": _practice_text(raw.get("disclaimer")),
+        }
+
+        intro = raw.get("intro") or {}
+        if (intro.get("heading") or "").strip():
+            how = intro.get("how_to_use") or {}
+            page["intro"] = {
+                "heading": _practice_text(intro["heading"]),
+                "paragraphs": [_practice_text(p) for p in intro.get("paragraphs") or [] if (p or "").strip()],
+                "how_title": _practice_text(how.get("title")),
+                "how_items": [_practice_text(i) for i in how.get("items") or [] if (i or "").strip()],
+                "video": _practice_video(intro.get("video"), label, "intro.video"),
+            }
+
+        medical = raw.get("medical_note") or {}
+        if (medical.get("heading") or "").strip() and medical.get("items"):
+            page["medical_note"] = {
+                "heading": _practice_text(medical["heading"]),
+                "intro": _practice_text(medical.get("intro")),
+                "list": [_practice_text(i) for i in medical["items"] if (i or "").strip()],
+                "footnote": _practice_text(medical.get("footnote")),
+            }
+
+        practices = raw.get("practices") or {}
+        situations = []
+        for sit in practices.get("situations") or []:
+            title = (sit.get("title") or "").strip()
+            if not title:
+                raise SystemExit(f"ОШИБКА в {label}: у одной из ситуаций practices.situations не указан title.")
+            items = []
+            for pr in sit.get("practices") or []:
+                name = (pr.get("name") or "").strip()
+                text = (pr.get("text") or "").strip()
+                if not name or not text:
+                    raise SystemExit(f"ОШИБКА в {label}: у одной из практик в «{title}» не указан name или text.")
+                item = {"name": _practice_text(name), "text": _practice_text(text)}
+                # video_url — свой Short у практики; пусто — ролика нет.
+                video_url = (pr.get("video_url") or "").strip()
+                if video_url:
+                    video_id = extract_youtube_id(video_url)
+                    if not video_id:
+                        raise SystemExit(
+                            f"ОШИБКА в {label}: у практики «{name}» video_url ({video_url}) — "
+                            f"не получилось распознать ссылку на YouTube."
+                        )
+                    item["video"] = {"id": video_id, "title": _practice_text(pr.get("video_title"))}
+                items.append(item)
+            note_box = sit.get("note_box") or {}
+            situations.append({
+                "title": _practice_text(title),
+                "caption": _practice_text(sit.get("caption")),
+                "practices": items,
+                "note_title": _practice_text(note_box.get("title")),
+                "note_text": _practice_text(note_box.get("text")),
+                "footnote": _practice_text(sit.get("footnote")),
+            })
+        if (practices.get("heading") or "").strip() and situations:
+            page["practices"] = {
+                "heading": _practice_text(practices["heading"]),
+                "situations": situations,
+                "footnote": _practice_text(practices.get("footnote")),
+            }
+
+        blanket = raw.get("warm_blanket") or {}
+        if (blanket.get("heading") or "").strip():
+            page["warm_blanket"] = {
+                "id": (blanket.get("id") or "").strip(),
+                "heading": _practice_text(blanket["heading"]),
+                "text": _practice_text(blanket.get("text")),
+                "small_note": _practice_text(blanket.get("small_note")),
+                "video": _practice_video(blanket.get("video"), label, "warm_blanket.video"),
+                "footnote": _practice_text(blanket.get("footnote")),
+            }
+
+        sheets = raw.get("sheets") or {}
+        sheet_label = (sheets.get("label") or "").strip()
+        if (sheets.get("heading") or "").strip() and sheet_label:
+            cards = [m for m in materials if sheet_label in m["labels"]]
+            if not cards:
+                print(f"ПРЕДУПРЕЖДЕНИЕ в {label}: в data/materials.yaml нет листов с меткой «{sheet_label}» — "
+                      f"блок «{sheets['heading'].strip()}» не показан.")
+            else:
+                page["sheets"] = {"heading": _practice_text(sheets["heading"]), "cards": cards}
+
+        invite = raw.get("invite") or {}
+        if (invite.get("heading") or "").strip():
+            page["invite"] = {
+                "heading": _practice_text(invite["heading"]),
+                "paragraphs": [_practice_text(p) for p in invite.get("paragraphs") or [] if (p or "").strip()],
+            }
+
+        pages.append(page)
+    return pages
+
+
 environment = Environment(loader=FileSystemLoader("."))
 # Для <head> (title/meta content) нужен обычный пробел, а не &nbsp; — неразрывные
 # пробелы там не видны пользователю и не нужны, но могут случайно попасть в seo-текст
@@ -822,6 +1018,7 @@ videos_json = load_videos()
 education = load_education()
 materials, materials_labels_order = load_materials()
 topics = load_topics()
+practice_pages = load_practice_pages(materials)
 
 # Данные для раздела "Материалы" на фронтенде (фильтры по меткам) и для
 # строки "Лист к этому видео" в разделе "Видео" — та же схема, что у
@@ -889,6 +1086,22 @@ for topic in topics:
     with open(os.path.join(topic_dir, "index.html"), mode="w", encoding="utf-8") as f:
         f.write(plain_head(topic_content))
 
+# Страницы-подборки практик (data/topics/*.yaml с type: practices) —
+# свой шаблон, та же схема папок public/<slug>/index.html.
+practices_template = environment.get_template(PRACTICES_TEMPLATE)
+for page in practice_pages:
+    page_content = practices_template.render(
+        topic=page,
+        year=today.year,
+        site_url=settings["site_url"],
+        favicon_v=favicon_v,
+        price=settings["price"],
+    )
+    page_dir = os.path.join("public", page["slug"])
+    os.makedirs(page_dir, exist_ok=True)
+    with open(os.path.join(page_dir, "index.html"), mode="w", encoding="utf-8") as f:
+        f.write(plain_head(page_content))
+
 # sitemap.xml: главная страница + PDF из раздела "Материалы" + тематические
 # страницы (без privacy — у неё noindex). Списки берутся из тех же
 # data/materials.yaml и data/topics/*.yaml, что и сами разделы/страницы на
@@ -897,7 +1110,7 @@ site_url = settings["site_url"]
 sitemap_urls = (
     [f"{site_url}/"]
     + [f"{site_url}{m['url']}" for m in materials]
-    + [f"{site_url}/{t['slug']}/" for t in topics]
+    + [f"{site_url}/{t['slug']}/" for t in sorted(topics + practice_pages, key=lambda t: t["slug"])]
 )
 sitemap_body = "\n".join(f"  <url><loc>{u}</loc></url>" for u in sitemap_urls)
 sitemap_content = (
