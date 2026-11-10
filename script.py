@@ -1023,7 +1023,10 @@ ARTICLE_KEYS = {
 }
 ARTICLE_REQUIRED = ("title", "description", "h1", "video_url", "sections")
 ARTICLE_SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-UPLOAD_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+# upload_date: дата и время выхода видео с часовым поясом (ISO 8601), например
+# 2026-11-02T11:45:06+00:00; просто дата тоже принимается, но с предупреждением —
+# Google в проверке расширенных результатов просит время и часовой пояс.
+UPLOAD_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2})?(Z|[+-]\d{2}:\d{2}))?$")
 DURATION_RE = re.compile(r"^P(?:\d+D)?(?:T(?=\d)(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$")
 # Тире после пробела в тексте статьи — неразрывный пробел перед ним, чтобы
 # тире не начинало строку (на тематических страницах его ставят вручную).
@@ -1134,15 +1137,22 @@ def load_video_articles(site_url):
         upload_date = str(upload_date or "").strip()
         video_ld = ""
         if not upload_date:
-            print(f"ПРЕДУПРЕЖДЕНИЕ в {label}: не заполнен upload_date (дата публикации видео, ГГГГ-ММ-ДД) — "
+            print(f"ПРЕДУПРЕЖДЕНИЕ в {label}: не заполнен upload_date (дата и время выхода видео, "
+                  f"например 2026-11-02T11:45:06+00:00) — "
                   f"разметка VideoObject для поисковиков не выводится.")
         else:
             try:
                 if not UPLOAD_DATE_RE.match(upload_date):
                     raise ValueError
-                datetime.date.fromisoformat(upload_date)
+                datetime.datetime.fromisoformat(upload_date.replace("Z", "+00:00"))
             except ValueError:
-                raise SystemExit(f"ОШИБКА в {label}: upload_date ({upload_date}) должен быть датой вида ГГГГ-ММ-ДД.")
+                raise SystemExit(
+                    f"ОШИБКА в {label}: upload_date ({upload_date}) должен быть датой и временем выхода видео "
+                    f"с часовым поясом, например \"2026-11-02T11:45:06+00:00\" (в кавычках)."
+                )
+            if "T" not in upload_date:
+                print(f"ПРЕДУПРЕЖДЕНИЕ в {label}: в upload_date ({upload_date}) только дата — Google просит "
+                      f"и время с часовым поясом, например \"{upload_date}T11:45:06+00:00\".")
             video_obj = {
                 "@context": "https://schema.org",
                 "@type": "VideoObject",
