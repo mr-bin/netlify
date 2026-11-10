@@ -92,6 +92,18 @@
         <h2 class="section-title">{{ topic.topics_block.heading }}</h2>
         <div class="topic-card-grid">
             {% for item in topic.topics_block.cards %}
+            {%- if item.url %}
+            <a href="{{ item.url }}" class="topic-page-card topic-card--link">
+                <div class="topic-card-row">
+                    <span class="dot"></span>
+                    <div>
+                        <h3 class="topic-page-card-title">{{ item.title }}</h3>
+                        {% if item.sub %}<p class="topic-page-card-sub">{{ item.sub }}</p>{% endif %}
+                    </div>
+                </div>
+                <span class="topic-card-more">Подробнее &rarr;</span>
+            </a>
+            {%- else %}
             <div class="topic-page-card">
                 <span class="dot"></span>
                 <div>
@@ -99,10 +111,11 @@
                     {% if item.sub %}<p class="topic-page-card-sub">{{ item.sub }}</p>{% endif %}
                 </div>
             </div>
+            {%- endif %}
             {% endfor %}
         </div>
-        {% if topic.topics_block.note %}
-        <p class="{% if topic.topics_block.note_style == 'box' %}topic-box topic-box--sage{% else %}disclaimer{% endif %}">{{ topic.topics_block.note }}</p>
+        {% if topic.topics_block.notes %}
+        <p class="{% if topic.topics_block.note_style == 'box' %}topic-box topic-box--sage{% else %}disclaimer{% endif %}">{{ topic.topics_block.notes|join("<br>\n        ") }}</p>
         {% endif %}
     </div>
 </section>
