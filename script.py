@@ -192,6 +192,18 @@ def fetch_thumbnail(video_id):
     return None
 
 
+_thumb_cache = {}
+
+
+def video_thumb(video_id):
+    """Обложка для превью видео на тематических страницах, подборках и в
+    статьях — та же, что в разделе «Видео» на главной (скачивается при
+    сборке, один раз на видео). None — обложку скачать не удалось."""
+    if video_id not in _thumb_cache:
+        _thumb_cache[video_id] = fetch_thumbnail(video_id)
+    return _thumb_cache[video_id]
+
+
 def load_videos():
     try:
         with open(VIDEOS_PATH, "r", encoding="utf-8") as f:
@@ -246,7 +258,7 @@ def load_videos():
             )
         seen_ids[video_id] = label
 
-        thumb_url = fetch_thumbnail(video_id)
+        thumb_url = video_thumb(video_id)
         videos.append({
             "id": video_id,
             "title": apply_nbsp(title.strip()),
@@ -782,6 +794,7 @@ def load_topics():
                 )
             topic["video"] = {
                 "id": video_id,
+                "thumb": video_thumb(video_id),
                 "title": apply_topic_nbsp((video.get("title") or "").strip()),
                 "description": apply_topic_nbsp((video.get("description") or "").strip()),
             }
@@ -860,6 +873,7 @@ def _practice_video(block, label, where):
         raise SystemExit(f"ОШИБКА в {label}: у {where}.url ({url}) не получилось распознать ссылку на YouTube.")
     return {
         "id": video_id,
+        "thumb": video_thumb(video_id),
         "title": _practice_text(block.get("title")),
         "description": _practice_text(block.get("description")),
     }
@@ -948,7 +962,8 @@ def load_practice_pages(materials):
                             f"ОШИБКА в {label}: у практики «{name}» video_url ({video_url}) — "
                             f"не получилось распознать ссылку на YouTube."
                         )
-                    item["video"] = {"id": video_id, "title": _practice_text(pr.get("video_title"))}
+                    item["video"] = {"id": video_id, "thumb": video_thumb(video_id),
+                                     "title": _practice_text(pr.get("video_title"))}
                 items.append(item)
             note_box = sit.get("note_box") or {}
             situations.append({
@@ -1158,7 +1173,8 @@ def load_video_articles(site_url):
             "og_image": f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg",
             "h1": _article_text(raw["h1"]),
             "intro": [_article_text(p) for p in raw.get("intro") or [] if (p or "").strip()],
-            "video": {"id": video_id, "title": html.escape(_plain(raw.get("video_name") or raw["h1"]))},
+            "video": {"id": video_id, "thumb": video_thumb(video_id),
+                      "title": html.escape(_plain(raw.get("video_name") or raw["h1"]))},
             "video_caption": _article_text(raw.get("video_caption")),
             "video_ld": video_ld,
             "sections": sections,

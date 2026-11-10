@@ -273,10 +273,26 @@
 {{ site_footer() }}
 {%- endmacro %}
 
+{# Превью видео вместо iframe: обложка, скачанная при сборке, и кнопка
+   воспроизведения, как в разделе «Видео» на главной. До клика страница
+   не обращается к YouTube; по клику public/video-facade.js ставит на место
+   превью плеер youtube-nocookie. Без JS кнопка — ссылка на видео на YouTube. #}
+{% macro video_facade(video, title) -%}
+{%- set label = title|striptags|e -%}
+<div class="video-facade" data-video-id="{{ video.id }}" data-video-title="{{ label }}">
+                    {%- if video.thumb %}
+                    <img class="video-main-thumb" src="{{ video.thumb }}" alt="" loading="lazy">
+                    {%- else %}
+                    <div class="video-main-thumb video-thumb-placeholder"><span>{{ label }}</span></div>
+                    {%- endif %}
+                    <a class="video-play-btn" href="https://www.youtube.com/watch?v={{ video.id }}" target="_blank" rel="noopener" aria-label="Смотреть: {{ label }}" data-play><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#fff"/></svg></a>
+                </div>
+{%- endmacro %}
+
 {% macro topic_video(video) -%}
 <div class="topic-video">
             <div class="topic-video-frame">
-                <iframe src="https://www.youtube-nocookie.com/embed/{{ video.id }}?rel=0&playsinline=1" title="{{ video.title }}" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                {{ video_facade(video, video.title) }}
             </div>
             <div class="topic-video-text">
                 <h3>{{ video.title }}</h3>
