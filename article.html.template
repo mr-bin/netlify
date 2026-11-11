@@ -58,7 +58,7 @@
             {% endfor %}
             {% if topic.cta %}<p class="article-cta-lead">{{ topic.cta }}</p>{% endif %}
             <a href="/#consultation" class="btn-cta">Записаться на&nbsp;консультацию</a>
-            <p class="topic-box topic-box--sage">Психотерапия не&nbsp;заменяет медицинское лечение и&nbsp;работает как дополнение к&nbsp;наблюдению&nbsp;у&nbsp;врача.</p>
+            <p class="disclaimer">Психотерапия не&nbsp;заменяет медицинское лечение и&nbsp;работает как дополнение к&nbsp;наблюдению&nbsp;у&nbsp;врача.</p>
         </div>
     </div>
 </section>
