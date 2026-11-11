@@ -48,7 +48,7 @@
     </div>
 </main>
 
-<!-- Концовка: связанные материалы, запись, оговорка. id="zapis" — сюда ведёт
+<!-- Концовка: связанные материалы, оговорка, запись. id="zapis" — сюда ведёт
      кнопка «Записаться» в шапке. -->
 <section class="section topic-section-lavender" id="zapis">
     <div class="container">
@@ -57,8 +57,8 @@
             <p>{{ line }}</p>
             {% endfor %}
             {% if topic.cta %}<p class="article-cta-lead">{{ topic.cta }}</p>{% endif %}
-            <a href="/#consultation" class="btn-cta">Записаться на&nbsp;консультацию</a>
             <p class="disclaimer">Психотерапия не&nbsp;заменяет медицинское лечение и&nbsp;работает как дополнение к&nbsp;наблюдению&nbsp;у&nbsp;врача.</p>
+            <a href="/#consultation" class="btn-cta">Записаться на&nbsp;консультацию</a>
         </div>
     </div>
 </section>
