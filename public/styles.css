@@ -719,6 +719,7 @@ a.video-play-btn { text-decoration: none; }
     font-feature-settings: "lnum" 1;
 }
 .price-card p { text-align: left; }
+.price-card .price-more { font-size: .9375rem; color: var(--color-text-soft); }
 
 .callout {
     background: var(--color-sage-soft);
