@@ -302,6 +302,9 @@
                 {%- endif %}
                 {%- if video.more %}
                 <p class="topic-video-more">{{ video.more }}</p>
+                {%- if video.more_article %}
+                <p class="topic-video-more"><a href="{{ video.more_article }}">Прочитать текстом&nbsp;&rarr;</a></p>
+                {%- endif %}
                 {%- endif %}
             </div>
         </div>

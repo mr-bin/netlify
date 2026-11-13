@@ -822,6 +822,11 @@ def load_topics():
                 more_lead = (video.get("more_lead") or "").strip() or VIDEO_MORE_LEAD_DEFAULT
                 more_title = (video.get("more_title") or "").strip()
                 topic["video"]["more"] = _external_link(more_url, f"{more_lead} «{more_title}»&nbsp;→")
+                # more_article — адрес статьи к этому следующему видео: строка
+                # «Прочитать текстом →» под ним, та же вкладка; без more_url не выводится.
+                more_article = (video.get("more_article") or "").strip()
+                if more_article:
+                    topic["video"]["more_article"] = more_article
 
         faq = raw.get("faq") or {}
         raw_faq = faq.get("items") or []
@@ -846,6 +851,16 @@ def load_topics():
                     parsed_item["more"] = "Подробнее&nbsp;— в видео " + _external_link(
                         more_video_url, f"«{more_video_title}»&nbsp;→"
                     )
+                # more_article_url/more_article_title — строка со ссылкой на
+                # статью к видео (/video/<имя>/), после строки про видео, та же вкладка.
+                more_article_url = (item.get("more_article_url") or "").strip()
+                if more_article_url:
+                    more_article_title = (item.get("more_article_title") or "").strip()
+                    parsed_item["more_article"] = (
+                        f'Подробнее&nbsp;— в статье <a href="{html.escape(more_article_url)}">'
+                        f'{_topic_typography(f"«{more_article_title}»&nbsp;→")}</a>'
+                    )
+                    parsed_item["more_article_url"] = more_article_url
                 parsed_faq.append(parsed_item)
             topic["faq"] = {"heading": apply_topic_nbsp(faq["heading"].strip()), "list": parsed_faq}
 
@@ -1238,10 +1253,17 @@ video_articles = load_video_articles(settings["site_url"])
 
 article_urls = {f"/{a['slug']}/" for a in video_articles}
 for topic in topics:
-    article = topic.get("video", {}).get("article")
-    if article and article not in article_urls:
-        print(f"ПРЕДУПРЕЖДЕНИЕ в data/topics/{topic['slug']}.yaml: video.article ({article}) — "
-              f"такой статьи к видео нет (или у неё show: false). Ссылка «Прочитать текстом» ведёт в никуда.")
+    article_links = [
+        ("video.article", topic.get("video", {}).get("article")),
+        ("video.more_article", topic.get("video", {}).get("more_article")),
+    ] + [
+        ("faq.items[].more_article_url", item.get("more_article_url"))
+        for item in topic.get("faq", {}).get("list", [])
+    ]
+    for field, article in article_links:
+        if article and article not in article_urls:
+            print(f"ПРЕДУПРЕЖДЕНИЕ в data/topics/{topic['slug']}.yaml: {field} ({article}) — "
+                  f"такой статьи к видео нет (или у неё show: false). Ссылка на статью ведёт в никуда.")
 
 # Данные для раздела "Материалы" на фронтенде (фильтры по меткам) и для
 # строки "Лист к этому видео" в разделе "Видео" — та же схема, что у
