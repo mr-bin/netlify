@@ -125,6 +125,9 @@
                 {%- if item.more %}
                 <p class="topic-faq-answer topic-faq-more">{{ item.more }}</p>
                 {%- endif %}
+                {%- if item.more_article %}
+                <p class="topic-faq-answer topic-faq-more">{{ item.more_article }}</p>
+                {%- endif %}
             </div>
             {% endfor %}
         </div>
