@@ -54,7 +54,7 @@
     <div class="container">
         <div class="stati-column article-end">
             {% if topic.cta %}<p>{{ topic.cta }}</p>{% endif %}
-            <p class="topic-box topic-box--sage stati-note">Психотерапия не&nbsp;заменяет медицинское лечение и&nbsp;работает как дополнение к&nbsp;наблюдению&nbsp;у&nbsp;врача.</p>
+            <p class="disclaimer">Психотерапия не&nbsp;заменяет медицинское лечение и&nbsp;работает как дополнение к&nbsp;наблюдению&nbsp;у&nbsp;врача.</p>
             <a href="/#consultation" class="btn-cta">Записаться на&nbsp;консультацию</a>
         </div>
     </div>

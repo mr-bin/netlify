@@ -1525,6 +1525,5 @@ a.video-play-btn { text-decoration: none; }
     overflow-wrap: break-word;
 }
 .stati-card-text { margin: 0; color: var(--color-text-soft); font-size: .92rem; }
-.stati-note { margin: 0 0 1.25rem; }
 /* Статья без видео: первый раздел сразу после первого экрана. */
 .article-column > .article-heading:first-child { margin-top: 0; }
