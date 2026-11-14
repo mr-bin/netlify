@@ -282,3 +282,7 @@ public/trevoga-v-ozhidanii/
 
 # Статьи к видео (data/video/*.yaml) — генерируются в public/video/<имя>/.
 public/video/
+
+# Подборка статей /stati/ и статьи без видео (data/stati/*.yaml) —
+# генерируются в public/stati/ и public/stati/<имя>/.
+public/stati/

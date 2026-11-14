@@ -150,6 +150,7 @@
         </div>
         <script type="application/json" id="videosData">{{ videos_json }}</script>
         <p class="text-center mt-3"><a href="https://youtube.com/@psy_ekaterina_zaikina">{{ ui.youtube() }} Все видео на YouTube канале</a></p>
+        <p class="text-center mt-2 mb-0"><a href="/stati/">Все статьи&nbsp;&rarr;</a></p>
     </div>
 </section>
 

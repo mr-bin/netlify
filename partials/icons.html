@@ -157,9 +157,10 @@
 
 {# Общие блоки тематических страниц (topic.html.template) и страниц-подборок
    (practices.html.template). page — данные страницы (seo_title, slug, hero...).
-   Статьи к видео (article.html.template) передают в topic_head свой og:type,
-   картинку-миниатюру видео и page.crumbs — крошки после «Главной». #}
-{% macro topic_head(page, og_type="website", og_image="") -%}
+   Статьи (article.html.template) передают в topic_head свой og:type,
+   картинку (миниатюру видео или фото профиля) с её размером и page.crumbs —
+   крошки после «Главной»; подборка статей (stati.html.template) — page.crumbs. #}
+{% macro topic_head(page, og_type="website", og_image="", og_image_size=(480, 360)) -%}
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ page.seo_title|plain_space }}</title>
@@ -176,8 +177,8 @@
     <meta property="og:description" content="{{ page.seo_description|plain_space }}">
     {%- if og_image %}
     <meta property="og:image" content="{{ og_image }}">
-    <meta property="og:image:width" content="480">
-    <meta property="og:image:height" content="360">
+    <meta property="og:image:width" content="{{ og_image_size[0] }}">
+    <meta property="og:image:height" content="{{ og_image_size[1] }}">
     {%- else %}
     <meta property="og:image" content="{{ site_url }}/resources/og-image.jpg">
     <meta property="og:image:width" content="1200">

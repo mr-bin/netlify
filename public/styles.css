@@ -1476,3 +1476,54 @@ a.video-play-btn { text-decoration: none; }
 .article-end .article-cta-lead { margin-top: 1.75rem; }
 .article-end .btn-cta { min-height: 48px; margin-bottom: 0; }
 .article-end .disclaimer { max-width: none; margin: 0 0 1.25rem; text-align: left; }
+
+/* ==========================================================================
+   Подборка статей (stati.html.template, /stati/)
+   ========================================================================== */
+.stati-column { max-width: 880px; margin: 0 auto; }
+.article-hero .stati-column { padding-top: 3.25rem; padding-bottom: 4rem; }
+@media (max-width: 700px) {
+    .article-hero .stati-column { padding-top: 2.5rem; padding-bottom: 3rem; }
+}
+.stati-group + .stati-group { margin-top: 2.75rem; }
+.stati-group-title {
+    font-size: clamp(1.5rem, 1.3rem + 1vw, 1.75rem);
+    line-height: 1.25;
+    margin: 0 0 1.1rem;
+    text-wrap: balance;
+}
+.stati-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+@media (max-width: 700px) {
+    .stati-grid { grid-template-columns: minmax(0, 1fr); }
+}
+.stati-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.4rem;
+    box-shadow: var(--shadow-card);
+    min-width: 0;
+}
+.stati-card-tag {
+    align-self: flex-start;
+    padding: .15rem .65rem;
+    border-radius: 999px;
+    background: var(--color-accent-soft);
+    color: var(--color-accent-dark);
+    font-size: .8rem;
+    font-weight: 600;
+}
+.stati-card-title {
+    margin: 0;
+    font-weight: 500;
+    font-size: 1.15rem;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+}
+.stati-card-text { margin: 0; color: var(--color-text-soft); font-size: .92rem; }
+/* Статья без видео: первый раздел сразу после первого экрана. */
+.article-column > .article-heading:first-child { margin-top: 0; }
