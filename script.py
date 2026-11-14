@@ -1338,7 +1338,10 @@ def load_video_articles(site_url, topic_keys):
                 "ld": ld,
                 "sections": sections,
                 "related": related,
-                "cta": _article_text(raw.get("cta")),
+                # cta — одна строка или список абзацев.
+                "cta": [_article_text(p) for p in
+                        (raw.get("cta") if isinstance(raw.get("cta"), list) else [raw.get("cta")])
+                        if (p or "").strip()],
                 # Для карточки на /stati/.
                 "topic": topic,
                 "card_title": _article_text(raw.get("card_title") or raw["h1"]),
@@ -1499,6 +1502,18 @@ for article in video_articles:
     os.makedirs(article_dir, exist_ok=True)
     with open(os.path.join(article_dir, "index.html"), mode="w", encoding="utf-8") as f:
         f.write(plain_head(article_content))
+
+# Папки статей, которых больше нет или у которых show: false, остаются от
+# прошлой сборки — удаляем, чтобы страница не открывалась по старому адресу.
+built_slugs = {a["slug"] for a in video_articles}
+for prefix in ("video", "stati"):
+    prefix_dir = os.path.join("public", prefix)
+    if not os.path.isdir(prefix_dir):
+        continue
+    for name in os.listdir(prefix_dir):
+        if os.path.isdir(os.path.join(prefix_dir, name)) and f"{prefix}/{name}" not in built_slugs:
+            shutil.rmtree(os.path.join(prefix_dir, name))
+            print(f"Удалена старая страница /{prefix}/{name}/ — статьи нет или у неё show: false.")
 
 stati_template = environment.get_template(STATI_TEMPLATE)
 stati_content = stati_template.render(
