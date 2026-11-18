@@ -279,6 +279,7 @@ public/eko/
 public/planirovanie-beremennosti/
 public/vdali-ot-doma/
 public/trevoga-v-ozhidanii/
+public/menopauza/
 
 # Статьи к видео (data/video/*.yaml) — генерируются в public/video/<имя>/.
 public/video/
