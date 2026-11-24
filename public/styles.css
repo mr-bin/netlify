@@ -298,7 +298,7 @@ a:hover { color: var(--color-accent); }
 /* На телефоне кнопка записи идёт сразу после «Работаю индивидуально…»,
    плашки — под ней, чтобы кнопка была видна на первом экране. */
 @media (max-width: 575px) {
-    .hero { display: flex; flex-direction: column; padding-top: 5rem; padding-bottom: 2.25rem; }
+    .hero { display: flex; flex-direction: column; padding-top: 5rem; }
     .hero-subline { margin-bottom: 1.25rem; }
     /* Плашки столбцом; ширина блока — по самой длинной из первых трёх. */
     .hero-stats {
