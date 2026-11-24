@@ -298,9 +298,20 @@ a:hover { color: var(--color-accent); }
 /* На телефоне кнопка записи идёт сразу после «Работаю индивидуально…»,
    плашки — под ней, чтобы кнопка была видна на первом экране. */
 @media (max-width: 575px) {
-    .hero { display: flex; flex-direction: column; padding-top: 5rem; }
+    .hero { display: flex; flex-direction: column; padding-top: 5rem; padding-bottom: 2.25rem; }
     .hero-subline { margin-bottom: 1.25rem; }
-    .hero-stats { order: 1; gap: .4rem; margin: 1.75rem 0 0; }
+    /* Плашки столбцом; ширина блока — по самой длинной из первых трёх. */
+    .hero-stats {
+        order: 1;
+        flex-direction: column;
+        align-items: center;
+        gap: .4rem;
+        width: fit-content;
+        max-width: 100%;
+        margin: 1.75rem auto 0;
+    }
+    /* Четвёртая не растягивает блок своим текстом, а занимает его ширину. */
+    .hero-stat:nth-child(4) { width: 0; min-width: 100%; }
 }
 
 .btn-cta {
