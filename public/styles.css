@@ -756,6 +756,11 @@ a.video-play-btn { text-decoration: none; }
     gap: .8rem;
     margin-bottom: 1.75rem;
 }
+@media (max-width: 575px) {
+    .edu-stats .hero-stat { text-align: center; text-wrap: balance; }
+    /* «1600+ часов…» — не на всю ширину, две примерно равные строки. */
+    .edu-stats .hero-stat:first-child { max-width: min(100%, 18.5rem); margin-inline: auto; }
+}
 .edu-timeline {
     position: relative;
     max-width: 620px;
