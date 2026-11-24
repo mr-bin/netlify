@@ -105,6 +105,17 @@ def apply_nbsp(text):
     return text
 
 
+# Выделение в плашках первого экрана (settings.yaml -> hero_stats): **текст**.
+HERO_STAT_STRONG_RE = re.compile(r"\*\*(.+?)\*\*")
+
+
+def hero_stat_html(text, stats):
+    """Плашка первого экрана: подставляет цифры из stats ({sessions} и т. п.),
+    расставляет неразрывные пробелы и превращает **текст** в <strong>."""
+    text = apply_nbsp(text.format(**stats))
+    return HERO_STAT_STRONG_RE.sub(r"<strong>\1</strong>", text)
+
+
 def _topic_typography(text):
     text = apply_nbsp(text)
     if not text:
@@ -1429,6 +1440,7 @@ index_content = index_template.render(
     title=settings["title"],
     price=settings["price"],
     stats=settings["stats"],
+    hero_stats=[hero_stat_html(t, settings["stats"]) for t in settings["hero_stats"]],
     year=today.year,
     site_url=settings["site_url"],
     favicon_v=favicon_v,

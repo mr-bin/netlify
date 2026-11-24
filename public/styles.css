@@ -122,9 +122,9 @@ a:hover { color: var(--color-accent); }
 .top-nav {
     display: flex;
     align-items: center;
-    gap: 1.3rem;
+    gap: 1rem;
     margin-right: auto;
-    margin-left: 1.5rem;
+    margin-left: 1rem;
 }
 .top-nav a {
     color: var(--color-text-soft);
@@ -154,7 +154,9 @@ a:hover { color: var(--color-accent); }
     border-radius: 1px;
 }
 
-@media (max-width: 859px) {
+/* Полное меню + три кнопки контактов помещаются только в контейнер от 1200px
+   (1140px); уже — меню сворачивается в «бургер». */
+@media (max-width: 1199px) {
     .top-nav {
         display: none;
         position: absolute;
@@ -216,7 +218,8 @@ a:hover { color: var(--color-accent); }
     overflow: hidden;
 }
 .hero {
-    padding: 6.5rem 0 4.5rem;
+    padding-top: 6.5rem;
+    padding-bottom: 4.5rem;
     text-align: center;
 }
 .wave {
@@ -289,8 +292,22 @@ a:hover { color: var(--color-accent); }
     padding: .5rem 1.1rem;
     font-size: .88rem;
     color: var(--color-text-soft);
+    text-wrap: balance;
 }
 .hero-stat strong { color: var(--color-accent-dark); font-weight: 600; }
+@media (max-width: 575px) {
+    /* Плашки столбцом; ширина блока — по самой длинной из первых трёх. */
+    .hero-stats {
+        flex-direction: column;
+        align-items: center;
+        gap: .4rem;
+        width: fit-content;
+        max-width: 100%;
+        margin: 0 auto 1.25rem;
+    }
+    /* Четвёртая не растягивает блок своим текстом, а занимает его ширину. */
+    .hero-stat:nth-child(4) { width: 0; min-width: 100%; }
+}
 
 .btn-cta {
     display: inline-block;
@@ -738,6 +755,11 @@ a.video-play-btn { text-decoration: none; }
     justify-content: center;
     gap: .8rem;
     margin-bottom: 1.75rem;
+}
+@media (max-width: 575px) {
+    .edu-stats .hero-stat { text-align: center; text-wrap: balance; }
+    /* «1600+ часов…» — не на всю ширину, две примерно равные строки. */
+    .edu-stats .hero-stat:first-child { max-width: min(100%, 18.5rem); margin-inline: auto; }
 }
 .edu-timeline {
     position: relative;
