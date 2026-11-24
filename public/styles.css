@@ -295,6 +295,9 @@ a:hover { color: var(--color-accent); }
     text-wrap: balance;
 }
 .hero-stat strong { color: var(--color-accent-dark); font-weight: 600; }
+@media (max-width: 575px) {
+    .hero-stats { gap: .4rem; margin-bottom: 1.25rem; }
+}
 
 .btn-cta {
     display: inline-block;
