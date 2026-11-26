@@ -17,7 +17,7 @@ intro:
 video_url: ""
 video_name: ""
 video_description: ""
-upload_date: ""   # ГГГГ-ММ-ДД из YouTube Studio, не придумывать
+upload_date: ""   # дата и время с часовым поясом, в кавычках: "2026-11-02T11:45:06+00:00" (летом +01:00); из YouTube Studio, не придумывать
 duration: ""      # ISO 8601 из YouTube Studio, не придумывать
 video_caption: "Если удобнее смотреть, вот видео"
 sections:
